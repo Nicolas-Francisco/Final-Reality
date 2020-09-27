@@ -8,7 +8,7 @@ import com.github.cc3002.finalreality.model.weapon.Weapon;
  * A character can be controlled by the player or by the CPU (an enemy).
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Nicolás García Ríos
  */
 public interface ICharacter {
 
@@ -25,13 +25,20 @@ public interface ICharacter {
 
   /**
    * Equips a weapon to the character.
-   */
-  void equip(Weapon weapon);
+   * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
+   * this means that this method should not be declared in the Interface nor in the
+   * Astract class, but in the PlayerCharacter class instead.
+   * void equip(Weapon weapon);
+   * /
 
   /**
    * Return this character's equipped weapon.
+   * Enemy class does not have any weapons, so having a getEquippedWeapon() method
+   * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
+   * implemented only by Player class.
+   *
+   * Weapon getEquippedWeapon();
    */
-  Weapon getEquippedWeapon();
 
   /**
    * Returns this character's class.
