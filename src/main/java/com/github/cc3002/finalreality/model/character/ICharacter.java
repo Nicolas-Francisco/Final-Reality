@@ -1,7 +1,6 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.CharacterClass;
-import com.github.cc3002.finalreality.model.weapon.Weapon;
 
 /**
  * This represents a character from the game.
@@ -28,7 +27,10 @@ public interface ICharacter {
    * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
    * this means that this method should not be declared in the Interface nor in the
    * Astract class, but in the PlayerCharacter class instead.
-   * void equip(Weapon weapon);
+   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
+   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
+   *
+   void equip(Weapon weapon);
    * /
 
   /**
@@ -36,8 +38,10 @@ public interface ICharacter {
    * Enemy class does not have any weapons, so having a getEquippedWeapon() method
    * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
    * implemented only by Player class.
+   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
+   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
    *
-   * Weapon getEquippedWeapon();
+   Weapon getEquippedWeapon();
    */
 
   /**

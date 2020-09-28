@@ -5,7 +5,6 @@ import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import java.util.Objects;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +12,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A class that holds all the information of a single character of the game.
  *
- * @author Ignacio Slater Muñoz.
+ * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
  */
 public class PlayerCharacter extends AbstractCharacter {
 
-  private ScheduledExecutorService scheduledExecutor;
   private Weapon equippedWeapon = null;
 
   /**
@@ -60,9 +58,9 @@ public class PlayerCharacter extends AbstractCharacter {
    * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
    * implemented only by the Player class.
    */
-   public Weapon getEquippedWeapon() {
-     return equippedWeapon;
-   }
+  public Weapon getEquippedWeapon() {
+    return equippedWeapon;
+  }
 
   @Override
   public int hashCode() {

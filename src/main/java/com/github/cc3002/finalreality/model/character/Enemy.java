@@ -3,7 +3,6 @@ package com.github.cc3002.finalreality.model.character;
 import com.github.cc3002.finalreality.model.character.player.CharacterClass;
 import java.util.Objects;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 public class Enemy extends AbstractCharacter {
 
   private final int weight;
-  private ScheduledExecutorService scheduledExecutor;
 
   /**
    * Creates a new enemy with a name, a weight and the queue with the characters ready to
