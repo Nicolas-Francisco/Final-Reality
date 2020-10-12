@@ -1,6 +1,5 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +22,7 @@ public class Enemy extends AbstractCharacter {
    */
   public Enemy(@NotNull final String name, final int weight,
       @NotNull final BlockingQueue<ICharacter> turnsQueue) {
-    super(turnsQueue, name, CharacterClass.ENEMY);
+    super(turnsQueue, name);
     this.weight = weight;
   }
 
@@ -38,9 +37,8 @@ public class Enemy extends AbstractCharacter {
    * waitTurn() method if the object is an Enemy
    */
   public void waitTurn(){
-    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-    var enemy = (Enemy) this;
-    scheduledExecutor.schedule(super::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
+    super.setScheduledExecutor(Executors.newSingleThreadScheduledExecutor());
+    super.getScheduledExecutor().schedule(super::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
   }
 
   /**
@@ -56,11 +54,12 @@ public class Enemy extends AbstractCharacter {
       return false;
     }
     final Enemy enemy = (Enemy) o;
-    return getWeight() == enemy.getWeight();
+    return getWeight() == enemy.getWeight() &&
+            getName() == enemy.getName();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getWeight());
+    return Objects.hash(getWeight(), getName());
   }
 }

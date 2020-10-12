@@ -1,12 +1,7 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
-// import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
-// import com.github.cc3002.finalreality.model.weapon.Weapon;
 import java.util.concurrent.BlockingQueue;
-// import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-// import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,17 +12,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCharacter implements ICharacter {
 
-  protected final BlockingQueue<ICharacter> turnsQueue;
-  protected final String name;
-  private final CharacterClass characterClass;
+  private final BlockingQueue<ICharacter> turnsQueue;
+  private final String name;
+  // private final CharacterClass characterClass;
   // private Weapon equippedWeapon = null;  Declared in Player Class instead
-  protected ScheduledExecutorService scheduledExecutor;
+  private ScheduledExecutorService scheduledExecutor;
 
   protected AbstractCharacter(@NotNull BlockingQueue<ICharacter> turnsQueue,
-      @NotNull String name, CharacterClass characterClass) {
+                              @NotNull String name) {
     this.turnsQueue = turnsQueue;
     this.name = name;
-    this.characterClass = characterClass;
+    // this.characterClass = characterClass;
   }
 
   /**
@@ -38,18 +33,17 @@ public abstract class AbstractCharacter implements ICharacter {
    * responsibilty to distinguish both classes, which should be delegated to
    * both subclasses instead.
    *
-   @Override
-     public void waitTurn() {
-       scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-       if (this instanceof PlayerCharacter) {
-         scheduledExecutor
-             .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
-       } else {
-         var enemy = (Enemy) this;
-         scheduledExecutor
-             .schedule(this::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
-       }
-     }
+   * @Override public void waitTurn() {
+   * scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+   * if (this instanceof PlayerCharacter) {
+   * scheduledExecutor
+   * .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
+   * } else {
+   * var enemy = (Enemy) this;
+   * scheduledExecutor
+   * .schedule(this::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
+   * }
+   * }
    */
   @Override
   public abstract void waitTurn();
@@ -57,12 +51,21 @@ public abstract class AbstractCharacter implements ICharacter {
   /**
    * Adds this character to the turns queue.
    * waitTurn() uses addToQueue() method in both subclasses (Enemy and Player), therefore
-   * addToQueue() should be a protected method OR there has to be a public get() method
-   * for the subclasses to use. In this case addToQueue() is a protected method.
+   * addToQueue() should be a protected method OR there has to be a public set() method
+   * for the subclasses to use. In this case addToQueue() is a private method.
    */
+
   protected void addToQueue() {
     turnsQueue.add(this);
     scheduledExecutor.shutdown();
+  }
+
+  public void setScheduledExecutor(ScheduledExecutorService scheduledExecutor) {
+    this.scheduledExecutor = scheduledExecutor;
+  }
+
+  public ScheduledExecutorService getScheduledExecutor() {
+    return scheduledExecutor;
   }
 
   @Override
@@ -76,8 +79,7 @@ public abstract class AbstractCharacter implements ICharacter {
    * Astract class, but in the PlayerCharacter class instead.
    * Declaring this method in the abstract class breaks the Liskov's subsitution principle,
    * since the Enemy subclass is uncapable of using it.
-  @Override
-  public void equip(Weapon weapon);
+   @Override public void equip(Weapon weapon);
    */
 
   /**
@@ -87,24 +89,15 @@ public abstract class AbstractCharacter implements ICharacter {
    * implemented only by the Player class.
    * Declaring this method in the abstract class breaks the Liskov's subsitution principle,
    * since the Enemy subclass is uncapable of using it.
-  @Override
-  public Weapon getEquippedWeapon() {
-    return equippedWeapon;
-  }
+   *
+   * @Override public Weapon getEquippedWeapon() {
+   * return equippedWeapon;
+   * }
    */
-
-  @Override
-  public CharacterClass getCharacterClass() {
-    return characterClass;
-  }
 
   /**
-   * both methods equals() and hashcode() are common in the subclasses, so these methods
-   * have to be declared in the abstract class.
+   @Override public CharacterClass getCharacterClass() {
+   return characterClass;
+   }
    */
-  @Override
-  public abstract boolean equals(final Object o);
-
-  @Override
-  public abstract int hashCode();
 }
