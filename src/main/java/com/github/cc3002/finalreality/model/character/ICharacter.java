@@ -21,6 +21,16 @@ public interface ICharacter {
   String getName();
 
   /**
+   * Returns this character's health points.
+   */
+  int getHP();
+
+  /**
+   * Returns this character's Defense.
+   */
+  int getDefense();
+
+  /**
    * Equips a weapon to the character.
    * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
    * this means that this method should not be declared in the Interface nor in the

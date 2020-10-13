@@ -1,31 +1,37 @@
 package com.github.cc3002.finalreality.model.character;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import com.github.cc3002.finalreality.model.character.player.BlackMage;
 import com.github.cc3002.finalreality.model.character.player.WhiteMage;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.cc3002.finalreality.model.character.player.Knight;
 import org.junit.jupiter.api.Test;
 
-class WhiteMageTest extends AbstractPlayerCharacterTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-    @BeforeEach
-    void setUp() {
-        basicSetUp();
-        testPlayers.add(new WhiteMage(WHITEMAGE_NAME, turns));
-    }
+public class WhiteMageTest extends AbstractPlayerCharacterTest {
 
     @Test
     void constructorTest() {
-        checkConstruction(new WhiteMage(WHITEMAGE_NAME, turns),
-                testPlayers.get(0),
-                new WhiteMage("Gandalf", turns),
-                new BlackMage("Saruman", turns));
+        var expectedWhiteMage = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);
+        var diferentWhiteMage1 = new WhiteMage("Logan", turns, 1, 1, 1);
+        var diferentWhiteMage2 = new WhiteMage(WHITEMAGE_NAME, turns, 5, 1, 1);
+        var diferentWhiteMage3 = new WhiteMage(WHITEMAGE_NAME, turns, 1, 5, 1);
+        var diferentWhiteMage4 = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 5);
+        var expectedKnight = new Knight("Solaire", turns, 1, 1);
+
+        assertEquals(expectedWhiteMage, expectedWhiteMage);
+        assertEquals(expectedWhiteMage.hashCode(), expectedWhiteMage.hashCode());
+
+        assertTrue(expectedWhiteMage.equals(expectedWhiteMage));
+        assertFalse(expectedWhiteMage.equals(diferentWhiteMage1));
+        assertFalse(expectedWhiteMage.equals(diferentWhiteMage2));
+        assertFalse(expectedWhiteMage.equals(diferentWhiteMage3));
+        assertFalse(expectedWhiteMage.equals(diferentWhiteMage4));
+        assertFalse(expectedWhiteMage.equals(expectedKnight));
     }
 
     @Test
     void equipWeaponTest() {
-        WhiteMage whitemage = new WhiteMage(WHITEMAGE_NAME, turns);
+        WhiteMage whitemage = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);
         assertNull(whitemage.getEquippedWeapon());
         whitemage.equip(testWeapon);
         assertEquals(testWeapon, whitemage.getEquippedWeapon());

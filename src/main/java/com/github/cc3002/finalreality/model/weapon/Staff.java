@@ -19,7 +19,7 @@ public class Staff extends AbstractWeapon{
         if (this == o) {
             return true;
         }
-        if (!(o instanceof IWeapon)) {
+        if (!(o instanceof Staff)) {
             return false;
         }
         final IWeapon weapon = (IWeapon) o;

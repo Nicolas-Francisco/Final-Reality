@@ -14,15 +14,18 @@ public abstract class AbstractCharacter implements ICharacter {
 
   private final BlockingQueue<ICharacter> turnsQueue;
   private final String name;
-  // private final CharacterClass characterClass;
-  // private Weapon equippedWeapon = null;  Declared in Player Class instead
+  private final int HP;
+  private final int Defense;
   private ScheduledExecutorService scheduledExecutor;
 
   protected AbstractCharacter(@NotNull BlockingQueue<ICharacter> turnsQueue,
-                              @NotNull String name) {
+                              @NotNull String name,
+                              @NotNull int hp,
+                              @NotNull int defense) {
     this.turnsQueue = turnsQueue;
     this.name = name;
-    // this.characterClass = characterClass;
+    this.HP = hp;
+    this.Defense = defense;
   }
 
   /**
@@ -71,6 +74,16 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public int getHP() {
+    return HP;
+  }
+
+  @Override
+  public int getDefense() {
+    return Defense;
   }
 
   /**

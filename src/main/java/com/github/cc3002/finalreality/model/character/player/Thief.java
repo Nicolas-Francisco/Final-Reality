@@ -15,13 +15,15 @@ import java.util.concurrent.BlockingQueue;
 
 public class Thief extends AbstractPlayerCharacter {
 
-    public Thief(@NotNull String name, @NotNull BlockingQueue<ICharacter> turnsQueue) {
-        super(name, turnsQueue);
+    public Thief(@NotNull String name,
+                 @NotNull BlockingQueue<ICharacter> turnsQueue,
+                 @NotNull int hp,
+                 @NotNull int defense) {
+        super(name, turnsQueue, hp, defense);
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getEquippedWeapon());
+        return Objects.hash(getName(), getHP(), getDefense());
     }
 
     @Override
@@ -29,10 +31,12 @@ public class Thief extends AbstractPlayerCharacter {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AbstractPlayerCharacter)) {
+        if (!(o instanceof Thief)) {
             return false;
         }
-        final AbstractPlayerCharacter that = (AbstractPlayerCharacter) o;
-        return getName().equals(that.getName());
+        final Thief that = (Thief) o;
+        return getName() == that.getName() &&
+                getHP() == that.getHP() &&
+                getDefense() == that.getDefense();
     }
 }

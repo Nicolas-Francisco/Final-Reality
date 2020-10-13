@@ -21,7 +21,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public abstract class AbstractCharacterTest {
 
   protected BlockingQueue<ICharacter> turns;
-  protected List<AbstractPlayerCharacter> testCharacters;
 
   protected void checkConstruction(final ICharacter expectedCharacter,
       final ICharacter testEqualCharacter,
@@ -32,7 +31,6 @@ public abstract class AbstractCharacterTest {
     assertNotEquals(testEqualCharacter, differentClassCharacter);
     assertEquals(expectedCharacter.hashCode(), testEqualCharacter.hashCode());
   }
-
 
   protected void basicSetUp() {
     turns = new LinkedBlockingQueue<>();

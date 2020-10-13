@@ -1,31 +1,34 @@
 package com.github.cc3002.finalreality.model.character;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import com.github.cc3002.finalreality.model.character.player.Engineer;
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class EngineerTest extends AbstractPlayerCharacterTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    @BeforeEach
-    void setUp() {
-        basicSetUp();
-        testPlayers.add(new Engineer(ENGINEER_NAME, turns));
-    }
+public class EngineerTest extends AbstractPlayerCharacterTest {
 
     @Test
     void constructorTest() {
-        checkConstruction(new Engineer(ENGINEER_NAME, turns),
-                testPlayers.get(0),
-                new Engineer("Tony", turns),
-                new Knight("Solaire", turns));
+        var expectedEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
+        var diferentEngineer1 = new Engineer("Tony", turns, 1, 1);
+        var diferentEngineer2 = new Engineer(ENGINEER_NAME, turns, 5, 1);
+        var diferentEngineer3 = new Engineer(ENGINEER_NAME, turns, 1, 5);
+        var expectedKnight = new Knight("Solaire", turns, 1, 1);
+
+        assertEquals(expectedKnight, expectedKnight);
+        assertEquals(expectedKnight.hashCode(), expectedKnight.hashCode());
+
+        assertTrue(expectedEngineer.equals(expectedEngineer));
+        assertFalse(expectedEngineer.equals(diferentEngineer1));
+        assertFalse(expectedEngineer.equals(diferentEngineer2));
+        assertFalse(expectedEngineer.equals(diferentEngineer3));
+        assertFalse(expectedEngineer.equals(expectedKnight));
     }
 
     @Test
     void equipWeaponTest() {
-        Engineer engineer = new Engineer(ENGINEER_NAME, turns);
+        Engineer engineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
         assertNull(engineer.getEquippedWeapon());
         engineer.equip(testWeapon);
         assertEquals(testWeapon, engineer.getEquippedWeapon());

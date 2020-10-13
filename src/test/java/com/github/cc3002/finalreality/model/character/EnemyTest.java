@@ -1,33 +1,39 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class EnemyTest extends AbstractCharacterTest {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class EnemyTest extends AbstractCharacterTest {
 
   private static final String ENEMY_NAME = "Goblin";
   protected List<AbstractCharacter> testCharacters;
 
-  @BeforeEach
-  void setUp() {
-    basicSetUp();
-    testCharacters.add(new Enemy(ENEMY_NAME, 10, turns));
+  @Test
+  void constructorTest() {
+    var expectedEnemy = new Enemy(ENEMY_NAME, 10,turns, 1, 1, 1);
+    var diferentEnemy1 = new Enemy("Mimic", 10, turns, 1, 1, 1);
+    var diferentEnemy2 = new Enemy(ENEMY_NAME, 15,turns, 1, 1, 1);
+    var diferentEnemy3 = new Enemy(ENEMY_NAME, 10,turns, 5, 1, 1);
+    var diferentEnemy4 = new Enemy(ENEMY_NAME, 10,turns, 1, 5, 1);
+    var diferentEnemy5 = new Enemy(ENEMY_NAME, 10,turns, 1, 1, 5);
+    var expectedKnight = new Knight("Solaire", turns, 1, 1);
+
+    assertTrue(expectedEnemy.equals(expectedEnemy));
+    assertFalse(expectedEnemy.equals(diferentEnemy1));
+    assertFalse(expectedEnemy.equals(diferentEnemy2));
+    assertFalse(expectedEnemy.equals(diferentEnemy3));
+    assertFalse(expectedEnemy.equals(diferentEnemy4));
+    assertFalse(expectedEnemy.equals(diferentEnemy5));
+    assertFalse(expectedEnemy.equals(expectedKnight));
   }
 
   /**
-  @Test
-  void constructorTest() {
-    checkConstruction(new Enemy(ENEMY_NAME, 10, turns),
-        testCharacters.get(0),
-        new Enemy(ENEMY_NAME, 11, turns),
-        new Knight(ENEMY_NAME, turns));
-  }
-
-
   @Test
   void waitTurnTest() {
     Assertions.assertTrue(turns.isEmpty());

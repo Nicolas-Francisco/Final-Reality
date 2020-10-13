@@ -15,13 +15,15 @@ import java.util.concurrent.BlockingQueue;
 
 public class Engineer extends AbstractPlayerCharacter {
 
-    public Engineer(@NotNull String name, @NotNull BlockingQueue<ICharacter> turnsQueue) {
-        super(name, turnsQueue);
+    public Engineer(@NotNull String name,
+                    @NotNull BlockingQueue<ICharacter> turnsQueue,
+                    @NotNull int hp,
+                    @NotNull int defense) {
+        super(name, turnsQueue, hp, defense);
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getEquippedWeapon());
+        return Objects.hash(getName(), getHP(), getDefense());
     }
 
     @Override
@@ -29,10 +31,12 @@ public class Engineer extends AbstractPlayerCharacter {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AbstractPlayerCharacter)) {
+        if (!(o instanceof Engineer)) {
             return false;
         }
-        final AbstractPlayerCharacter that = (AbstractPlayerCharacter) o;
-        return getName().equals(that.getName());
+        final Engineer that = (Engineer) o;
+        return getName() == that.getName() &&
+                getHP() == that.getHP() &&
+                getDefense() == that.getDefense();
     }
 }

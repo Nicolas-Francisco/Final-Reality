@@ -1,6 +1,6 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
+import com.github.cc3002.finalreality.model.character.player.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @author Nicolas García Ríos
  * @see AbstractPlayerCharacter
  */
-class AbstractPlayerCharacterTest extends AbstractCharacterTest {
+public class AbstractPlayerCharacterTest extends AbstractCharacterTest {
 
   protected static final String BLACKMAGE_NAME = "Vivi";
   protected static final String KNIGHT_NAME = "Adelbert";
@@ -28,16 +28,31 @@ class AbstractPlayerCharacterTest extends AbstractCharacterTest {
   protected List<AbstractPlayerCharacter> testPlayers;
 
 
-
   private void tryToEquip(AbstractPlayerCharacter player) {
     player.equip(testWeapon);
   }
-
 /**
   @Test
   void waitTurnTest() {
+    var BlackMagePlayer = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 1);
+    var EngineerPlayer = new Engineer(ENGINEER_NAME, turns, 1, 1);
+    var KnightPlayer = new Knight(KNIGHT_NAME, turns, 1, 1);
+    var ThiefPlayer = new Thief(THIEF_NAME, turns, 1, 1);
+    var WhiteMagePlayer = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);
+
+    BlackMagePlayer.equip(testWeapon);
+    EngineerPlayer.equip(testWeapon);
+    KnightPlayer.equip(testWeapon);
+    ThiefPlayer.equip(testWeapon);
+    WhiteMagePlayer.equip(testWeapon);
+
+    testPlayers.add(BlackMagePlayer);
+    testPlayers.add(EngineerPlayer);
+    testPlayers.add(KnightPlayer);
+    testPlayers.add(ThiefPlayer);
+    testPlayers.add(WhiteMagePlayer);
+
     Assertions.assertTrue(turns.isEmpty());
-    tryToEquip(testPlayers.get(0));
     testPlayers.get(0).waitTurn();
     try {
       // Thread.sleep is not accurate so this values may be changed to adjust the

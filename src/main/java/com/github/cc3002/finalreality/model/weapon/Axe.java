@@ -19,7 +19,7 @@ public class Axe extends AbstractWeapon{
         if (this == o) {
             return true;
         }
-        if (!(o instanceof IWeapon)) {
+        if (!(o instanceof Axe)) {
             return false;
         }
         final IWeapon weapon = (IWeapon) o;

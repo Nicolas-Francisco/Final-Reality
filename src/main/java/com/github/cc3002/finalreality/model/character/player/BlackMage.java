@@ -15,13 +15,24 @@ import java.util.concurrent.BlockingQueue;
 
 public class BlackMage extends AbstractPlayerCharacter {
 
-    public BlackMage(@NotNull String name, @NotNull BlockingQueue<ICharacter> turnsQueue) {
-        super(name, turnsQueue);
+    private int MP;
+
+    public BlackMage(@NotNull String name,
+                     @NotNull BlockingQueue<ICharacter> turnsQueue,
+                     @NotNull int hp,
+                     @NotNull int defense,
+                     @NotNull int mana) {
+        super(name, turnsQueue, hp, defense);
+        this.MP = mana;
+    }
+
+    public int getMP(){
+        return MP;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getEquippedWeapon());
+        return Objects.hash(getName(), getHP(), getDefense(), getMP());
     }
 
     @Override
@@ -29,10 +40,13 @@ public class BlackMage extends AbstractPlayerCharacter {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AbstractPlayerCharacter)) {
+        if (!(o instanceof BlackMage)) {
             return false;
         }
-        final AbstractPlayerCharacter that = (AbstractPlayerCharacter) o;
-        return getName().equals(that.getName());
+        final BlackMage that = (BlackMage) o;
+        return getName() == that.getName() &&
+                getHP() == that.getHP() &&
+                getDefense() == that.getDefense() &&
+                getMP() == that.getMP();
     }
 }
