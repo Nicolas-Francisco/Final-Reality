@@ -7,12 +7,25 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EnemyTest extends AbstractCharacterTest {
+/**
+ * This testing class tests all the methods of a Enemy Character.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas García Ríos
+ */
+public class EnemyTest{
 
+  /**
+   * Name, Enemy and the BlockingQueue for the constructor to test with
+   */
   protected BlockingQueue<ICharacter> turns = new LinkedBlockingQueue<>();
   private static final String ENEMY_NAME = "Goblin";
   private Enemy testEnemy;
 
+  /**
+   * This method tests the waitTurn() method if the character is a enemy.
+   * In this case we test only with a enemy character.
+   */
   @Test
   void waitTurnTest() {
     testEnemy = new Enemy(ENEMY_NAME, turns, 10,1, 1, 1);
@@ -32,6 +45,13 @@ public class EnemyTest extends AbstractCharacterTest {
     }
   }
 
+  /**
+   * This method tests the construction method.
+   * Because every Hashcode() and Equals() is different in every Class, we have to
+   * test every branch and any difference between characters. In this case, the Hashcode
+   * and Equals compares every parameter of the enemy character, thus we have to test
+   * differences in each parameter (name, hp, defence and attack)
+   */
   @Test
   void constructorTest() {
     var expectedEnemy = new Enemy(ENEMY_NAME,turns, 10, 1, 1, 1);

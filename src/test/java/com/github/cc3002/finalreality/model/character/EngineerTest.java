@@ -6,14 +6,26 @@ import com.github.cc3002.finalreality.model.weapon.Axe;
 import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This testing class tests all the methods of a Engineer player.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas García Ríos
+ */
 public class EngineerTest extends AbstractPlayerCharacterTest {
 
+    /**
+     * New testing player and testing weapon
+     */
     private Engineer testEngineer;
     private IWeapon testAxe;
 
+    /**
+     * This method tests the waitTurn() method if the character is a player.
+     * In this case we test only with a engineer player.
+     */
     @Test
     void waitTurnTest() {
         testEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
@@ -35,6 +47,13 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
         }
     }
 
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the Engineer Class, thus we have to test
+     * differences in each parameter (name, hp and  defence)
+     */
     @Test
     void constructorTest() {
         var expectedEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
@@ -53,6 +72,11 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
         assertFalse(expectedEngineer.equals(expectedKnight));
     }
 
+    /**
+     * This method tests the equip method.
+     * For now it just tests with any weapon, but when we start the double dispatch we
+     * will have to test every weapon that this class can equip
+     */
     @Test
     void equipWeaponTest() {
         Engineer engineer = new Engineer(ENGINEER_NAME, turns, 1, 1);

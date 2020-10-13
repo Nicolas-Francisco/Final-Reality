@@ -1,8 +1,10 @@
 package com.github.cc3002.finalreality.model.weapon;
 
 /**
- * This represents a weapon form the game,
- * A weapon can be used by the player only.
+ * This represents a weapon form the game.
+ * A weapon can be used by the player only, and every weapon has
+ * many parameters that relate them, hence there has to be a Interface
+ * wich can unify all the weapons in the game
  *
  * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
@@ -10,21 +12,17 @@ package com.github.cc3002.finalreality.model.weapon;
 public interface IWeapon {
 
     /**
-     * Returns this character's name.
+     * Returns this weapon's name.
      */
     String getName();
 
     /**
-     * Returns this character's damage.
+     * Returns this weapon's damage.
      */
     int getDamage();
 
     /**
-     * Returns this character's weight.
+     * Returns this weapon's weight.
      */
     int getWeight();
-
-    /**
-     * Returns this character's type.
-     */
 }

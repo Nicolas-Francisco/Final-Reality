@@ -9,24 +9,35 @@ import java.util.concurrent.BlockingQueue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A class that holds all the information of a single character of the game.
+ * A class that holds all the information of a player character of the game,
+ * which is controlled by the player and not by the cpu.
+ *
+ * Because the CharacterClass array was eliminated, we no longer have that
+ * parameter to differentiate each class from another. Hence this is now a
+ * AbstractClass which represents a character controlled by the player no
+ * matter the class of the player.
  *
  * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
  */
 public class AbstractPlayerCharacter extends AbstractCharacter {
 
+  /**
+   * Every Player can equip a weapon, but its not part of the
+   * constructor of the player.
+   */
+
   private IWeapon equippedWeapon = null;
 
   /**
-   * Creates a new character.
+   * Creates a new player.
    *
    * @param name
-   *     the character's name
+   *     the player's name
    * @param turnsQueue
-   *     the queue with the characters waiting for their turn
+   *     the queue with the player waiting for their turn
    * @param hp
-   *     the character's hp
+   *     the player's health points
    * @param defense
    *     the character's defense
    */
@@ -37,7 +48,7 @@ public class AbstractPlayerCharacter extends AbstractCharacter {
     super(turnsQueue, name, hp, defense);
   }
 
-    /**
+  /**
    * waitTurn() method if the object is a Player
    */
   public void waitTurn(){
@@ -48,7 +59,7 @@ public class AbstractPlayerCharacter extends AbstractCharacter {
   /**
    * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
    * this means that this method should not be declared in the Interface nor in the
-   * Astract class, but in the PlayerCharacter class instead.
+   * Abstract class, but in the AbstractPlayerCharacter class instead.
    */
   public void equip(IWeapon weapon) {
     this.equippedWeapon = weapon;
@@ -57,11 +68,10 @@ public class AbstractPlayerCharacter extends AbstractCharacter {
   /**
    * Return this character's equipped weapon.
    * Enemy class does not have any weapons, so having a getEquippedWeapon() method
-   * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
-   * implemented only by the Player class.
+   * for enemies has no sense. Therefore getEquippedWeapon() should be declared and
+   * implemented only by the AbstractPlayerClass.
    */
   public IWeapon getEquippedWeapon() {
     return equippedWeapon;
   }
-
 }

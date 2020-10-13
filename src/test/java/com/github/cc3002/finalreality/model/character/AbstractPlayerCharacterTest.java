@@ -1,26 +1,21 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.*;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.github.cc3002.finalreality.model.weapon.*;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- * Set of tests for the {@code GameCharacter} class.
+ * This class just Creates parameters for all the Testings Classes of each
+ * player to use, there is nothing to test in this Abstract Class.
  *
  * @author Ignacio Slater Muñoz
  * @author Nicolas García Ríos
- * @see AbstractPlayerCharacter
  */
-public class AbstractPlayerCharacterTest extends AbstractCharacterTest {
+public class AbstractPlayerCharacterTest{
 
+  /**
+   * Names for each player with a different class and the BlockingQueue
+   * "turns" for the constructors of every testing player
+   */
   protected static final String BLACKMAGE_NAME = "Vivi";
   protected static final String KNIGHT_NAME = "Adelbert";
   protected static final String WHITEMAGE_NAME = "Eiko";

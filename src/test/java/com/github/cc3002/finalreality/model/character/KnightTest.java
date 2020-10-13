@@ -6,15 +6,27 @@ import com.github.cc3002.finalreality.model.weapon.Axe;
 import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * This testing class tests all the methods of a Knight player.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas García Ríos
+ */
 public class KnightTest extends AbstractPlayerCharacterTest {
 
+    /**
+     * New testing player and testing weapon
+     */
     private Knight testKnight;
     private IWeapon testSword;
 
+    /**
+     * This method tests the waitTurn() method if the character is a player.
+     * In this case we test only with a knight player.
+     */
     @Test
     void waitTurnTest() {
         testKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
@@ -36,6 +48,13 @@ public class KnightTest extends AbstractPlayerCharacterTest {
         }
     }
 
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the Knight Class, thus we have to test
+     * differences in each parameter (name, hp and  defence)
+     */
     @Test
     void constructorTest() {
         var expectedKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
@@ -54,6 +73,11 @@ public class KnightTest extends AbstractPlayerCharacterTest {
         assertFalse(expectedKnight.equals(expectedEngineer));
     }
 
+    /**
+     * This method tests the equip method.
+     * For now it just tests with any weapon, but when we start the double dispatch we
+     * will have to test every weapon that this class can equip
+     */
     @Test
     void equipWeaponTest() {
         Knight knight = new Knight(KNIGHT_NAME, turns, 1, 1);

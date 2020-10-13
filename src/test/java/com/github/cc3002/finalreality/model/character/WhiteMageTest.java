@@ -6,15 +6,27 @@ import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import com.github.cc3002.finalreality.model.weapon.Staff;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * This testing class tests all the methods of a WhiteMage player.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas García Ríos
+ */
 public class WhiteMageTest extends AbstractPlayerCharacterTest {
 
+    /**
+     * New testing player and testing weapon
+     */
     private WhiteMage testWhiteMage;
     private IWeapon testStaff;
 
+    /**
+     * This method tests the waitTurn() method if the character is a player.
+     * In this case we test only with a whitemage player.
+     */
     @Test
     void waitTurnTest() {
         testWhiteMage = new WhiteMage(WHITEMAGE_NAME, turns, 10, 10, 10);
@@ -36,6 +48,13 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
         }
     }
 
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the WhiteMage Class, thus we have to test
+     * differences in each parameter (name, hp, defence and mana)
+     */
     @Test
     void constructorTest() {
         var expectedWhiteMage = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);
@@ -56,6 +75,11 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
         assertFalse(expectedWhiteMage.equals(expectedKnight));
     }
 
+    /**
+     * This method tests the equip method.
+     * For now it just tests with any weapon, but when we start the double dispatch we
+     * will have to test every weapon that this class can equip
+     */
     @Test
     void equipWeaponTest() {
         WhiteMage whitemage = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);

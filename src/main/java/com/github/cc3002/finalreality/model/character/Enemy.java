@@ -18,8 +18,20 @@ public class Enemy extends AbstractCharacter {
   private int attack;
 
   /**
-   * Creates a new enemy with a name, a weight and the queue with the characters ready to
-   * play.
+   * Creates a new enemy.
+   *
+   * @param name
+   *     the enemy's name
+   * @param turnsQueue
+   *     the queue with the characters waiting for their turn
+   * @param hp
+   *     the enemy's hp
+   * @param defense
+   *     the enemy's defense
+   * @param weight
+   *    the enemy's weight
+   * @param attack
+   *    the enemy's attack
    */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
@@ -52,8 +64,8 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
-   * both methods equals() and hashcode() are common in the subclasses, so these methods
-   * have to be declared in the abstract class.
+   * both methods equals() and hashcode() are different depending of the type of character and
+   * the type of Character, hence this methods cannot be used with inheritance
    */
   @Override
   public boolean equals(final Object o) {

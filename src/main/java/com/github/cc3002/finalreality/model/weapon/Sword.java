@@ -10,10 +10,24 @@ import java.util.Objects;
  */
 public class Sword extends AbstractWeapon{
 
+    /**
+     * Creates a new Sword of the game.
+     *
+     * @param name
+     *     the Sword's name
+     * @param damage
+     *     the Sword's damage
+     * @param weight
+     *     the Sword's weight
+     */
     public Sword(final String name, final int damage, final int weight) {
         super (name, damage, weight);
     }
 
+    /**
+     * both methods equals() and hashcode() are different depending of the type of weapon
+     * hence this methods cannot be used with inheritance
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

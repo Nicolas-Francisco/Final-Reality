@@ -2,7 +2,6 @@ package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
@@ -17,6 +16,20 @@ public class WhiteMage extends AbstractPlayerCharacter {
 
     private int MP;
 
+    /**
+     * Creates a new player.
+     *
+     * @param name
+     *     the player's name
+     * @param turnsQueue
+     *     the queue with the player waiting for their turn
+     * @param hp
+     *     the player's health points
+     * @param defense
+     *     the character's defense
+     * @param mana
+     *     the player's magic Points for spells
+     */
     public WhiteMage(@NotNull String name,
                      @NotNull BlockingQueue<ICharacter> turnsQueue,
                      @NotNull int hp,
@@ -26,10 +39,17 @@ public class WhiteMage extends AbstractPlayerCharacter {
         this.MP = mana;
     }
 
+    /**
+     * get() method for the magic points of the player.
+     */
     public int getMP(){
         return MP;
     }
 
+    /**
+     * both methods equals() and hashcode() are different depending of the type of character and
+     * the type of Character, hence this methods cannot be used with inheritance
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getHP(), getDefense(), getMP());

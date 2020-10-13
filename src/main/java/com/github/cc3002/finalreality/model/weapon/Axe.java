@@ -10,10 +10,24 @@ import java.util.Objects;
  */
 public class Axe extends AbstractWeapon{
 
+    /**
+     * Creates a new Axe of the game.
+     *
+     * @param name
+     *     the Axe's name
+     * @param damage
+     *     the Axe's damage
+     * @param weight
+     *     the Axe's weight
+     */
     public Axe(final String name, final int damage, final int weight) {
         super (name, damage, weight);
     }
 
+    /**
+     * both methods equals() and hashcode() are different depending of the type of weapon
+     * hence this methods cannot be used with inheritance
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
