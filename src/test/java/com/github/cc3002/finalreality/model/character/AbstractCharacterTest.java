@@ -1,13 +1,7 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -20,7 +14,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public abstract class AbstractCharacterTest {
 
-  protected BlockingQueue<ICharacter> turns;
 
   protected void checkConstruction(final ICharacter expectedCharacter,
       final ICharacter testEqualCharacter,
@@ -32,7 +25,4 @@ public abstract class AbstractCharacterTest {
     assertEquals(expectedCharacter.hashCode(), testEqualCharacter.hashCode());
   }
 
-  protected void basicSetUp() {
-    turns = new LinkedBlockingQueue<>();
-  }
 }

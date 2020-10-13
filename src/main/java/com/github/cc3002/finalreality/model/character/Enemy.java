@@ -15,17 +15,18 @@ import org.jetbrains.annotations.NotNull;
 public class Enemy extends AbstractCharacter {
 
   private final int weight;
-  private int atack;
+  private int attack;
 
   /**
    * Creates a new enemy with a name, a weight and the queue with the characters ready to
    * play.
    */
-  public Enemy(@NotNull final String name, final int weight,
-      @NotNull final BlockingQueue<ICharacter> turnsQueue, int hp, int defense, int atack) {
+  public Enemy(@NotNull final String name,
+               @NotNull final BlockingQueue<ICharacter> turnsQueue,
+               final int weight,int hp, int defense, int attack) {
     super(turnsQueue, name, hp, defense);
     this.weight = weight;
-    this.atack = atack;
+    this.attack = attack;
   }
 
   /**
@@ -36,10 +37,10 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
-   * Returns the atack of this enemy.
+   * Returns the attack of this enemy.
    */
-  public int getAtack() {
-    return atack;
+  public int getAttack() {
+    return attack;
   }
 
   /**
@@ -47,7 +48,7 @@ public class Enemy extends AbstractCharacter {
    */
   public void waitTurn(){
     super.setScheduledExecutor(Executors.newSingleThreadScheduledExecutor());
-    super.getScheduledExecutor().schedule(super::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+    super.getScheduledExecutor().schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
   }
 
   /**
@@ -67,12 +68,12 @@ public class Enemy extends AbstractCharacter {
             getName() == enemy.getName() &&
             getHP() == enemy.getHP() &&
             getDefense() == enemy.getDefense() &&
-            getAtack() == enemy.getAtack();
+            getAttack() == enemy.getAttack();
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(getWeight(),
-            getName(), getHP(), getDefense(), getAtack());
+            getName(), getHP(), getDefense(), getAttack());
   }
 }
