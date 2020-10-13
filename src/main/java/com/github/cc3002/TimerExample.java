@@ -1,10 +1,9 @@
 package com.github.cc3002;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
-import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
-import com.github.cc3002.finalreality.model.weapon.Weapon;
-import com.github.cc3002.finalreality.model.weapon.WeaponType;
+import com.github.cc3002.finalreality.model.weapon.Knife;
+import com.github.cc3002.finalreality.model.character.player.Thief;
+
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,9 +18,8 @@ public class TimerExample {
     Random rng = new Random();
     for (int i = 0; i < 10; i++) {
       // Gives a random speed to each character to generate different waiting times
-      var weapon = new Weapon("", 0, rng.nextInt(50), WeaponType.KNIFE);
-      var character = new PlayerCharacter(Integer.toString(i), queue,
-          CharacterClass.THIEF);
+      var weapon = new Knife("", 0, rng.nextInt(50));
+      var character = new Thief(Integer.toString(i), queue, 1, 1);
       character.equip(weapon);
       character.waitTurn();
     }

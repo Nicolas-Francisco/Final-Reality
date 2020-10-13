@@ -1,14 +1,11 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
-import com.github.cc3002.finalreality.model.weapon.Weapon;
-
 /**
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Nicolás García Ríos
  */
 public interface ICharacter {
 
@@ -24,17 +21,39 @@ public interface ICharacter {
   String getName();
 
   /**
-   * Equips a weapon to the character.
+   * Returns this character's health points.
    */
-  void equip(Weapon weapon);
+  int getHP();
+
+  /**
+   * Returns this character's Defense.
+   */
+  int getDefense();
+
+  /**
+   * Adds this character to the turns queue.
+   */
+  void addToQueue();
+
+  /**
+   * Equips a weapon to the character.
+   * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
+   * this means that this method should not be declared in the Interface nor in the
+   * Astract class, but in the PlayerCharacter class instead.
+   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
+   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
+   *
+   void equip(Weapon weapon);
+   * /
 
   /**
    * Return this character's equipped weapon.
+   * Enemy class does not have any weapons, so having a getEquippedWeapon() method
+   * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
+   * implemented only by Player class.
+   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
+   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
+   *
+   Weapon getEquippedWeapon();
    */
-  Weapon getEquippedWeapon();
-
-  /**
-   * Returns this character's class.
-   */
-  CharacterClass getCharacterClass();
 }
