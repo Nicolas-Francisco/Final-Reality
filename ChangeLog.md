@@ -3,7 +3,14 @@ ChangeLog
 
 Version 2.0
 -----------
-Write your changes in here
+- (RC.1) "Tarea 1"
+- (B.6) Updated README.md and Code Comments
+- (B.6) Implementation waitTurn() Tests
+- (B.5) Implementation of most Tests
+- (B.4) New attributes implemented to Weapons and Players
+- (B.3) Elimination of CharacterClass and WeaponType
+- (B.2) Implementation of the IWeapon and AbstractWeapon Class Design
+- (B.1) Implementation of the AbstractPlayer Class Design
 
 Version 1.0
 -----------

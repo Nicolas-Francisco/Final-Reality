@@ -31,6 +31,11 @@ public interface ICharacter {
   int getDefense();
 
   /**
+   * Adds this character to the turns queue.
+   */
+  void addToQueue();
+
+  /**
    * Equips a weapon to the character.
    * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
    * this means that this method should not be declared in the Interface nor in the

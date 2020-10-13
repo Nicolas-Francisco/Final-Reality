@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
  */
-public class AbstractPlayerCharacter extends AbstractCharacter {
+public abstract class AbstractPlayerCharacter extends AbstractCharacter {
 
   /**
    * Every Player can equip a weapon, but its not part of the

@@ -57,7 +57,7 @@ public abstract class AbstractCharacter implements ICharacter {
    * addToQueue() should be a protected method OR there has to be a public set() method
    * for the subclasses to use. In this case addToQueue() is a private method.
    */
-  protected void addToQueue() {
+  public void addToQueue() {
     turnsQueue.add(this);
     scheduledExecutor.shutdown();
   }
