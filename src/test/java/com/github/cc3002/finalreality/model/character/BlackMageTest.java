@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.BlackMage;
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
-import com.github.cc3002.finalreality.model.weapon.Staff;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class BlackMageTest extends AbstractPlayerCharacterTest {
 
     /**
-     * New testing player and testing weapon
+     * New testing player
      */
-    private BlackMage testBlackMage;
-    private IWeapon testStaff;
+    private BlackMage testBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 10, 10, 10);
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -29,10 +26,8 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 10, 10, 10);
-        testStaff = new Staff("test", 10, 10);
         Assertions.assertTrue(turns.isEmpty());
-        testBlackMage.equip(testStaff);
+        testBlackMage.equipStaff(testStaff);
         testBlackMage.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -76,15 +71,27 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
     }
 
     /**
-     * This method tests the equip method.
-     * For now it just tests with any weapon, but when we start the double dispatch we
-     * will have to test every weapon that this class can equip
+     * This method tests the equip methods and branches.
      */
     @Test
     void equipWeaponTest() {
-        BlackMage blackmage = new BlackMage(BLACKMAGE_NAME, turns, 10, 10, 10);
-        assertNull(blackmage.getEquippedWeapon());
-        blackmage.equip(testStaff);
-        assertEquals(testStaff, blackmage.getEquippedWeapon());
+        assertNull(testBlackMage.getEquippedWeapon());
+        testBlackMage.equipSword(testSword);
+        assertNull(testBlackMage.getEquippedWeapon());
+        testBlackMage.equipAxe(testAxe);
+        assertNull(testBlackMage.getEquippedWeapon());
+        testBlackMage.equipBow(testBow);
+        assertNull(testBlackMage.getEquippedWeapon());
+
+        testBlackMage.equipKnife(testKnife);
+        assertEquals(testKnife, testBlackMage.getEquippedWeapon());
+        testBlackMage.equipStaff(testStaff);
+        assertEquals(testStaff, testBlackMage.getEquippedWeapon());
+
+        BlackMage differentBlackMage1 = new BlackMage("Saruman", turns, 0, 1, 1);
+        differentBlackMage1.equipStaff(testStaff);
+        assertNull(differentBlackMage1.getEquippedWeapon());
+        differentBlackMage1.equipKnife(testKnife);
+        assertNull(differentBlackMage1.getEquippedWeapon());
     }
 }

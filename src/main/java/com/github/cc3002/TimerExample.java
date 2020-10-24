@@ -9,7 +9,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @author Ignacio Slater Muñoz.
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas Garcia Rios
  */
 public class TimerExample {
 
@@ -20,7 +21,7 @@ public class TimerExample {
       // Gives a random speed to each character to generate different waiting times
       var weapon = new Knife("", 0, rng.nextInt(50));
       var character = new Thief(Integer.toString(i), queue, 1, 1);
-      character.equip(weapon);
+      character.equipKnife(weapon);
       character.waitTurn();
     }
     // Waits for 6 seconds to ensure that all characters have finished waiting

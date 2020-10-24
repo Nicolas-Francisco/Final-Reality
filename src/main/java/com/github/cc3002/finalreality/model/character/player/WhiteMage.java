@@ -1,6 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.Staff;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -44,6 +45,18 @@ public class WhiteMage extends AbstractPlayerCharacter {
      */
     public int getMP(){
         return MP;
+    }
+
+    /**
+     * equips a staff to the white mage.
+     * A white mage class can only equip a staff. Hence, we create equipStaff to make sure
+     * that the white mage can only equip this type of weapon.
+     */
+    @Override
+    public void equipStaff(Staff staff){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(staff);
+        }
     }
 
     /**

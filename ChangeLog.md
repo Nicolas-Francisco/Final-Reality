@@ -1,10 +1,17 @@
 ChangeLog
 =========
 
+Version 3.0
+-----------
+- (RC.3) "Tarea 2 - Entrega Parcial 1"
+- (B.3) Implemented missing tests
+- (B.2) Implementation of equip() methods using Double Dispatch
+- (B.1) Implementation of attackTo() and attackedBy() methods
+
 Version 2.0
 -----------
-- (RC.1) "Tarea 1"
-- (B.6) Updated README.md and Code Comments
+- (RC.2) "Tarea 1"
+- (B.7) Updated README.md and Code Comments
 - (B.6) Implementation waitTurn() Tests
 - (B.5) Implementation of most Tests
 - (B.4) New attributes implemented to Weapons and Players

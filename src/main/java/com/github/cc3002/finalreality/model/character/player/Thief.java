@@ -1,6 +1,9 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.Bow;
+import com.github.cc3002.finalreality.model.weapon.Knife;
+import com.github.cc3002.finalreality.model.weapon.Sword;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -31,6 +34,42 @@ public class Thief extends AbstractPlayerCharacter {
                  @NotNull int hp,
                  @NotNull int defense) {
         super(name, turnsQueue, hp, defense);
+    }
+
+    /**
+     * equips a sword to the thief.
+     * A thief class can only equip a sword, a bow or a knife. Hence, we create equipSword,
+     * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
+     */
+    @Override
+    public void equipSword(Sword sword){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(sword);
+        }
+    }
+
+    /**
+     * equips a bow to the thief.
+     * A thief class can only equip a sword, a bow or a knife. Hence, we create equipSword,
+     * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
+     */
+    @Override
+    public void equipBow(Bow bow){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(bow);
+        }
+    }
+
+    /**
+     * equips a knife to the thief.
+     * A thief class can only equip a sword, a bow or a knife. Hence, we create equipSword,
+     * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
+     */
+    @Override
+    public void equipKnife(Knife knife){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(knife);
+        }
     }
 
     /**

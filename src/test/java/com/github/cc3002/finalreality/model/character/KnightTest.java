@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.Knight;
 import com.github.cc3002.finalreality.model.character.player.Engineer;
-import com.github.cc3002.finalreality.model.weapon.Axe;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class KnightTest extends AbstractPlayerCharacterTest {
 
     /**
-     * New testing player and testing weapon
+     * New testing player
      */
-    private Knight testKnight;
-    private IWeapon testSword;
+    private Knight testKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -29,10 +26,8 @@ public class KnightTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
-        testSword = new Axe("test", 10, 10);
         Assertions.assertTrue(turns.isEmpty());
-        testKnight.equip(testSword);
+        testKnight.equipSword(testSword);
         testKnight.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -74,15 +69,29 @@ public class KnightTest extends AbstractPlayerCharacterTest {
     }
 
     /**
-     * This method tests the equip method.
-     * For now it just tests with any weapon, but when we start the double dispatch we
-     * will have to test every weapon that this class can equip
+     * This method tests the equip methods and branches.
      */
     @Test
     void equipWeaponTest() {
-        Knight knight = new Knight(KNIGHT_NAME, turns, 1, 1);
-        assertNull(knight.getEquippedWeapon());
-        knight.equip(testSword);
-        assertEquals(testSword, knight.getEquippedWeapon());
+        testKnight.equipStaff(testStaff);
+        assertNull(testKnight.getEquippedWeapon());
+        testKnight.equipBow(testBow);
+        assertNull(testKnight.getEquippedWeapon());
+
+        testKnight.equipSword(testSword);
+        assertEquals(testSword, testKnight.getEquippedWeapon());
+        testKnight.equipKnife(testKnife);
+        assertEquals(testKnife, testKnight.getEquippedWeapon());
+        testKnight.equipAxe(testAxe);
+        assertEquals(testAxe, testKnight.getEquippedWeapon());
+
+
+        Knight differentKnight1 = new Knight("Solaire", turns, 0, 1);
+        differentKnight1.equipAxe(testAxe);
+        assertNull(differentKnight1.getEquippedWeapon());
+        differentKnight1.equipKnife(testKnife);
+        assertNull(differentKnight1.getEquippedWeapon());
+        differentKnight1.equipSword(testSword);
+        assertNull(differentKnight1.getEquippedWeapon());
     }
 }

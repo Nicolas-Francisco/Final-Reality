@@ -2,6 +2,8 @@ package com.github.cc3002.finalreality.model.character;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
+
+import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,9 +16,10 @@ public abstract class AbstractCharacter implements ICharacter {
 
   private final BlockingQueue<ICharacter> turnsQueue;
   private final String name;
-  private final int HP;
+  private int HP;
   private final int Defense;
   private ScheduledExecutorService scheduledExecutor;
+  private boolean alive;
 
   /**
    * Creates a new character.
@@ -38,6 +41,19 @@ public abstract class AbstractCharacter implements ICharacter {
     this.name = name;
     this.HP = hp;
     this.Defense = defense;
+
+    /**
+     * depending of the amount of HP of the character, it might be dead or alive. This parameter
+     * can be changed during fights (a character can be killed by another when attacked).
+     * If a user creates a character with 0 HP, we initialize the character with false. (this
+     * is a border case)
+     */
+    if(this.HP > 0){
+      this.alive = true;
+    }
+    else{
+      this.alive = false;
+    }
   }
 
   /**
@@ -57,6 +73,7 @@ public abstract class AbstractCharacter implements ICharacter {
    * addToQueue() should be a protected method OR there has to be a public set() method
    * for the subclasses to use. In this case addToQueue() is a private method.
    */
+  @Override
   public void addToQueue() {
     turnsQueue.add(this);
     scheduledExecutor.shutdown();
@@ -89,6 +106,52 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public int getDefense() {
     return Defense;
+  }
+
+  /**
+   * setter methods for each private parameter of the class.
+   */
+  public void setHP(int health) {
+    if (health <= 0){
+      this.HP = 0;
+      this.setDead();
+    }
+    else{
+      this.HP = health;
+      this.setAlive();
+    }
+  }
+
+  public void setDead() {
+    this.alive = false;
+  }
+
+  public void setAlive() {
+    this.alive = true;
+  }
+
+  /**
+   * the character attacks to another character.
+   * The class of the character attacked doesn't affect how we implement this method, but we are
+   * going to assume that an enemy can only attack to a Player class and viceversa.
+   */
+  @Override
+  public void attackTo(){}
+
+  /**
+   * the character is attacked by another character.
+   * Assuming that the enemy can only be attacked by a Player and viceversa, the damage inflicted
+   * to the enemy or player is determined by the weapon equipped by the player or not.
+   */
+  @Override
+  public void attackedBy(){}
+
+  /**
+   * method that informs if the character is dead or alive.
+   */
+  @Override
+  public boolean IsAlive() {
+    return this.alive;
   }
 
   /**

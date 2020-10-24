@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
+
+import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -61,6 +63,24 @@ public class Enemy extends AbstractCharacter {
   public void waitTurn(){
     super.setScheduledExecutor(Executors.newSingleThreadScheduledExecutor());
     super.getScheduledExecutor().schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+  }
+
+  /**
+   * the enemy attacks to a player.
+   * Assuming that an enemy can only attack to a Player class and viceversa, this method
+   * reduces the Hp of the attacked character depending of the attributes of the enemy.
+   */
+  public void attackTo(AbstractPlayerCharacter player){
+    if (player.IsAlive() && this.IsAlive()){
+      int damage = this.attack - player.getDefense();
+      if (player.getHP() > damage){
+        player.setHP(player.getHP() - damage);
+      }
+      else{
+        player.setHP(0);
+        player.setDead();
+      }
+    }
   }
 
   /**

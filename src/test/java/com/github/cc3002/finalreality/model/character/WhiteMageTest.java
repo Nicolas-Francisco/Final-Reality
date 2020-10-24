@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.WhiteMage;
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
-import com.github.cc3002.finalreality.model.weapon.Staff;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class WhiteMageTest extends AbstractPlayerCharacterTest {
 
     /**
-     * New testing player and testing weapon
+     * New testing player
      */
-    private WhiteMage testWhiteMage;
-    private IWeapon testStaff;
+    private WhiteMage testWhiteMage = new WhiteMage(WHITEMAGE_NAME, turns, 10, 10, 10);
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -29,9 +26,7 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testWhiteMage = new WhiteMage(WHITEMAGE_NAME, turns, 10, 10, 10);
-        testStaff = new Staff("test", 10, 10);
-        testWhiteMage.equip(testStaff);
+        testWhiteMage.equipStaff(testStaff);
         Assertions.assertTrue(turns.isEmpty());
         testWhiteMage.waitTurn();
         try {
@@ -76,15 +71,25 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
     }
 
     /**
-     * This method tests the equip method.
-     * For now it just tests with any weapon, but when we start the double dispatch we
-     * will have to test every weapon that this class can equip
+     * This method tests the equip methods and branches.
      */
     @Test
     void equipWeaponTest() {
-        WhiteMage whitemage = new WhiteMage(WHITEMAGE_NAME, turns, 1, 1, 1);
-        assertNull(whitemage.getEquippedWeapon());
-        whitemage.equip(testStaff);
-        assertEquals(testStaff, whitemage.getEquippedWeapon());
+        assertNull(testWhiteMage.getEquippedWeapon());
+        testWhiteMage.equipSword(testSword);
+        assertNull(testWhiteMage.getEquippedWeapon());
+        testWhiteMage.equipKnife(testKnife);
+        assertNull(testWhiteMage.getEquippedWeapon());
+        testWhiteMage.equipAxe(testAxe);
+        assertNull(testWhiteMage.getEquippedWeapon());
+        testWhiteMage.equipBow(testBow);
+        assertNull(testWhiteMage.getEquippedWeapon());
+
+        testWhiteMage.equipStaff(testStaff);
+        assertEquals(testStaff, testWhiteMage.getEquippedWeapon());
+
+        WhiteMage differentWhiteMage1 = new WhiteMage("Logan", turns, 0, 1, 1);
+        differentWhiteMage1.equipStaff(testStaff);
+        assertNull(differentWhiteMage1.getEquippedWeapon());
     }
 }

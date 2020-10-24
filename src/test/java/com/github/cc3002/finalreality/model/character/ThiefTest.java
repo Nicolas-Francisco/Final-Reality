@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.Knight;
 import com.github.cc3002.finalreality.model.character.player.Thief;
-import com.github.cc3002.finalreality.model.weapon.Bow;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,10 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class ThiefTest extends AbstractPlayerCharacterTest {
 
     /**
-     * New testing player and testing weapon
+     * New testing player
      */
-    private Thief testThief;
-    private IWeapon testBow;
+    private Thief testThief = new Thief(THIEF_NAME, turns, 1, 1);
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -29,10 +26,8 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testThief = new Thief(THIEF_NAME, turns, 1, 1);
-        testBow = new Bow("test", 10, 10);
         Assertions.assertTrue(turns.isEmpty());
-        testThief.equip(testBow);
+        testThief.equipBow(testBow);
         testThief.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -74,15 +69,30 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
     }
 
     /**
-     * This method tests the equip method.
-     * For now it just tests with any weapon, but when we start the double dispatch we
-     * will have to test every weapon that this class can equip
+     * This method tests the equip methods and branches.
      */
     @Test
     void equipWeaponTest() {
-        Thief thief = new Thief(THIEF_NAME, turns, 1, 1);
-        assertNull(thief.getEquippedWeapon());
-        thief.equip(testBow);
-        assertEquals(testBow, thief.getEquippedWeapon());
+        testThief.equipStaff(testStaff);
+        assertNull(testThief.getEquippedWeapon());
+        testThief.equipAxe(testAxe);
+        assertNull(testThief.getEquippedWeapon());
+
+        testThief.equipBow(testBow);
+        assertEquals(testBow, testThief.getEquippedWeapon());
+        testThief.equipSword(testSword);
+        assertEquals(testSword, testThief.getEquippedWeapon());
+        testThief.equipKnife(testKnife);
+        assertEquals(testKnife, testThief.getEquippedWeapon());
+
+
+
+        Thief differentThief1 = new Thief("Greirat", turns, 0, 1);
+        differentThief1.equipKnife(testKnife);
+        assertNull(differentThief1.getEquippedWeapon());
+        differentThief1.equipSword(testSword);
+        assertNull(differentThief1.getEquippedWeapon());
+        differentThief1.equipBow(testBow);
+        assertNull(differentThief1.getEquippedWeapon());
     }
 }

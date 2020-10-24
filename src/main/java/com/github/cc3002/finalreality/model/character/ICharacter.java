@@ -36,6 +36,16 @@ public interface ICharacter {
   void addToQueue();
 
   /**
+   * the character attacks to another character.
+   */
+  void attackTo();
+
+  /**
+   * Returns this character State (alive or dead)
+   */
+  boolean IsAlive();
+
+  /**
    * Equips a weapon to the character.
    * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
    * this means that this method should not be declared in the Interface nor in the

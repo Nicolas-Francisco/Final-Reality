@@ -1,6 +1,9 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.Axe;
+import com.github.cc3002.finalreality.model.weapon.Knife;
+import com.github.cc3002.finalreality.model.weapon.Sword;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -32,6 +35,40 @@ public class Knight extends AbstractPlayerCharacter {
                   @NotNull int defense) {
         super(name, turnsQueue, hp, defense);
     }
+
+    /**
+     * equips a sword to the knight.
+     * A knight class can only equip a sword, an axe or a knife. Hence, we create equipSword,
+     * equipAxe and equipKnife to make sure the knight can only equip this types of weapons.
+     */
+    public void equipSword(Sword sword){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(sword);
+        }
+    }
+
+    /**
+     * equips an axe to the knight.
+     * A knight class can only equip a sword, an axe or a knife. Hence, we create equipSword,
+     * equipAxe and equipKnife to make sure the knight can only equip this types of weapons.
+     */
+    public void equipAxe(Axe axe){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(axe);
+        }
+    }
+
+    /**
+     * equips a knife to the knight.
+     * A knight class can only equip a sword, an axe or a knife. Hence, we create equipSword,
+     * equipAxe and equipKnife to make sure the knight can only equip this types of weapons.
+     */
+    public void equipKnife(Knife knife){
+        if (this.IsAlive()){
+            this.setEquippedWeapon(knife);
+        }
+    }
+
 
     /**
      * both methods equals() and hashcode() are different depending of the type of character and

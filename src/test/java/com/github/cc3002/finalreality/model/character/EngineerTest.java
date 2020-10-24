@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.Engineer;
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import com.github.cc3002.finalreality.model.weapon.Axe;
-import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,10 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EngineerTest extends AbstractPlayerCharacterTest {
 
     /**
-     * New testing player and testing weapon
+     * New testing player
      */
-    private Engineer testEngineer;
-    private IWeapon testAxe;
+    private Engineer testEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -28,10 +25,8 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
-        testAxe = new Axe("test", 10, 10);
         Assertions.assertTrue(turns.isEmpty());
-        testEngineer.equip(testAxe);
+        testEngineer.equipAxe(testAxe);
         testEngineer.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -73,15 +68,27 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
     }
 
     /**
-     * This method tests the equip method.
-     * For now it just tests with any weapon, but when we start the double dispatch we
-     * will have to test every weapon that this class can equip
+     * This method tests the equip methods and branches.
      */
     @Test
     void equipWeaponTest() {
-        Engineer engineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
-        assertNull(engineer.getEquippedWeapon());
-        engineer.equip(testAxe);
-        assertEquals(testAxe, engineer.getEquippedWeapon());
+        assertNull(testEngineer.getEquippedWeapon());
+        testEngineer.equipSword(testSword);
+        assertNull(testEngineer.getEquippedWeapon());
+        testEngineer.equipKnife(testKnife);
+        assertNull(testEngineer.getEquippedWeapon());
+        testEngineer.equipStaff(testStaff);
+        assertNull(testEngineer.getEquippedWeapon());
+
+        testEngineer.equipAxe(testAxe);
+        assertEquals(testAxe, testEngineer.getEquippedWeapon());
+        testEngineer.equipBow(testBow);
+        assertEquals(testBow, testEngineer.getEquippedWeapon());
+
+        Engineer differentEngineer1 = new Engineer("Tony", turns, 0, 1);
+        differentEngineer1.equipAxe(testAxe);
+        assertNull(differentEngineer1.getEquippedWeapon());
+        differentEngineer1.equipBow(testBow);
+        assertNull(differentEngineer1.getEquippedWeapon());
     }
 }
