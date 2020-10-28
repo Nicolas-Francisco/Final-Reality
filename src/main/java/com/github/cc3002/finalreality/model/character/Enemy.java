@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
-
-import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -66,19 +64,28 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
-   * the enemy attacks to a player.
-   * Assuming that an enemy can only attack to a Player class and viceversa, this method
-   * reduces the Hp of the attacked character depending of the attributes of the enemy.
+   * the enemy attacks to a character using Double Dispatch
    */
-  public void attackTo(AbstractPlayerCharacter player){
-    if (player.IsAlive() && this.IsAlive()){
-      int damage = this.attack - player.getDefense();
-      if (player.getHP() > damage){
-        player.setHP(player.getHP() - damage);
+  @Override
+  public void attackTo(ICharacter character){
+    if (this.IsAlive()){
+      int BaseDamage = this.attack;
+      character.attacked(BaseDamage);
+    }
+  }
+
+  /**
+   * the enemy is attacked by a character using Double Dispatch
+   */
+  @Override
+  public void attacked(int BaseDamage){
+    if ((this.IsAlive())){
+      int damage = BaseDamage - this.getDefense();
+      if (this.getHP() > damage){
+        this.setHP(this.getHP() - damage);
       }
       else{
-        player.setHP(0);
-        player.setDead();
+        this.setHP(0);
       }
     }
   }

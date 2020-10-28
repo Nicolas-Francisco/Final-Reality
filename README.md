@@ -23,8 +23,8 @@ by their attack attribute.
 - The "Tarea 1" Version only modifies the Design and construction of the Characters and
 Weapons, it is not necessary to implement spells, adverse effects, Double Dispatch nor 
 Inventory.
-- An enemy can only attack to a player and viceversa, its forbidden for the player to attack
-to another player and for an enemy to attack another enemy.
+- An enemy can attack to a player or another enemy, and a player can attack to an enemy 
+or another player.
 - The Thief can equip swords, knives and bows.
 - The Knight can equip swords, knives and axes.
 - The Engineer can equip axes and bows.
@@ -80,16 +80,22 @@ class, we make different classes depending on the type of weapon, which extends
 
 In this version all the original tests are changed in order to test this new Design.
 
-"Tarea 2" version Design
+"Entrega Parcial 1 - Tarea 2" version Design
 ---
-The previous design (Tarea 1) stays the same except for equip() method. Using Double
+
+The previous design (Tarea 1) does not implement an Inteface for the Player (it is not a good
+design to call an Abstract Class, therefore, there must be an Interface). In this new version
+we modify this error and create a new Interface IPlayer, which has all equip() methods (described
+in the next paragraph) and the get/set methods for the equipped weapon.
+
+Besides this, the design (Tarea 1) stays the same except for equip() method. Using Double
 Dispatch we implement a base equip_weapon() for every weapon in the AbstractPlayer Class
 that is not implemented in order to avoid errors if we try to equip a weapon that some 
 class should not equip. Therefore, every player class overrides equip_weapon() and 
 implements it if the weapon type can be used for the player.  
 
 Also, we implement new methods to the Interface ICharacter (shared between players and 
-enemies), these methods are attackTo() and IsAlive(). attackTo() method attacks the 
+enemies), these methods are attackTo(), attackedBy() and IsAlive(). attackTo() method attacks the 
 another character, and IsAlive() method returns a boolean depending on the character's HP.
 attackTo() works different if the character that attacks is an enemy or a player, because an
 enemy has a specific attribute called attack while the player does not (the damage inflicted

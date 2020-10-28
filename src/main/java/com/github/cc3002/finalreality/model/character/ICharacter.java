@@ -4,7 +4,7 @@ package com.github.cc3002.finalreality.model.character;
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
  *
- * @author Ignacio Slater Muñoz.
+ * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
  */
 public interface ICharacter {
@@ -38,7 +38,12 @@ public interface ICharacter {
   /**
    * the character attacks to another character.
    */
-  void attackTo();
+  void attackTo(ICharacter character);
+
+  /**
+   * the character is attacked by character.
+   */
+  void attacked(int BaseDamage);
 
   /**
    * Returns this character State (alive or dead)

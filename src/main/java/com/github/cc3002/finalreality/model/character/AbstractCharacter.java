@@ -2,8 +2,6 @@ package com.github.cc3002.finalreality.model.character;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
-
-import com.github.cc3002.finalreality.model.character.player.AbstractPlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -132,19 +130,15 @@ public abstract class AbstractCharacter implements ICharacter {
 
   /**
    * the character attacks to another character.
-   * The class of the character attacked doesn't affect how we implement this method, but we are
-   * going to assume that an enemy can only attack to a Player class and viceversa.
    */
   @Override
-  public void attackTo(){}
+  public void attackTo(ICharacter character){}
 
   /**
-   * the character is attacked by another character.
-   * Assuming that the enemy can only be attacked by a Player and viceversa, the damage inflicted
-   * to the enemy or player is determined by the weapon equipped by the player or not.
+   * the character is attacked by character.
    */
   @Override
-  public void attackedBy(){}
+  public void attacked(int BaseDamage){}
 
   /**
    * method that informs if the character is dead or alive.
@@ -155,7 +149,7 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   /**
-   * equip(Weapon) is only used in AbstractPlayerCharacter and is subclasses,
+   * equip(Weapon) is only used in AbstractPlayerCharacter and its subclasses,
    * which all extends AbstractCharacter, this means that this method should not be
    * declared in the Interface nor in the Abstract class, but in the AbstractPlayerCharacter
    * class instead.

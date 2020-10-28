@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ignacio Slater Muñoz
  * @author Nicolás García Ríos
  */
-public abstract class AbstractPlayerCharacter extends AbstractCharacter {
+public abstract class AbstractPlayerCharacter extends AbstractCharacter implements IPlayer{
 
   /**
    * Every Player can equip a weapon, but its not part of the
@@ -75,26 +75,36 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter {
   /**
    * equipSword base method
    */
+  @Override
   public void equipSword(Sword sword){
   }
+
   /**
    * equipAxe base method
    */
+  @Override
   public void equipAxe(Axe axe){
   }
+
   /**
    * equipStaff base method
    */
+  @Override
   public void equipStaff(Staff staff){
   }
+
   /**
    * equipKnife base method
    */
+
+  @Override
   public void equipKnife(Knife knife){
   }
+
   /**
    * equipBow base method
    */
+  @Override
   public void equipBow(Bow bow){
   }
 
@@ -104,6 +114,7 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter {
    * for enemies has no sense. Therefore getEquippedWeapon() should be declared and
    * implemented only by the AbstractPlayerClass.
    */
+  @Override
   public IWeapon getEquippedWeapon() {
     return equippedWeapon;
   }
@@ -113,24 +124,34 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter {
    * equippedWeapon is a private parameter, so there must be a setter method to be able
    * to modify it.
    */
-  protected void setEquippedWeapon(IWeapon weapon) {
+  @Override
+  public void setEquippedWeapon(IWeapon weapon) {
     this.equippedWeapon = weapon;
   }
 
   /**
-   * the player attacks to an enemy.
-   * Assuming that an enemy can only attack to a Player class and viceversa, this method
-   * reduces the Hp of the attacked character depending of the attributes of the player.
+   * the player attacks to a character using Double Dispatch
    */
-  public void attackTo(Enemy enemy){
-    if (enemy.IsAlive() && this.IsAlive()){
-      int damage =  this.getEquippedWeapon().getDamage() - enemy.getDefense();
-      if (enemy.getHP() > damage){
-        enemy.setHP(enemy.getHP() - damage);
+  @Override
+  public void attackTo(ICharacter character){
+    if (this.IsAlive() && this.getEquippedWeapon() != null){
+      int BaseDamage = this.getEquippedWeapon().getDamage();
+      character.attacked(BaseDamage);
+    }
+  }
+
+  /**
+   * the player is attacked by a character using Double Dispatch
+   */
+  @Override
+  public void attacked(int BaseDamage){
+    if ((this.IsAlive())){
+      int damage = BaseDamage - this.getDefense();
+      if (this.getHP() > damage){
+        this.setHP(this.getHP() - damage);
       }
       else{
-        enemy.setHP(0);
-        enemy.setDead();
+        this.setHP(0);
       }
     }
   }
