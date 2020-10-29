@@ -41,7 +41,7 @@ public class Knight extends AbstractPlayerCharacter {
      * A knight class can only equip a sword, an axe or a knife. Hence, we create equipSword,
      * equipAxe and equipKnife to make sure the knight can only equip this types of weapons.
      */
-    public void equipSword(Sword sword){
+    public void equip(Sword sword){
         if (this.IsAlive()){
             this.setEquippedWeapon(sword);
         }
@@ -52,7 +52,7 @@ public class Knight extends AbstractPlayerCharacter {
      * A knight class can only equip a sword, an axe or a knife. Hence, we create equipSword,
      * equipAxe and equipKnife to make sure the knight can only equip this types of weapons.
      */
-    public void equipAxe(Axe axe){
+    public void equip(Axe axe){
         if (this.IsAlive()){
             this.setEquippedWeapon(axe);
         }

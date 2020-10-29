@@ -26,7 +26,7 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void waitTurnTest() {
-        testWhiteMage.equipStaff(testStaff);
+        testWhiteMage.equip(testStaff);
         Assertions.assertTrue(turns.isEmpty());
         testWhiteMage.waitTurn();
         try {
@@ -76,20 +76,20 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
     @Test
     void equipWeaponTest() {
         assertNull(testWhiteMage.getEquippedWeapon());
-        testWhiteMage.equipSword(testSword);
+        testWhiteMage.equip(testSword);
         assertNull(testWhiteMage.getEquippedWeapon());
-        testWhiteMage.equipKnife(testKnife);
+        testWhiteMage.equip(testKnife);
         assertNull(testWhiteMage.getEquippedWeapon());
-        testWhiteMage.equipAxe(testAxe);
+        testWhiteMage.equip(testAxe);
         assertNull(testWhiteMage.getEquippedWeapon());
-        testWhiteMage.equipBow(testBow);
+        testWhiteMage.equip(testBow);
         assertNull(testWhiteMage.getEquippedWeapon());
 
-        testWhiteMage.equipStaff(testStaff);
+        testWhiteMage.equip(testStaff);
         assertEquals(testStaff, testWhiteMage.getEquippedWeapon());
 
         WhiteMage differentWhiteMage1 = new WhiteMage("Logan", turns, 0, 1, 1);
-        differentWhiteMage1.equipStaff(testStaff);
+        differentWhiteMage1.equip(testStaff);
         assertNull(differentWhiteMage1.getEquippedWeapon());
     }
 }

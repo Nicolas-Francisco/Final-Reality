@@ -26,7 +26,7 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
     @Test
     void waitTurnTest() {
         Assertions.assertTrue(turns.isEmpty());
-        testEngineer.equipAxe(testAxe);
+        testEngineer.equip(testAxe);
         testEngineer.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -73,22 +73,22 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
     @Test
     void equipWeaponTest() {
         assertNull(testEngineer.getEquippedWeapon());
-        testEngineer.equipSword(testSword);
+        testEngineer.equip(testSword);
         assertNull(testEngineer.getEquippedWeapon());
-        testEngineer.equipKnife(testKnife);
+        testEngineer.equip(testKnife);
         assertNull(testEngineer.getEquippedWeapon());
-        testEngineer.equipStaff(testStaff);
+        testEngineer.equip(testStaff);
         assertNull(testEngineer.getEquippedWeapon());
 
-        testEngineer.equipAxe(testAxe);
+        testEngineer.equip(testAxe);
         assertEquals(testAxe, testEngineer.getEquippedWeapon());
-        testEngineer.equipBow(testBow);
+        testEngineer.equip(testBow);
         assertEquals(testBow, testEngineer.getEquippedWeapon());
 
         Engineer differentEngineer1 = new Engineer("Tony", turns, 0, 1);
-        differentEngineer1.equipAxe(testAxe);
+        differentEngineer1.equip(testAxe);
         assertNull(differentEngineer1.getEquippedWeapon());
-        differentEngineer1.equipBow(testBow);
+        differentEngineer1.equip(testBow);
         assertNull(differentEngineer1.getEquippedWeapon());
     }
 }

@@ -40,7 +40,7 @@ public class Engineer extends AbstractPlayerCharacter {
      * A engineer class can only equip an axe or a bow. Hence, we create equipAxe, and
      * equipBow to make sure the engineer can only equip this types of weapons.
      */
-    public void equipAxe(Axe axe){
+    public void equip(Axe axe){
         if (this.IsAlive()){
             this.setEquippedWeapon(axe);
         }
@@ -51,7 +51,7 @@ public class Engineer extends AbstractPlayerCharacter {
      * A engineer class can only equip an axe or a bow. Hence, we create equipAxe, and
      * equipBow to make sure the engineer can only equip this types of weapons.
      */
-    public void equipBow(Bow bow){
+    public void equip(Bow bow){
         if (this.IsAlive()){
             this.setEquippedWeapon(bow);
         }

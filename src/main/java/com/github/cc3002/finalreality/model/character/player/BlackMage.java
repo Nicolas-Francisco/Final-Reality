@@ -53,7 +53,7 @@ public class BlackMage extends AbstractPlayerCharacter {
      * A black mage class can only equip a staff or a knife. Hence, we create equipStaff and
      * equipKnife to make sure the black mage can only equip this types of weapons.
      */
-    public void equipStaff(Staff staff){
+    public void equip(Staff staff){
         if (this.IsAlive()){
             this.setEquippedWeapon(staff);
         }
@@ -64,7 +64,7 @@ public class BlackMage extends AbstractPlayerCharacter {
      * A black mage class can only equip a staff or a knife. Hence, we create equipStaff and
      * equipKnife to make sure the black mage can only equip this types of weapons.
      */
-    public void equipKnife(Knife knife){
+    public void equip(Knife knife){
         if (this.IsAlive()){
             this.setEquippedWeapon(knife);
         }

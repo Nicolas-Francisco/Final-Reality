@@ -53,7 +53,7 @@ public class WhiteMage extends AbstractPlayerCharacter {
      * that the white mage can only equip this type of weapon.
      */
     @Override
-    public void equipStaff(Staff staff){
+    public void equip(Staff staff){
         if (this.IsAlive()){
             this.setEquippedWeapon(staff);
         }

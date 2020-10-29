@@ -42,7 +42,7 @@ public class Thief extends AbstractPlayerCharacter {
      * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
      */
     @Override
-    public void equipSword(Sword sword){
+    public void equip(Sword sword){
         if (this.IsAlive()){
             this.setEquippedWeapon(sword);
         }
@@ -54,7 +54,7 @@ public class Thief extends AbstractPlayerCharacter {
      * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
      */
     @Override
-    public void equipBow(Bow bow){
+    public void equip(Bow bow){
         if (this.IsAlive()){
             this.setEquippedWeapon(bow);
         }
@@ -66,7 +66,7 @@ public class Thief extends AbstractPlayerCharacter {
      * equipBow and equipKnife to make sure the thief can only equip this types of weapons.
      */
     @Override
-    public void equipKnife(Knife knife){
+    public void equip(Knife knife){
         if (this.IsAlive()){
             this.setEquippedWeapon(knife);
         }

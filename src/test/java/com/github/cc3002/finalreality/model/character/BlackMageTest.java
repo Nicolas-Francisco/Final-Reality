@@ -27,7 +27,7 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
     @Test
     void waitTurnTest() {
         Assertions.assertTrue(turns.isEmpty());
-        testBlackMage.equipStaff(testStaff);
+        testBlackMage.equip(testStaff);
         testBlackMage.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -76,22 +76,22 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
     @Test
     void equipWeaponTest() {
         assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equipSword(testSword);
+        testBlackMage.equip(testSword);
         assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equipAxe(testAxe);
+        testBlackMage.equip(testAxe);
         assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equipBow(testBow);
+        testBlackMage.equip(testBow);
         assertNull(testBlackMage.getEquippedWeapon());
 
-        testBlackMage.equipKnife(testKnife);
+        testBlackMage.equip(testKnife);
         assertEquals(testKnife, testBlackMage.getEquippedWeapon());
-        testBlackMage.equipStaff(testStaff);
+        testBlackMage.equip(testStaff);
         assertEquals(testStaff, testBlackMage.getEquippedWeapon());
 
         BlackMage differentBlackMage1 = new BlackMage("Saruman", turns, 0, 1, 1);
-        differentBlackMage1.equipStaff(testStaff);
+        differentBlackMage1.equip(testStaff);
         assertNull(differentBlackMage1.getEquippedWeapon());
-        differentBlackMage1.equipKnife(testKnife);
+        differentBlackMage1.equip(testKnife);
         assertNull(differentBlackMage1.getEquippedWeapon());
     }
 }

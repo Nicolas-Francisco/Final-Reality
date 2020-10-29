@@ -27,7 +27,7 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
     @Test
     void waitTurnTest() {
         Assertions.assertTrue(turns.isEmpty());
-        testThief.equipBow(testBow);
+        testThief.equip(testBow);
         testThief.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -73,26 +73,26 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void equipWeaponTest() {
-        testThief.equipStaff(testStaff);
+        testThief.equip(testStaff);
         assertNull(testThief.getEquippedWeapon());
-        testThief.equipAxe(testAxe);
+        testThief.equip(testAxe);
         assertNull(testThief.getEquippedWeapon());
 
-        testThief.equipBow(testBow);
+        testThief.equip(testBow);
         assertEquals(testBow, testThief.getEquippedWeapon());
-        testThief.equipSword(testSword);
+        testThief.equip(testSword);
         assertEquals(testSword, testThief.getEquippedWeapon());
-        testThief.equipKnife(testKnife);
+        testThief.equip(testKnife);
         assertEquals(testKnife, testThief.getEquippedWeapon());
 
 
 
         Thief differentThief1 = new Thief("Greirat", turns, 0, 1);
-        differentThief1.equipKnife(testKnife);
+        differentThief1.equip(testKnife);
         assertNull(differentThief1.getEquippedWeapon());
-        differentThief1.equipSword(testSword);
+        differentThief1.equip(testSword);
         assertNull(differentThief1.getEquippedWeapon());
-        differentThief1.equipBow(testBow);
+        differentThief1.equip(testBow);
         assertNull(differentThief1.getEquippedWeapon());
     }
 }

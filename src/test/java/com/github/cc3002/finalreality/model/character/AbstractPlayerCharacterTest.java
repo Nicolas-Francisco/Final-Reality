@@ -45,8 +45,8 @@ public class AbstractPlayerCharacterTest{
     Knight knightTest2 = new Knight("Horace", turns, 0, 4);
     Sword testSword1 = new Sword("Astora's Sword", 10, 8);
     Sword testSword2 = new Sword("Halberd", 8, 5);
-    knightTest1.equipSword(testSword1);
-    knightTest2.equipSword(testSword2);
+    knightTest1.equip(testSword1);
+    knightTest2.equip(testSword2);
 
     /**
      * attackTo() if the enemy is alive, and if the damage is lower than its life.

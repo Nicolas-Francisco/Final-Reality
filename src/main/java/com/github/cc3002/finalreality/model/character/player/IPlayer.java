@@ -15,25 +15,26 @@ public interface IPlayer extends ICharacter {
     /**
      * equipSword base method
      */
-    public void equipSword(Sword sword);
+    void equip(Sword sword);
     /**
      * equipAxe base method
      */
-    public void equipAxe(Axe axe);
+    void equip(Axe axe);
 
     /**
      * equipStaff base method
      */
-    public void equipStaff(Staff staff);
+    void equip(Staff staff);
 
     /**
      * equipKnife base method
      */
-    public void equipKnife(Knife knife);
+    void equip(Knife knife);
+
     /**
      * equipBow base method
      */
-    public void equipBow(Bow bow);
+    void equip(Bow bow);
 
     /**
      * Return this character's equipped weapon.
@@ -41,12 +42,12 @@ public interface IPlayer extends ICharacter {
      * for enemies has no sense. Therefore getEquippedWeapon() should be declared and
      * implemented only by the AbstractPlayerClass.
      */
-    public IWeapon getEquippedWeapon();
+    IWeapon getEquippedWeapon();
 
     /**
      * Modifies this character's equipped weapon.
      * equippedWeapon is a private parameter, so there must be a setter method to be able
      * to modify it.
      */
-    public void setEquippedWeapon(IWeapon weapon);
+    void setEquippedWeapon(IWeapon weapon);
 }

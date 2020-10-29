@@ -76,21 +76,21 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
    * equipSword base method
    */
   @Override
-  public void equipSword(Sword sword){
+  public void equip(Sword sword){
   }
 
   /**
    * equipAxe base method
    */
   @Override
-  public void equipAxe(Axe axe){
+  public void equip(Axe axe){
   }
 
   /**
    * equipStaff base method
    */
   @Override
-  public void equipStaff(Staff staff){
+  public void equip(Staff staff){
   }
 
   /**
@@ -98,14 +98,14 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
    */
 
   @Override
-  public void equipKnife(Knife knife){
+  public void equip(Knife knife){
   }
 
   /**
    * equipBow base method
    */
   @Override
-  public void equipBow(Bow bow){
+  public void equip(Bow bow){
   }
 
   /**

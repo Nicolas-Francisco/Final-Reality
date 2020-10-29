@@ -27,7 +27,7 @@ public class KnightTest extends AbstractPlayerCharacterTest {
     @Test
     void waitTurnTest() {
         Assertions.assertTrue(turns.isEmpty());
-        testKnight.equipSword(testSword);
+        testKnight.equip(testSword);
         testKnight.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
@@ -73,25 +73,25 @@ public class KnightTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void equipWeaponTest() {
-        testKnight.equipStaff(testStaff);
+        testKnight.equip(testStaff);
         assertNull(testKnight.getEquippedWeapon());
-        testKnight.equipBow(testBow);
+        testKnight.equip(testBow);
         assertNull(testKnight.getEquippedWeapon());
 
-        testKnight.equipSword(testSword);
+        testKnight.equip(testSword);
         assertEquals(testSword, testKnight.getEquippedWeapon());
         testKnight.equipKnife(testKnife);
         assertEquals(testKnife, testKnight.getEquippedWeapon());
-        testKnight.equipAxe(testAxe);
+        testKnight.equip(testAxe);
         assertEquals(testAxe, testKnight.getEquippedWeapon());
 
 
         Knight differentKnight1 = new Knight("Solaire", turns, 0, 1);
-        differentKnight1.equipAxe(testAxe);
+        differentKnight1.equip(testAxe);
         assertNull(differentKnight1.getEquippedWeapon());
         differentKnight1.equipKnife(testKnife);
         assertNull(differentKnight1.getEquippedWeapon());
-        differentKnight1.equipSword(testSword);
+        differentKnight1.equip(testSword);
         assertNull(differentKnight1.getEquippedWeapon());
     }
 }
