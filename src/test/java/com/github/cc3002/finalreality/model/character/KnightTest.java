@@ -80,7 +80,7 @@ public class KnightTest extends AbstractPlayerCharacterTest {
 
         testKnight.equip(testSword);
         assertEquals(testSword, testKnight.getEquippedWeapon());
-        testKnight.equipKnife(testKnife);
+        testKnight.equip(testKnife);
         assertEquals(testKnife, testKnight.getEquippedWeapon());
         testKnight.equip(testAxe);
         assertEquals(testAxe, testKnight.getEquippedWeapon());
@@ -89,7 +89,7 @@ public class KnightTest extends AbstractPlayerCharacterTest {
         Knight differentKnight1 = new Knight("Solaire", turns, 0, 1);
         differentKnight1.equip(testAxe);
         assertNull(differentKnight1.getEquippedWeapon());
-        differentKnight1.equipKnife(testKnife);
+        differentKnight1.equip(testKnife);
         assertNull(differentKnight1.getEquippedWeapon());
         differentKnight1.equip(testSword);
         assertNull(differentKnight1.getEquippedWeapon());

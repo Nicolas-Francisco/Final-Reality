@@ -1,10 +1,8 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
-import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.weapon.*;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
@@ -73,40 +71,12 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
    */
 
   /**
-   * equipSword base method
+   * equip base method
    */
   @Override
-  public void equip(Sword sword){
+  public void equip(IWeapon weapon){
   }
 
-  /**
-   * equipAxe base method
-   */
-  @Override
-  public void equip(Axe axe){
-  }
-
-  /**
-   * equipStaff base method
-   */
-  @Override
-  public void equip(Staff staff){
-  }
-
-  /**
-   * equipKnife base method
-   */
-
-  @Override
-  public void equip(Knife knife){
-  }
-
-  /**
-   * equipBow base method
-   */
-  @Override
-  public void equip(Bow bow){
-  }
 
   /**
    * Return this character's equipped weapon.

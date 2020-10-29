@@ -1,5 +1,8 @@
 package com.github.cc3002.finalreality.model.weapon;
 
+import com.github.cc3002.finalreality.model.character.player.Engineer;
+import com.github.cc3002.finalreality.model.character.player.Knight;
+
 import java.util.Objects;
 
 /**
@@ -22,6 +25,17 @@ public class Axe extends AbstractWeapon{
      */
     public Axe(final String name, final int damage, final int weight) {
         super (name, damage, weight);
+    }
+
+    /**
+     * equips an Axe using Double Dispatch
+     */
+    public void equipToKnight(Knight knight){
+        knight.setEquippedWeapon(this);
+    }
+
+    public void equipToEngineer(Engineer engineer){
+        engineer.setEquippedWeapon(this);
     }
 
     /**

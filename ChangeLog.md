@@ -3,7 +3,9 @@ ChangeLog
 
 Version 3.0
 -----------
-- (RC.4) "Tarea 2 - Entrega Parcial 1" final version
+- (RC.5) "Tarea 2 - Entrega Parcial 1" version 3 (final)
+- (B.6) equip() method and Double Dispatch fixed 
+- (RC.4) "Tarea 2 - Entrega Parcial 1" version 2
 - (B.5) attackTo() and attackedBy() methods fixed 
 - (B.4) Implementation of IPlayer interface 
 - (RC.3) "Tarea 2 - Entrega Parcial 1" version 1

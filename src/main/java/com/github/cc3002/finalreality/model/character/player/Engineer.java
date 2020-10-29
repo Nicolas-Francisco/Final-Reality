@@ -1,8 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
-import com.github.cc3002.finalreality.model.weapon.Axe;
-import com.github.cc3002.finalreality.model.weapon.Bow;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -36,24 +35,12 @@ public class Engineer extends AbstractPlayerCharacter {
     }
 
     /**
-     * equips a axe to the engineer.
-     * A engineer class can only equip an axe or a bow. Hence, we create equipAxe, and
-     * equipBow to make sure the engineer can only equip this types of weapons.
+     * equips weapon to the player Using Double Dispatch.
      */
-    public void equip(Axe axe){
+    @Override
+    public void equip(IWeapon weapon){
         if (this.IsAlive()){
-            this.setEquippedWeapon(axe);
-        }
-    }
-
-    /**
-     * equips a bow to the engineer.
-     * A engineer class can only equip an axe or a bow. Hence, we create equipAxe, and
-     * equipBow to make sure the engineer can only equip this types of weapons.
-     */
-    public void equip(Bow bow){
-        if (this.IsAlive()){
-            this.setEquippedWeapon(bow);
+            weapon.equipToEngineer(this);
         }
     }
 

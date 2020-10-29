@@ -1,8 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
-import com.github.cc3002.finalreality.model.weapon.Knife;
-import com.github.cc3002.finalreality.model.weapon.Staff;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -49,24 +48,12 @@ public class BlackMage extends AbstractPlayerCharacter {
     }
 
     /**
-     * equips a staff to the black mage.
-     * A black mage class can only equip a staff or a knife. Hence, we create equipStaff and
-     * equipKnife to make sure the black mage can only equip this types of weapons.
+     * equips weapon to the player Using Double Dispatch.
      */
-    public void equip(Staff staff){
+    @Override
+    public void equip(IWeapon weapon){
         if (this.IsAlive()){
-            this.setEquippedWeapon(staff);
-        }
-    }
-
-    /**
-     * equips a knife to the black mage.
-     * A black mage class can only equip a staff or a knife. Hence, we create equipStaff and
-     * equipKnife to make sure the black mage can only equip this types of weapons.
-     */
-    public void equip(Knife knife){
-        if (this.IsAlive()){
-            this.setEquippedWeapon(knife);
+            weapon.equipToBlackMage(this);
         }
     }
 

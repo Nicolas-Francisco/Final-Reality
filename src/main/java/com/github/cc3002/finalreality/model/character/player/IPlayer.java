@@ -13,28 +13,9 @@ import com.github.cc3002.finalreality.model.weapon.*;
 public interface IPlayer extends ICharacter {
 
     /**
-     * equipSword base method
+     * equip base method
      */
-    void equip(Sword sword);
-    /**
-     * equipAxe base method
-     */
-    void equip(Axe axe);
-
-    /**
-     * equipStaff base method
-     */
-    void equip(Staff staff);
-
-    /**
-     * equipKnife base method
-     */
-    void equip(Knife knife);
-
-    /**
-     * equipBow base method
-     */
-    void equip(Bow bow);
+    void equip(IWeapon weapon);
 
     /**
      * Return this character's equipped weapon.

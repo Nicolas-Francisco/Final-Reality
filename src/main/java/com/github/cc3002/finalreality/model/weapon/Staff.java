@@ -1,5 +1,8 @@
 package com.github.cc3002.finalreality.model.weapon;
 
+import com.github.cc3002.finalreality.model.character.player.BlackMage;
+import com.github.cc3002.finalreality.model.character.player.WhiteMage;
+
 import java.util.Objects;
 
 /**
@@ -22,6 +25,17 @@ public class Staff extends AbstractWeapon{
      */
     public Staff(final String name, final int damage, final int weight) {
         super (name, damage, weight);
+    }
+
+    /**
+     * equip base methods using Double Dispatch
+     */
+    public void equipToWhiteMage(WhiteMage whitemage){
+        whitemage.setEquippedWeapon(this);
+    }
+
+    public void equipToBlackMage(BlackMage blackmage){
+        blackmage.setEquippedWeapon(this);
     }
 
     /**

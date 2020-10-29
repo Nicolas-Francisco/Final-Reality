@@ -1,5 +1,9 @@
 package com.github.cc3002.finalreality.model.weapon;
 
+import com.github.cc3002.finalreality.model.character.player.BlackMage;
+import com.github.cc3002.finalreality.model.character.player.Knight;
+import com.github.cc3002.finalreality.model.character.player.Thief;
+
 import java.util.Objects;
 
 /**
@@ -22,6 +26,21 @@ public class Knife extends AbstractWeapon{
      */
     public Knife(final String name, final int damage, final int weight) {
         super (name, damage, weight);
+    }
+
+    /**
+     * equip base methods using Double Dispatch
+     */
+    public void equipToThief(Thief thief){
+        thief.setEquippedWeapon(this);
+    }
+
+    public void equipToKnight(Knight knight){
+        knight.setEquippedWeapon(this);
+    }
+
+    public void equipToBlackMage(BlackMage blackmage){
+        blackmage.setEquippedWeapon(this);
     }
 
     /**
