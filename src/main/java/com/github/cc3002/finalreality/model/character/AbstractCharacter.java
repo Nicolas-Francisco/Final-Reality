@@ -15,21 +15,17 @@ public abstract class AbstractCharacter implements ICharacter {
   private final BlockingQueue<ICharacter> turnsQueue;
   private final String name;
   private int HP;
-  private final int Defense;
+  private int Defense;
   private ScheduledExecutorService scheduledExecutor;
   private boolean alive;
 
   /**
    * Creates a new character.
    *
-   * @param name
-   *     the character's name
-   * @param turnsQueue
-   *     the queue with the characters waiting for their turn
-   * @param hp
-   *     the character's hp
-   * @param defense
-   *     the character's defense
+   * @param name       the character's name
+   * @param turnsQueue the queue with the characters waiting for their turn
+   * @param hp         the character's hp
+   * @param defense    the character's defense
    */
   protected AbstractCharacter(@NotNull BlockingQueue<ICharacter> turnsQueue,
                               @NotNull String name,
@@ -46,10 +42,9 @@ public abstract class AbstractCharacter implements ICharacter {
      * If a user creates a character with 0 HP, we initialize the character with false. (this
      * is a border case)
      */
-    if(this.HP > 0){
+    if (this.HP > 0) {
       this.alive = true;
-    }
-    else{
+    } else {
       this.alive = false;
     }
   }
@@ -110,14 +105,17 @@ public abstract class AbstractCharacter implements ICharacter {
    * setter methods for each private parameter of the class.
    */
   public void setHP(int health) {
-    if (health <= 0){
+    if (health <= 0) {
       this.HP = 0;
       this.setDead();
-    }
-    else{
+    } else {
       this.HP = health;
       this.setAlive();
     }
+  }
+
+  public void setDefense(int defense) {
+    this.Defense = defense;
   }
 
   public void setDead() {

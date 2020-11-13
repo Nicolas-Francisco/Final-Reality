@@ -1,8 +1,10 @@
 package com.github.cc3002.finalreality.model.weapon;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
- * This class just Creates parameters for all the Testings Classes of each
- * weapon to use, there is nothing to test in this Abstract Class.
+ * This class only defines checkConstruction method, which will be used by each weapon type
+ * to test using inheritance and avoid repeating the same code over and over.
  *
  * @author Ignacio Slater Muñoz
  * @author Nicolas García Ríos
@@ -10,20 +12,31 @@ package com.github.cc3002.finalreality.model.weapon;
 abstract public class AbstractWeaponTest {
 
   /**
-   * Names for each weapon we will create in the tests.
+   * checkConstruction method.
+   * Tests all the different players.
    */
-  protected static final String AXE_NAME = "Test Axe";
-  protected static final String STAFF_NAME = "Test Staff";
-  protected static final String SWORD_NAME = "Test Sword";
-  protected static final String BOW_NAME = "Test Bow";
-  protected static final String KNIFE_NAME = "Test Knife";
-  protected static final int DAMAGE = 15;
-  protected static final int SPEED = 10;
+  protected void checkConstruction(final IWeapon testWeapon,
+                                   final IWeapon expectedWeapon,
+                                   final IWeapon differentWeapon1,
+                                   final IWeapon differentWeapon2,
+                                   final IWeapon differentWeapon3,
+                                   final Object differentWeaponType){
+    assertEquals(expectedWeapon, testWeapon);
+    assertEquals(expectedWeapon.hashCode(), testWeapon.hashCode());
 
-  protected IWeapon testAxe;
-  protected IWeapon testStaff;
-  protected IWeapon testSword;
-  protected IWeapon testBow;
-  protected IWeapon testKnife;
+    assertTrue(expectedWeapon.equals(expectedWeapon));
+    assertEquals(expectedWeapon.hashCode(), expectedWeapon.hashCode());
 
+    assertFalse(expectedWeapon.equals(differentWeapon1));
+    assertNotEquals(expectedWeapon.hashCode(), differentWeapon1.hashCode());
+
+    assertFalse(expectedWeapon.equals(differentWeapon2));
+    assertNotEquals(expectedWeapon.hashCode(), differentWeapon2.hashCode());
+
+    assertFalse(expectedWeapon.equals(differentWeapon3));
+    assertNotEquals(expectedWeapon.hashCode(), differentWeapon3.hashCode());
+
+    assertFalse(expectedWeapon.equals(differentWeaponType));
+    assertNotEquals(expectedWeapon.hashCode(), differentWeaponType.hashCode());
+  }
 }

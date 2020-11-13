@@ -56,6 +56,13 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
+   * setter method for the attack points.
+   */
+  public void setAttack(int attack) {
+    this.attack = attack;
+  }
+
+  /**
    * waitTurn() method if the object is an Enemy
    */
   public void waitTurn(){
@@ -79,7 +86,7 @@ public class Enemy extends AbstractCharacter {
    */
   @Override
   public void attacked(int BaseDamage){
-    if ((this.IsAlive())){
+    if ((this.IsAlive()) && (BaseDamage > this.getDefense())){
       int damage = BaseDamage - this.getDefense();
       if (this.getHP() > damage){
         this.setHP(this.getHP() - damage);

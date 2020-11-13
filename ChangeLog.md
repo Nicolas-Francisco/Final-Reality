@@ -3,6 +3,8 @@ ChangeLog
 
 Version 3.0
 -----------
+- (RC.6) "Tarea 2 - Entrega Parcial 2" version
+- (B.7) damage bug fixed and reorganization of most test (Inheritance)
 - (RC.5) "Tarea 2 - Entrega Parcial 1" version 3 (final)
 - (B.6) equip() method and Double Dispatch fixed 
 - (RC.4) "Tarea 2 - Entrega Parcial 1" version 2
@@ -17,7 +19,7 @@ Version 2.0
 -----------
 - (RC.2) "Tarea 1"
 - (B.7) Updated README.md and Code Comments
-- (B.6) Implementation waitTurn() Tests
+- (B.6) Implementation of waitTurn() Tests
 - (B.5) Implementation of most Tests
 - (B.4) New attributes implemented to Weapons and Players
 - (B.3) Elimination of CharacterClass and WeaponType

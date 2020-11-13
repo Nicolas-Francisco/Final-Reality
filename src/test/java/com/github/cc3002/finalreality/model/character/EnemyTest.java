@@ -1,6 +1,7 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.Knight;
+import com.github.cc3002.finalreality.model.weapon.Sword;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.concurrent.BlockingQueue;
@@ -61,16 +62,29 @@ public class EnemyTest{
     var differentEnemy5 = new Enemy(ENEMY_NAME, turns, 10, 1, 1, 5);
     var expectedKnight = new Knight("Solaire", turns, 1, 1);
 
-    assertEquals(expectedEnemy, expectedEnemy);
-    assertEquals(expectedEnemy.hashCode(), expectedEnemy.hashCode());
+    assertTrue(testEnemy.equals(expectedEnemy));
+    assertEquals(testEnemy.hashCode(), expectedEnemy.hashCode());
 
     assertTrue(expectedEnemy.equals(expectedEnemy));
+    assertEquals(expectedEnemy.hashCode(), expectedEnemy.hashCode());
+
     assertFalse(expectedEnemy.equals(differentEnemy1));
+    assertNotEquals(expectedEnemy.hashCode(), differentEnemy1.hashCode());
+
     assertFalse(expectedEnemy.equals(differentEnemy2));
+    assertNotEquals(expectedEnemy.hashCode(), differentEnemy2.hashCode());
+
     assertFalse(expectedEnemy.equals(differentEnemy3));
+    assertNotEquals(expectedEnemy.hashCode(), differentEnemy3.hashCode());
+
     assertFalse(expectedEnemy.equals(differentEnemy4));
+    assertNotEquals(expectedEnemy.hashCode(), differentEnemy4.hashCode());
+
     assertFalse(expectedEnemy.equals(differentEnemy5));
+    assertNotEquals(expectedEnemy.hashCode(), differentEnemy5.hashCode());
+
     assertFalse(expectedEnemy.equals(expectedKnight));
+    assertNotEquals(expectedEnemy.hashCode(), expectedKnight.hashCode());
   }
 
   /**
@@ -82,6 +96,8 @@ public class EnemyTest{
     Enemy enemyTest2 = new Enemy("Iudex", turns, 10,0, 6, 20);
     Knight knightTest1 = new Knight("Anri", turns, 25, 5);
     Knight knightTest2 = new Knight("Horace", turns, 0, 4);
+    Sword testSword1 = new Sword("Astora's Sword", 10, 8);
+    knightTest1.equip(testSword1);
 
     /**
      * attackTo() if the player is alive, and if the damage is lower than its life.
@@ -98,6 +114,16 @@ public class EnemyTest{
     enemyTest1.attackTo(knightTest1);
     assertEquals(0, knightTest1.getHP());
     assertFalse(knightTest1.IsAlive());
+
+    /**
+     * attackTo() if the enemy's defense is higher than the damage.
+     */
+    knightTest1.setHP(10);
+    enemyTest1.setHP(10);
+    enemyTest1.setDefense(100);
+    knightTest1.attackTo(enemyTest1);
+    assertEquals(10, enemyTest1.getHP());
+    assertTrue(enemyTest1.IsAlive());
 
     /**
      * attackTo() if the player is dead.

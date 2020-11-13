@@ -51,24 +51,22 @@ public interface ICharacter {
   boolean IsAlive();
 
   /**
-   * Equips a weapon to the character.
-   * equip(Weapon) is only used in PlayerCharacter class which extends AbstractCharacter,
-   * this means that this method should not be declared in the Interface nor in the
-   * Astract class, but in the PlayerCharacter class instead.
-   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
-   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
-   *
-   void equip(Weapon weapon);
-   * /
+   * Sets this character Hp to another value
+   */
+  void setHP(int health);
 
   /**
-   * Return this character's equipped weapon.
-   * Enemy class does not have any weapons, so having a getEquippedWeapon() method
-   * for enemys has no sense. Therefore getEquippedWeapon() should be declared and
-   * implemented only by Player class.
-   * Declaring this method in the abstract class breaks the Liskov's subsitution principle
-   * and the Interface segregation principle, since the Enemy subclass is uncapable of using it.
-   *
-   Weapon getEquippedWeapon();
+   * Sets this character Defense to another value
    */
+  void setDefense(int defense);
+
+  /**
+   * Sets this character state to alive
+   */
+  void setDead();
+
+  /**
+   * Sets this character state to dead
+   */
+  void setAlive();
 }

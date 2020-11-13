@@ -1,11 +1,13 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.BlackMage;
-import com.github.cc3002.finalreality.model.character.player.Knight;
+import com.github.cc3002.finalreality.model.character.player.IPlayer;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This testing class tests all the methods of a BlackMage player.
@@ -15,10 +17,62 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class BlackMageTest extends AbstractPlayerCharacterTest {
 
+    private static final String BLACKMAGE_NAME = "Vivi";
+    private BlackMage testBlackMage;
+    private IPlayer expectedBlackMage;
+    private IPlayer differentBlackMage1;
+    private IPlayer differentBlackMage2;
+    private IPlayer differentBlackMage3;
+    private IPlayer differentBlackMage4;
+    private Object differentBlackMage5;
+
     /**
-     * New testing player
+     * This method creates all the objects that we are going to test with the constructorTest().
+     * Using inheritance, we only have to create these objects with different attributes and test them all
+     * in the upper method checkConstructor, which tests all the weapons.
      */
-    private BlackMage testBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 10, 10, 10);
+    @BeforeEach
+    void setUp() {
+        testBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 1);
+        expectedBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 1);
+        differentBlackMage1 = new BlackMage("Saruman", turns, 1, 1, 1);
+        differentBlackMage2 = new BlackMage(BLACKMAGE_NAME, turns, 5, 1, 1);
+        differentBlackMage3 = new BlackMage(BLACKMAGE_NAME, turns, 1, 5, 1);
+        differentBlackMage4 = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 5);
+        differentBlackMage5 = new Object();
+    }
+
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the WhiteMage Class, thus we have to test
+     * differences in each parameter (name, hp, defence and mana)
+     */
+    @Test
+    void constructorTest() {
+        checkConstruction(testBlackMage, expectedBlackMage, differentBlackMage1, differentBlackMage2, differentBlackMage3,
+                differentBlackMage4, differentBlackMage5);
+    }
+
+    /**
+     * This method tests the equip methods and branches.
+     */
+    @Test
+    void equipWeaponTest() {
+        List<IWeapon> cannotEquip = new ArrayList<IWeapon>();
+        cannotEquip.add(testSword);
+        cannotEquip.add(testAxe);
+        cannotEquip.add(testBow);
+
+        List<IWeapon> canEquip = new ArrayList<IWeapon>();
+        canEquip.add(testKnife);
+        canEquip.add(testStaff);
+
+        BlackMage testDeadBlackMage = new BlackMage("Saruman", turns, 0, 1, 1);
+
+        checkEquip(testBlackMage, testDeadBlackMage, canEquip, cannotEquip);
+    }
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -41,57 +95,5 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * This method tests the construction method.
-     * Because every Hashcode() and Equals() is different in every Class, we have to
-     * test every branch and any difference between players. In this case, the Hashcode
-     * and Equals compares every parameter of the BlackMage Class, thus we have to test
-     * differences in each parameter (name, hp, defence and mana)
-     */
-    @Test
-    void constructorTest() {
-        var expectedBlackMage = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 1);
-        var differentBlackMage1 = new BlackMage("Saruman", turns, 1, 1, 1);
-        var differentBlackMage2 = new BlackMage(BLACKMAGE_NAME, turns, 5, 1, 1);
-        var differentBlackMage3 = new BlackMage(BLACKMAGE_NAME, turns, 1, 5, 1);
-        var differentBlackMage4 = new BlackMage(BLACKMAGE_NAME, turns, 1, 1, 5);
-        var expectedKnight = new Knight("Solaire", turns, 1, 1);
-
-        assertEquals(expectedBlackMage, expectedBlackMage);
-        assertEquals(expectedBlackMage.hashCode(), expectedBlackMage.hashCode());
-
-        assertTrue(expectedBlackMage.equals(expectedBlackMage));
-        assertFalse(expectedBlackMage.equals(differentBlackMage1));
-        assertFalse(expectedBlackMage.equals(differentBlackMage2));
-        assertFalse(expectedBlackMage.equals(differentBlackMage3));
-        assertFalse(expectedBlackMage.equals(differentBlackMage4));
-        assertFalse(expectedBlackMage.equals(expectedKnight));
-    }
-
-    /**
-     * This method tests the equip methods and branches.
-     */
-    @Test
-    void equipWeaponTest() {
-        assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equip(testSword);
-        assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equip(testAxe);
-        assertNull(testBlackMage.getEquippedWeapon());
-        testBlackMage.equip(testBow);
-        assertNull(testBlackMage.getEquippedWeapon());
-
-        testBlackMage.equip(testKnife);
-        assertEquals(testKnife, testBlackMage.getEquippedWeapon());
-        testBlackMage.equip(testStaff);
-        assertEquals(testStaff, testBlackMage.getEquippedWeapon());
-
-        BlackMage differentBlackMage1 = new BlackMage("Saruman", turns, 0, 1, 1);
-        differentBlackMage1.equip(testStaff);
-        assertNull(differentBlackMage1.getEquippedWeapon());
-        differentBlackMage1.equip(testKnife);
-        assertNull(differentBlackMage1.getEquippedWeapon());
     }
 }

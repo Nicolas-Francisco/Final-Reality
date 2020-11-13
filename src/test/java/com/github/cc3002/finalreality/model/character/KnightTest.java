@@ -1,11 +1,13 @@
 package com.github.cc3002.finalreality.model.character;
 
+import com.github.cc3002.finalreality.model.character.player.IPlayer;
 import com.github.cc3002.finalreality.model.character.player.Knight;
-import com.github.cc3002.finalreality.model.character.player.Engineer;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This testing class tests all the methods of a Knight player.
@@ -15,10 +17,60 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class KnightTest extends AbstractPlayerCharacterTest {
 
+    private static final String KNIGHT_NAME = "Adelbert";
+    private Knight testKnight;
+    private IPlayer expectedKnight;
+    private IPlayer differentKnight1;
+    private IPlayer differentKnight2;
+    private IPlayer differentKnight3;
+    private Object differentKnight4;
+
     /**
-     * New testing player
+     * This method creates all the objects that we are going to test with the constructorTest().
+     * Using inheritance, we only have to create these objects with different attributes and test them all
+     * in the upper method checkConstructor, which tests all the weapons.
      */
-    private Knight testKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
+    @BeforeEach
+    void setUp() {
+        testKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
+        expectedKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
+        differentKnight1 = new Knight("Solaire", turns, 1, 1);
+        differentKnight2 = new Knight(KNIGHT_NAME, turns, 5, 1);
+        differentKnight3 = new Knight(KNIGHT_NAME, turns, 1, 5);
+        differentKnight4 = new Object();
+    }
+
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the WhiteMage Class, thus we have to test
+     * differences in each parameter (name, hp, defence and mana)
+     */
+    @Test
+    void constructorTest() {
+        checkConstruction(testKnight, expectedKnight, differentKnight1, differentKnight2, differentKnight3,
+                differentKnight4);
+    }
+
+    /**
+     * This method tests the equip methods and branches.
+     */
+    @Test
+    void equipWeaponTest() {
+        List<IWeapon> cannotEquip = new ArrayList<IWeapon>();
+        cannotEquip.add(testStaff);
+        cannotEquip.add(testBow);
+
+        List<IWeapon> canEquip = new ArrayList<IWeapon>();
+        canEquip.add(testSword);
+        canEquip.add(testKnife);
+        canEquip.add(testAxe);
+
+        Knight testDeadKnight = new Knight("Solaire", turns, 0, 1);
+
+        checkEquip(testKnight, testDeadKnight, canEquip, cannotEquip);
+    }
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -41,57 +93,5 @@ public class KnightTest extends AbstractPlayerCharacterTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * This method tests the construction method.
-     * Because every Hashcode() and Equals() is different in every Class, we have to
-     * test every branch and any difference between players. In this case, the Hashcode
-     * and Equals compares every parameter of the Knight Class, thus we have to test
-     * differences in each parameter (name, hp and  defence)
-     */
-    @Test
-    void constructorTest() {
-        var expectedKnight = new Knight(KNIGHT_NAME, turns, 1, 1);
-        var differentKnight1 = new Knight("Solaire", turns, 1, 1);
-        var differentKnight2 = new Knight(KNIGHT_NAME, turns, 5, 1);
-        var differentKnight3 = new Knight(KNIGHT_NAME, turns, 1, 5);
-        var expectedEngineer = new Engineer(ENGINEER_NAME, turns, 1, 1);
-
-        assertEquals(expectedKnight, expectedKnight);
-        assertEquals(expectedKnight.hashCode(), expectedKnight.hashCode());
-
-        assertTrue(expectedKnight.equals(expectedKnight));
-        assertFalse(expectedKnight.equals(differentKnight1));
-        assertFalse(expectedKnight.equals(differentKnight2));
-        assertFalse(expectedKnight.equals(differentKnight3));
-        assertFalse(expectedKnight.equals(expectedEngineer));
-    }
-
-    /**
-     * This method tests the equip methods and branches.
-     */
-    @Test
-    void equipWeaponTest() {
-        testKnight.equip(testStaff);
-        assertNull(testKnight.getEquippedWeapon());
-        testKnight.equip(testBow);
-        assertNull(testKnight.getEquippedWeapon());
-
-        testKnight.equip(testSword);
-        assertEquals(testSword, testKnight.getEquippedWeapon());
-        testKnight.equip(testKnife);
-        assertEquals(testKnife, testKnight.getEquippedWeapon());
-        testKnight.equip(testAxe);
-        assertEquals(testAxe, testKnight.getEquippedWeapon());
-
-
-        Knight differentKnight1 = new Knight("Solaire", turns, 0, 1);
-        differentKnight1.equip(testAxe);
-        assertNull(differentKnight1.getEquippedWeapon());
-        differentKnight1.equip(testKnife);
-        assertNull(differentKnight1.getEquippedWeapon());
-        differentKnight1.equip(testSword);
-        assertNull(differentKnight1.getEquippedWeapon());
     }
 }
