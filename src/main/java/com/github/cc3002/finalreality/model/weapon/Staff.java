@@ -1,8 +1,6 @@
 package com.github.cc3002.finalreality.model.weapon;
-
 import com.github.cc3002.finalreality.model.character.player.BlackMage;
 import com.github.cc3002.finalreality.model.character.player.WhiteMage;
-
 import java.util.Objects;
 
 /**

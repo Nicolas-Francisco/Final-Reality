@@ -29,7 +29,7 @@ public class AbstractPlayerCharacterTest{
   /**
    * checkConstruction() method.
    * This method tests the equip methods and branches for each player. Magical players have 5
-   * attributes (due to mana attribute, which non-magical player do not have). For now, we will
+   * attributes (due to mana attribute, which non-magical players do not have). For now, we will
    * create two versions of checkConstruction method, one that receives 4 differentPlayers and
    * another that receives 5.
    */

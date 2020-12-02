@@ -24,7 +24,12 @@ abstract public class AbstractWeaponTest {
     assertEquals(expectedWeapon, testWeapon);
     assertEquals(expectedWeapon.hashCode(), testWeapon.hashCode());
 
+      
     assertTrue(expectedWeapon.equals(expectedWeapon));
+    
+
+
+
     assertEquals(expectedWeapon.hashCode(), expectedWeapon.hashCode());
 
     assertFalse(expectedWeapon.equals(differentWeapon1));
@@ -35,7 +40,6 @@ abstract public class AbstractWeaponTest {
 
     assertFalse(expectedWeapon.equals(differentWeapon3));
     assertNotEquals(expectedWeapon.hashCode(), differentWeapon3.hashCode());
-
     assertFalse(expectedWeapon.equals(differentWeaponType));
     assertNotEquals(expectedWeapon.hashCode(), differentWeaponType.hashCode());
   }
