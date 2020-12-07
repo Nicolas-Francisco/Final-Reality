@@ -1,4 +1,4 @@
-package com.github.cc3002.finalreality.model;
+package com.github.cc3002.finalreality.model.controller;
 import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import java.util.HashMap;
 
@@ -9,7 +9,6 @@ import java.util.HashMap;
  */
 public class Inventory {
     private HashMap<String, IWeapon> inventory;
-    private final int Limit = 10;
 
     public Inventory(){
         this.inventory = new HashMap<String, IWeapon>();
@@ -27,7 +26,7 @@ public class Inventory {
      * it won't add anything to the inventory
      */
     public void addToInventory(IWeapon weapon){
-        if (this.getInventory().size() < Limit) {
+        if (weapon == null){
             this.getInventory().put(weapon.getName(), weapon);
         }
     }
@@ -68,4 +67,3 @@ public class Inventory {
         return -1;
     }
 }
-
