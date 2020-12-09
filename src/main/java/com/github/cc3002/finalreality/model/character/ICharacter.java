@@ -1,5 +1,7 @@
 package com.github.cc3002.finalreality.model.character;
 
+import com.github.cc3002.finalreality.model.controller.IEventHandler;
+
 /**
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
@@ -69,4 +71,9 @@ public interface ICharacter {
    * Sets this character state to dead
    */
   void setAlive();
+
+  /**
+   * Adds a listener to the character
+   */
+  void addListener(IEventHandler handler);
 }

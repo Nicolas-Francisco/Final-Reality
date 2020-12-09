@@ -146,6 +146,7 @@ public abstract class AbstractCharacter implements ICharacter {
   /**
    * addListener() adds a listener to the event
    */
+  @Override
   public void addListener(IEventHandler characterHandler){
     DeadCharacterEvent.addPropertyChangeListener(characterHandler);
   }
