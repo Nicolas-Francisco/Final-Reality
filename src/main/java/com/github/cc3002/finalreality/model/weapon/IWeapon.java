@@ -1,4 +1,5 @@
 package com.github.cc3002.finalreality.model.weapon;
+import com.github.cc3002.finalreality.model.character.player.*;
 
 /**
  * This represents a weapon form the game.
@@ -25,4 +26,17 @@ public interface IWeapon {
      * Returns this weapon's weight.
      */
     int getWeight();
+
+    /**
+     * equip base methods using Double Dispatch
+     */
+    void equipToKnight(Knight knight);
+
+    void equipToEngineer(Engineer engineer);
+
+    void equipToThief(Thief thief);
+
+    void equipToWhiteMage(WhiteMage whitemage);
+
+    void equipToBlackMage(BlackMage blackmage);
 }

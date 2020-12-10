@@ -18,11 +18,29 @@ Assumptions
 ---
 - There are only 5 classes of players, which two of them are magical ones (Black Mage and
 White Mage), and can equip only one weapon at a time. 
+
 - Enemies cannot equip weapons, and the damage inflicted to the players is determined
 by their attack attribute.
+
 - The "Tarea 1" Version only modifies the Design and construction of the Characters and
 Weapons, it is not necessary to implement spells, adverse effects, Double Dispatch nor 
 Inventory.
+
+- An enemy can attack to a player or another enemy, and a player can attack to an enemy 
+or another player.
+
+- The Thief can equip swords, knives and bows.
+- The Knight can equip swords, knives and axes.
+- The Engineer can equip axes and bows.
+- The White Mage can only equip staffs.
+- The Black Mage can equip staffs and knives.
+
+- There are two and only two parties in the controller, one exclusive for the players
+, and the other one exclusive for the enemies.
+
+- The game will end in two possible ways: If all the enemies die, the player party wins, and the victory method
+triggers. However, if all the players die, then the enemy party wins, and the gameOver method 
+triggers.
 
 
 
@@ -72,6 +90,49 @@ class, we make different classes depending on the type of weapon, which extends
 **AbstractWeapon** class.
 
 In this version all the original tests are changed in order to test this new Design.
+
+"Entrega Parcial 1 - Tarea 2" version Design
+---
+
+The previous design (Tarea 1) does not implement an Inteface for the Player (it is not a good
+design to call an Abstract Class, therefore, there must be an Interface). In this new version
+we modify this error and create a new Interface IPlayer, which has all equip() methods (described
+in the next paragraph) and the get/set methods for the equipped weapon.
+
+Besides this, the design (Tarea 1) stays the same except for equip() method. Using Double
+Dispatch we implement a base equip_weapon() for every weapon in the AbstractPlayer Class
+that is not implemented in order to avoid errors if we try to equip a weapon that some 
+class should not equip. Therefore, every player class overrides equip_weapon() and 
+implements it if the weapon type can be used for the player.  
+
+Also, we implement new methods to the Interface ICharacter (shared between players and 
+enemies), these methods are attackTo(), attackedBy() and IsAlive(). attackTo() method attacks the 
+another character, and IsAlive() method returns a boolean depending on the character's HP.
+attackTo() works different if the character that attacks is an enemy or a player, because an
+enemy has a specific attribute called attack while the player does not (the damage inflicted
+by the player depends on the equipped weapon's damage).
+
+
+"Tarea 2" version Design
+---
+
+In this version we created the controller of the game (GameController class), the inventory of the game
+ (controller by the GameController), and the observer for the players and enemies 
+ within the game. The IEventHandler interface extends the PropertyChangeListener,
+which is extended by two new handlers (PlayerHandler and EnemyHandler, where both are observers of the
+players and enemies). Whenever a player or an enemy dies, the onDeadPlayer or on DeadEnemy methods of 
+the controller triggers to see if all the enemies or players had died.  
+
+In the controller class we implement all the creation methods to put in both parties and inventory. 
+The ones that create characters (such as createKnight, createEnemy, etc.) create the character and adds it
+to its party depending on it's class (player or enemy). By the other hand the ones that create
+weapons (such as createKnife, createStaff, etc.) create the weapon and then adds it to the inventory.
+
+The inventory is represented by a HashMap using a string as a key (the name of the weapon), 
+eliminating the "Inventory" class, while the party is represented by an ArrayList of characters,
+ eliminating the "User" class.
+
+
 
 Testing
 ---

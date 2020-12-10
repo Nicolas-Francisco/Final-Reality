@@ -1,11 +1,28 @@
 ChangeLog
 =========
 
+Version 3.0
+-----------
+- (RC.7) "Tarea 2" version
+- (B.9) Elimination of the inventory and controller classes
+- (B.8) Implementation of the inventory and controller classes
+- (RC.6) "Tarea 2 - Entrega Parcial 2" version
+- (B.7) damage bug fixed and reorganization of most test (Inheritance)
+- (RC.5) "Tarea 2 - Entrega Parcial 1" version 3 (final)
+- (B.6) equip() method and Double Dispatch fixed 
+- (RC.4) "Tarea 2 - Entrega Parcial 1" version 2
+- (B.5) attackTo() and attackedBy() methods fixed 
+- (B.4) Implementation of IPlayer interface 
+- (RC.3) "Tarea 2 - Entrega Parcial 1" version 1
+- (B.3) Implemented missing tests
+- (B.2) Implementation of equip() methods using Double Dispatch
+- (B.1) Implementation of attackTo() and attackedBy() methods
+
 Version 2.0
 -----------
-- (RC.1) "Tarea 1"
-- (B.6) Updated README.md and Code Comments
-- (B.6) Implementation waitTurn() Tests
+- (RC.2) "Tarea 1"
+- (B.7) Updated README.md and Code Comments
+- (B.6) Implementation of waitTurn() Tests
 - (B.5) Implementation of most Tests
 - (B.4) New attributes implemented to Weapons and Players
 - (B.3) Elimination of CharacterClass and WeaponType

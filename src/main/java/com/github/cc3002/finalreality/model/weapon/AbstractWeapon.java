@@ -1,4 +1,5 @@
 package com.github.cc3002.finalreality.model.weapon;
+import com.github.cc3002.finalreality.model.character.player.*;
 
 /**
  * An abstract class that holds all the information of a weapon. Every weapon is
@@ -48,4 +49,16 @@ public abstract class AbstractWeapon implements IWeapon{
     return weight;
   }
 
+  /**
+   * equip base methods using Double Dispatch
+   */
+  public void equipToKnight(Knight knight){}
+
+  public void equipToEngineer(Engineer engineer){}
+
+  public void equipToThief(Thief thief){}
+
+  public void equipToWhiteMage(WhiteMage whitemage){}
+
+  public void equipToBlackMage(BlackMage blackmage){}
 }

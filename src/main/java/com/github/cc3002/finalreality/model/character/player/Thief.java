@@ -1,6 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -31,6 +32,16 @@ public class Thief extends AbstractPlayerCharacter {
                  @NotNull int hp,
                  @NotNull int defense) {
         super(name, turnsQueue, hp, defense);
+    }
+
+    /**
+     * equips weapon to the player Using Double Dispatch.
+     */
+    @Override
+    public void equip(IWeapon weapon){
+        if (this.IsAlive()){
+            weapon.equipToThief(this);
+        }
     }
 
     /**

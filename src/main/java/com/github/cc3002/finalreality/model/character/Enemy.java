@@ -56,11 +56,45 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
+   * setter method for the attack points.
+   */
+  public void setAttack(int attack) {
+    this.attack = attack;
+  }
+
+  /**
    * waitTurn() method if the object is an Enemy
    */
   public void waitTurn(){
     super.setScheduledExecutor(Executors.newSingleThreadScheduledExecutor());
     super.getScheduledExecutor().schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+  }
+
+  /**
+   * the enemy attacks to a character using Double Dispatch
+   */
+  @Override
+  public void attackTo(ICharacter character){
+    if (this.IsAlive()){
+      int BaseDamage = this.attack;
+      character.attacked(BaseDamage);
+    }
+  }
+
+  /**
+   * the enemy is attacked by a character using Double Dispatch
+   */
+  @Override
+  public void attacked(int BaseDamage){
+    if ((this.IsAlive()) && (BaseDamage > this.getDefense())){
+      int damage = BaseDamage - this.getDefense();
+      if (this.getHP() > damage){
+        this.setHP(this.getHP() - damage);
+      }
+      else{
+        this.setHP(0);
+      }
+    }
   }
 
   /**

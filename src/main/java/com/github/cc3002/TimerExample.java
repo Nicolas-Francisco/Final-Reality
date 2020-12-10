@@ -9,7 +9,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @author Ignacio Slater Muñoz.
+ * @author Ignacio Slater Muñoz
+ * @author Nicolas Garcia Rios
  */
 public class TimerExample {
 

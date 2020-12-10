@@ -1,8 +1,8 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
@@ -45,6 +45,16 @@ public class BlackMage extends AbstractPlayerCharacter {
      */
     public int getMP(){
         return MP;
+    }
+
+    /**
+     * equips weapon to the player Using Double Dispatch.
+     */
+    @Override
+    public void equip(IWeapon weapon){
+        if (this.IsAlive()){
+            weapon.equipToBlackMage(this);
+        }
     }
 
     /**
