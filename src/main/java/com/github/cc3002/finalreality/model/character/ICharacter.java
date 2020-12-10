@@ -63,16 +63,6 @@ public interface ICharacter {
   void setDefense(int defense);
 
   /**
-   * Sets this character state to alive
-   */
-  void setDead();
-
-  /**
-   * Sets this character state to dead
-   */
-  void setAlive();
-
-  /**
    * Adds a listener to the character
    */
   void addListener(IEventHandler handler);

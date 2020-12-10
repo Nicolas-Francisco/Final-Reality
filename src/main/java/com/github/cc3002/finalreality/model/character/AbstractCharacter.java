@@ -103,24 +103,16 @@ public abstract class AbstractCharacter implements ICharacter {
   public void setHP(int health) {
     if (health <= 0) {
       this.HP = 0;
-      this.setDead();
+      this.alive = false;
+      DeadCharacterEvent.firePropertyChange("Death", null, this);
     } else {
       this.HP = health;
-      this.setAlive();
+      this.alive = true;
     }
   }
 
   public void setDefense(int defense) {
     this.Defense = defense;
-  }
-
-  public void setDead() {
-    this.alive = false;
-    DeadCharacterEvent.firePropertyChange("alive", true, false);
-  }
-
-  public void setAlive() {
-    this.alive = true;
   }
 
   /**

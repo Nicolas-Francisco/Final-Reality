@@ -3,6 +3,8 @@ ChangeLog
 
 Version 3.0
 -----------
+- (RC.7) "Tarea 2" version
+- (B.9) Elimination of the inventory and controller classes
 - (B.8) Implementation of the inventory and controller classes
 - (RC.6) "Tarea 2 - Entrega Parcial 2" version
 - (B.7) damage bug fixed and reorganization of most test (Inheritance)

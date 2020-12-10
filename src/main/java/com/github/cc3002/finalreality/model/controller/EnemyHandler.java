@@ -1,4 +1,5 @@
 package com.github.cc3002.finalreality.model.controller;
+
 import com.github.cc3002.finalreality.model.character.Enemy;
 import java.beans.PropertyChangeEvent;
 

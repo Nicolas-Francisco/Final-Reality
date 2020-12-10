@@ -4,7 +4,6 @@ import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.*;
 import com.github.cc3002.finalreality.model.weapon.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -23,10 +22,11 @@ public class GameController {
     private ArrayList<Enemy> cpuParty;
     private int alivePlayers;
     private int aliveEnemies;
-    private final IEventHandler DeadPlayerHandler = new EnemyHandler(this);
-    private final IEventHandler DeadEnemyHandler = new PlayerHandler(this);
+    private final IEventHandler DeadPlayerHandler = new PlayerHandler(this);
+    private final IEventHandler DeadEnemyHandler = new EnemyHandler(this);
     private final BlockingQueue<ICharacter> turnsQueue;
-    protected int enemies = new Random().nextInt(4) + 1;
+    protected int enemies = new Random().nextInt(3) + 1;
+    private ICharacter characterTurn;
 
     public GameController(){
         this.turnsQueue = new LinkedBlockingQueue<ICharacter>();
@@ -35,6 +35,51 @@ public class GameController {
         this.cpuParty = new ArrayList<Enemy>();
         this.aliveEnemies = 0;
         this.alivePlayers = 0;
+    }
+
+    /**
+     * startQueue() method puts all the characters to the turns queue.
+     */
+    public void startQueue(){
+        if (this.gamerParty.size() == this.maxCharacters){
+            int numberPlayer = 0;
+            int numberEnemies = 0;
+            while (numberPlayer < this.gamerParty.size()){
+                IPlayer player = this.getPlayer(numberPlayer);
+                player.waitTurn();
+                numberPlayer ++;
+            }
+            while (numberEnemies < this.cpuParty.size()) {
+                Enemy enemy = this.getEnemy(numberEnemies);
+                enemy.waitTurn();
+                numberEnemies++;
+            }
+        }
+    }
+
+    /**
+     * beginTurn() method designs the character who owns the actual turn.
+     */
+    public void beginTurn(){
+        this.characterTurn = turnsQueue.peek();
+        System.out.println(this.characterTurn.getName() + "'s turn");
+    }
+
+    /**
+     * endTurn() method ends the actual turn, making the last character wait.
+     */
+    public void endTurn(ICharacter character){
+        turnsQueue.poll();
+        character.waitTurn();
+    }
+
+    /**
+     * attack() method attacks the second character using the first one. Then it ends its turn
+     */
+    public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
+        System.out.println(attackerCharacter.getName() + " attacks " + attackedCharacter.getName());
+        attackerCharacter.attackTo(attackedCharacter);
+        endTurn(attackedCharacter);
     }
 
     /**
@@ -67,7 +112,7 @@ public class GameController {
     public void putInPlayerParty(IPlayer player){
         if (gamerParty.size() < this.maxCharacters){
             gamerParty.add(player);
-            alivePlayers ++;
+            this.alivePlayers ++;
             player.addListener(DeadPlayerHandler);
         }
     }
@@ -78,7 +123,7 @@ public class GameController {
     public void putInEnemyParty(Enemy enemy){
         if (cpuParty.size() < this.maxCharacters){
             cpuParty.add(enemy);
-            alivePlayers ++;
+            this.aliveEnemies ++;
             enemy.addListener(DeadEnemyHandler);
         }
     }
@@ -131,12 +176,12 @@ public class GameController {
         IPlayer player = this.getPlayer(playerIndex);
         IWeapon currentWeapon = player.getEquippedWeapon();
         player.equip(weapon);
-        if (weapon == null){
-            if (currentWeapon.hashCode() == weapon.hashCode()){
+        if (currentWeapon == null){
+            if (player.getEquippedWeapon() != null){
                 inventory.remove(weapon.getName());
             }
         } else {
-            if (currentWeapon.hashCode() == weapon.hashCode()){
+            if (player.getEquippedWeapon().hashCode() == weapon.hashCode()){
                 inventory.remove(weapon.getName());
                 inventory.put(currentWeapon.getName(), currentWeapon);
             }
@@ -147,17 +192,8 @@ public class GameController {
      * createEnemy() method creates an Enemy with the information given, and then it is added to the EnemyParty
      */
     public void createEnemy(String name, int hp, int defense, int attack, int weight){
-        int amount = this.enemies;
-        while(amount > 0) {
-            Enemy enemy = new Enemy(name, turnsQueue, weight, hp, defense, attack);
-            this.putInEnemyParty(enemy);
-            this.aliveEnemies ++;
-            amount --;
-        }
-    }
-
-    public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
-        attackedCharacter.attackTo(attackedCharacter);
+        Enemy enemy = new Enemy(name, turnsQueue, weight, hp, defense, attack);
+        this.putInEnemyParty(enemy);
     }
 
     /**
@@ -215,7 +251,7 @@ public class GameController {
     }
 
     /**
-     * getter methods for the gamer and the cpu users.
+     * getters methods.
      */
     public ArrayList<IPlayer> getGamerParty(){return this.gamerParty;}
 
@@ -235,20 +271,8 @@ public class GameController {
         return this.getGamerParty().get(playerIndex);
     }
 
-    public int getHP(ArrayList<ICharacter> party, int characterIndex){
-        return party.get(characterIndex).getHP();
-    }
-
-    public int getDefense(ArrayList<ICharacter> party, int characterIndex){
-        return party.get(characterIndex).getDefense();
-    }
-
-    public String getName(ArrayList<ICharacter> party, int characterIndex){
-        return party.get(characterIndex).getName();
-    }
-
-    public boolean isAlive(ArrayList<ICharacter> party, int characterIndex){
-        return party.get(characterIndex).IsAlive();
+    public ICharacter getCharacterTurn(){
+        return this.characterTurn;
     }
 
     public IWeapon getEquippedWeapon(int playerIndex){

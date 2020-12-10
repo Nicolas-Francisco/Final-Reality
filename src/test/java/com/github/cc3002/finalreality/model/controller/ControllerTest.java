@@ -12,6 +12,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This class tests the Controller of the game.
+ *
+ * @author Nicolas García Ríos
+ */
 public class ControllerTest {
     protected Thief testThief;
     protected Knight testKnight;
@@ -47,6 +52,10 @@ public class ControllerTest {
         controller = new GameController();
     }
 
+    /**
+     * createCharactersTest() method.
+     * This method tests all the create methods of the controller that uses characters.
+     */
     @Test
     public void createCharactersTest(){
         ArrayList<IPlayer> emptyPlayerList = new ArrayList<>();
@@ -77,9 +86,13 @@ public class ControllerTest {
 
         assertEquals(controller.getAliveEnemies(), 0);
         controller.createEnemy("testEnemy", 10, 10, 10, 10);
-        assertEquals(controller.getAliveEnemies(), controller.enemies);
+        assertEquals(controller.getAliveEnemies(), 1);
     }
 
+    /**
+     * createWeaponTest() method.
+     * This method tests all the create methods of the controller that uses weapons and inventory.
+     */
     @Test
     public void createWeaponTest(){
         HashMap<String, IWeapon> emptyHash = new HashMap<>();
@@ -105,6 +118,10 @@ public class ControllerTest {
                 testSword.hashCode());
     }
 
+    /**
+     * equipTest() method.
+     * This method tests the equip method of the controller of the game.
+     */
     @Test
     public void equipTest(){
         controller.createKnight("testKnight", 10, 10);
@@ -116,6 +133,17 @@ public class ControllerTest {
         controller.createKnife("testKnife", 10, 10);
         controller.createStaff("testStaff", 10, 10);
         controller.createSword("testSword", 10, 10);
+        controller.createBow("testBow", 10, 10);
+
+        assertNull(controller.getEquippedWeapon(0));
+        assertNull(controller.getEquippedWeapon(1));
+        assertNull(controller.getEquippedWeapon(2));
+        assertNull(controller.getEquippedWeapon(3));
+
+        controller.equip(0, "testStaff");
+        controller.equip(1, "testStaff");
+        controller.equip(2, "testSword");
+        controller.equip(3, "testAxe");
 
         assertNull(controller.getEquippedWeapon(0));
         assertNull(controller.getEquippedWeapon(1));
@@ -123,15 +151,103 @@ public class ControllerTest {
         assertNull(controller.getEquippedWeapon(3));
 
         controller.equip(0, "testSword");
-        assertEquals(controller.getEquippedWeapon(0).hashCode(), testSword.hashCode());
-
         controller.equip(1, "testKnife");
-        assertEquals(controller.getEquippedWeapon(0).hashCode(), testKnife.hashCode());
-
         controller.equip(2, "testAxe");
-        assertEquals(controller.getEquippedWeapon(0).hashCode(), testAxe.hashCode());
-
         controller.equip(3, "testStaff");
-        assertEquals(controller.getEquippedWeapon(0).hashCode(), testStaff.hashCode());
+
+        assertEquals(controller.getEquippedWeapon(0).hashCode(), testSword.hashCode());
+        assertEquals(controller.getEquippedWeapon(1).hashCode(), testKnife.hashCode());
+        assertEquals(controller.getEquippedWeapon(2).hashCode(), testAxe.hashCode());
+        assertEquals(controller.getEquippedWeapon(3).hashCode(), testStaff.hashCode());
+
+
+
+        controller.createAxe("testAxe", 10, 10);
+        controller.createKnife("testKnife", 10, 10);
+        controller.createStaff("testStaff", 10, 10);
+        controller.createSword("testSword", 10, 10);
+
+        controller.equip(0, "testStaff");
+        controller.equip(1, "testStaff");
+        controller.equip(2, "testSword");
+        controller.equip(3, "testAxe");
+
+        assertEquals(controller.getEquippedWeapon(0).hashCode(), testSword.hashCode());
+        assertEquals(controller.getEquippedWeapon(1).hashCode(), testKnife.hashCode());
+        assertEquals(controller.getEquippedWeapon(2).hashCode(), testAxe.hashCode());
+        assertEquals(controller.getEquippedWeapon(3).hashCode(), testStaff.hashCode());
+
+        Staff testStaff2 = new Staff("testStaff2", 10, 10);
+        Bow testBow2 = new Bow("testBow2", 10, 10);
+        controller.createStaff("testStaff2", 10, 10);
+        controller.createBow("testBow2", 10, 10);
+
+        controller.equip(0, "testAxe");
+        controller.equip(1, "testBow");
+        controller.equip(2, "testBow2");
+        controller.equip(3, "testStaff2");
+
+        assertEquals(controller.getEquippedWeapon(0).hashCode(), testAxe.hashCode());
+        assertEquals(controller.getEquippedWeapon(1).hashCode(), testBow.hashCode());
+        assertEquals(controller.getEquippedWeapon(2).hashCode(), testBow2.hashCode());
+        assertEquals(controller.getEquippedWeapon(3).hashCode(), testStaff2.hashCode());
+    }
+
+    /**
+     * victoryTest() method.
+     * This method tests a simple fight where the player party wins
+     */
+    @Test
+    public void victoryTest() throws InterruptedException {
+        Knight testKnight2 = new Knight("testKnight2", turns, 100, 100);
+
+        controller.createKnight("testKnight2", 100, 100);
+        controller.createThief("testThief", 10, 10);
+        controller.createEngineer("testEngineer", 10, 10);
+        controller.createWhiteMage("testWhiteMage", 10, 10, 10);
+
+        controller.createAxe("testAxe", 10, 300);
+        controller.createKnife("testKnife", 10, 200);
+        controller.createStaff("testStaff", 10, 100);
+        controller.createSword("testSword", 100, 10);
+
+        controller.equip(0, "testSword");
+        controller.equip(1, "testKnife");
+        controller.equip(2, "testAxe");
+        controller.equip(3, "testStaff");
+
+        controller.createEnemy("testEnemy", 10, 10, 10, 20);
+
+        controller.startQueue();
+        Thread.sleep(5000);
+        controller.beginTurn();
+        assertEquals(controller.getCharacterTurn().hashCode(), testKnight2.hashCode());
+        controller.attack(controller.getCharacterTurn(), controller.getEnemy(0));
+        assertFalse(controller.getEnemy(0).IsAlive());
+    }
+
+    /**
+     * gameOverTest() method.
+     * This method tests a simple fight where the player party loses
+     */
+    @Test
+    public void gameOverTest() throws InterruptedException {
+        controller.createKnight("testKnight", 10, 10);
+        controller.createThief("testThief", 10, 10);
+        controller.createEngineer("testEngineer", 10, 10);
+        controller.createWhiteMage("testWhiteMage", 10, 10, 10);
+
+        controller.createEnemy("testEnemy", 100, 100, 100, 10);
+
+        assertEquals(controller.getAlivePlayers(), 4);
+
+        int cont = 0;
+        while (cont < 4) {
+            assertTrue(controller.getPlayer(cont).IsAlive());
+            controller.getEnemy(0).attackTo(controller.getPlayer(cont));
+            assertFalse(controller.getPlayer(cont).IsAlive());
+            cont ++;
+        }
+        assertEquals(controller.getAlivePlayers(), 0);
     }
 }
