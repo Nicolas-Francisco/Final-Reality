@@ -3,6 +3,12 @@ package com.github.cc3002.finalreality.model.controller;
 import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.*;
+import com.github.cc3002.finalreality.model.controller.observer.EnemyHandler;
+import com.github.cc3002.finalreality.model.controller.observer.IEventHandler;
+import com.github.cc3002.finalreality.model.controller.observer.PlayerHandler;
+import com.github.cc3002.finalreality.model.controller.observer.TurnHandler;
+import com.github.cc3002.finalreality.model.controller.state.GameState;
+import com.github.cc3002.finalreality.model.controller.state.StartState;
 import com.github.cc3002.finalreality.model.weapon.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,17 +30,57 @@ public class GameController {
     private int aliveEnemies;
     private final IEventHandler DeadPlayerHandler = new PlayerHandler(this);
     private final IEventHandler DeadEnemyHandler = new EnemyHandler(this);
+    private final IEventHandler TurnHandler = new TurnHandler(this);
+    private GameState state;
     private final BlockingQueue<ICharacter> turnsQueue;
-    protected int enemies = new Random().nextInt(3) + 1;
+    protected int enemies = new Random().nextInt(4) + 1;
     private ICharacter characterTurn;
 
     public GameController(){
+        this.state = new StartState(this);
         this.turnsQueue = new LinkedBlockingQueue<ICharacter>();
         this.inventory = new HashMap<String, IWeapon>();
         this.gamerParty = new ArrayList<IPlayer>();
         this.cpuParty = new ArrayList<Enemy>();
         this.aliveEnemies = 0;
         this.alivePlayers = 0;
+    }
+
+    /**
+     * tryToBeginTurn() method tries to begin the next turn, asking the state pattern
+     */
+    public void tryToBeginTurn(){
+        this.state.beginTurn();
+    }
+
+    /**
+     * tryToEndTurn() method tries to end the actual turn, asking the state pattern
+     */
+    public void tryToEndTurn(){
+        this.state.endTurn();
+    }
+
+    /**
+     * tryToEquip() method tries to equip a weapon to the player. Assuming the player can only change
+     * the equipped weapon in a turn, and not between two.
+     */
+    public void tryToEquip(int playerIndex, String weaponName){
+        this.state.equip(playerIndex, weaponName);
+    }
+
+    /**
+     * tryToAttack() method tries to attack a character. Assuming that some character can attack to another
+     * during a turn only, and not between two.
+     */
+    public void tryToAttack(ICharacter attackerCharacter, ICharacter attackedCharacter){
+        this.state.attack(attackerCharacter, attackedCharacter);
+    }
+
+    /**
+     * setState() method changes the state of the game.
+     */
+    public void setState(GameState state){
+        this.state = state;
     }
 
     /**
@@ -54,23 +100,50 @@ public class GameController {
                 enemy.waitTurn();
                 numberEnemies++;
             }
+            this.state.startGame();
         }
     }
 
     /**
-     * beginTurn() method designs the character who owns the actual turn.
+     * beginTurn() method designs the character who owns the actual turn. If the character is dead, then it
+     * ends it's turn immediately, passing to the next alive character. By the other hand if the character
+     * is an enemy, it only attacks a random player and finishes it's turn (through tryToAttack method).
      */
     public void beginTurn(){
+        this.state.nextTurn();
         this.characterTurn = turnsQueue.peek();
-        System.out.println(this.characterTurn.getName() + "'s turn");
+        if(this.characterTurn.IsAlive()){
+            this.state.beginTurn();
+            System.out.println(this.characterTurn.getName() + "'s turn");
+            this.characterTurn.useTurn(this);
+        }
+        else {
+            this.state.endTurn();
+            beginTurn();
+        }
+    }
+
+    /**
+     * attackRandomPlayer() is called when an enemy just started it's turn. It only attacks a random player
+     * from the player party.
+     */
+    public void attackRandomPlayer(){
+        int rand = new Random().nextInt(4);
+        if (this.getPlayer(rand).IsAlive()){
+            attack(this.characterTurn, this.getPlayer(rand));
+        } else {
+            attackRandomPlayer();
+        }
     }
 
     /**
      * endTurn() method ends the actual turn, making the last character wait.
      */
     public void endTurn(ICharacter character){
+        System.out.println(this.characterTurn.getName() + "´s turn has ended");
         turnsQueue.poll();
         character.waitTurn();
+        state.endTurn();
     }
 
     /**
@@ -79,7 +152,35 @@ public class GameController {
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         System.out.println(attackerCharacter.getName() + " attacks " + attackedCharacter.getName());
         attackerCharacter.attackTo(attackedCharacter);
-        endTurn(attackedCharacter);
+        System.out.println(attackerCharacter.getName() + "'s current hp: " + attackerCharacter.getHP());
+        System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
+        endTurn(attackerCharacter);
+    }
+
+    /**
+     * equip() method equips a weapon to the player
+     */
+    public void equip(int playerIndex, String weaponName){
+        IWeapon weapon = this.inventory.get(weaponName);
+        IPlayer player = this.getPlayer(playerIndex);
+        IWeapon currentWeapon = player.getEquippedWeapon();
+        player.equip(weapon);
+        if (currentWeapon == null){
+            if (player.getEquippedWeapon() != null){
+                inventory.remove(weapon.getName());
+                System.out.println(player.getName() + " equips " + player.getEquippedWeapon().getName());
+                System.out.println(player.getEquippedWeapon().getName() + "'s damage: " +
+                        player.getEquippedWeapon().getDamage());
+            }
+        } else {
+            if (player.getEquippedWeapon().hashCode() == weapon.hashCode()){
+                inventory.remove(weapon.getName());
+                inventory.put(currentWeapon.getName(), currentWeapon);
+                System.out.println(player.getName() + " equips " + weapon.getName());
+                System.out.println(currentWeapon.getName() + " saved");
+                System.out.println(weapon.getName() + "'s damage: " + weapon.getDamage());
+            }
+        }
     }
 
     /**
@@ -88,7 +189,7 @@ public class GameController {
      */
     public void onDeadEnemy(Enemy enemy) {
         this.aliveEnemies --;
-        System.out.println(enemy.getName() + " has died");
+        System.out.println(enemy.getName() + " of the Enemy party has died");
         if (this.getAliveEnemies() == 0){
             this.victory();
         }
@@ -100,10 +201,17 @@ public class GameController {
      */
     public void onDeadPlayer(IPlayer player) {
         this.alivePlayers --;
-        System.out.println(player.getName() + " has died");
+        System.out.println(player.getName() + " of the Player party has died");
         if (this.getAlivePlayers() == 0){
             this.gameOver();
         }
+    }
+
+    /**
+     * onModifiedQueue() method is triggered when a character is added to the queue.
+     */
+    public void onModifiedQueue(ICharacter character) {
+        System.out.println(character.getName() + " added to Queue");
     }
 
     /**
@@ -114,6 +222,7 @@ public class GameController {
             gamerParty.add(player);
             this.alivePlayers ++;
             player.addListener(DeadPlayerHandler);
+            player.addListener(TurnHandler);
         }
     }
 
@@ -125,6 +234,7 @@ public class GameController {
             cpuParty.add(enemy);
             this.aliveEnemies ++;
             enemy.addListener(DeadEnemyHandler);
+            enemy.addListener(TurnHandler);
         }
     }
 
@@ -166,26 +276,6 @@ public class GameController {
     public void createBlackMage(String name, int hp , int defense, int mp){
         BlackMage blackmage = new BlackMage(name, turnsQueue, hp, defense, mp);
         this.putInPlayerParty(blackmage);
-    }
-
-    /**
-     * equip() method equips a weapon to the player
-     */
-    public void equip(int playerIndex, String weaponName){
-        IWeapon weapon = this.inventory.get(weaponName);
-        IPlayer player = this.getPlayer(playerIndex);
-        IWeapon currentWeapon = player.getEquippedWeapon();
-        player.equip(weapon);
-        if (currentWeapon == null){
-            if (player.getEquippedWeapon() != null){
-                inventory.remove(weapon.getName());
-            }
-        } else {
-            if (player.getEquippedWeapon().hashCode() == weapon.hashCode()){
-                inventory.remove(weapon.getName());
-                inventory.put(currentWeapon.getName(), currentWeapon);
-            }
-        }
     }
 
     /**
@@ -240,6 +330,7 @@ public class GameController {
      * gameOver() finalizes the game when the gamer loses.
      */
     public void gameOver(){
+        this.state.gameOver();
         System.out.println("YOU DIED");
     }
 
@@ -247,6 +338,7 @@ public class GameController {
      * victory() finalizes the game when the gamer wins.
      */
     public void victory(){
+        this.state.victory();
         System.out.println("HEIR OF FIRE DESTROYED");
     }
 

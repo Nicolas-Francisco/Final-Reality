@@ -42,7 +42,19 @@ or another player.
 triggers. However, if all the players die, then the enemy party wins, and the gameOver method 
 triggers.
 
+- The game has 6 states in general: Start, Waiting, Selection, Turn, victory and GameOver.
 
+- In the Start state we only can start the game (going to the waiting state) if the 
+player party is complete. This represents the "menu of creation" before the actual game.
+
+- In the Waiting-Selection and Turn states we have the actual game. It is a loop of these
+three events over and over until some party wins. Waiting state is the state where the game
+waits for the players to join the turns queue, Selection is a brief state in which we search
+for the next character to start its turn. Finally, the Turn state corresponds to the moment
+in which some character decides what to do (in this case, equip and attack). 
+
+- In the Victory and Game Over state we have the end of the game. These states can only be 
+accessed through the Turn state (the only moment in the game where somebody could die).
 
 Original Version Design
 ---
@@ -132,6 +144,11 @@ The inventory is represented by a HashMap using a string as a key (the name of t
 eliminating the "Inventory" class, while the party is represented by an ArrayList of characters,
  eliminating the "User" class.
 
+"Tarea 3" version Design
+---
+
+In this version we create de states of the game using the State patter design. The states are best 
+described in the assumptions title.
 
 
 Testing

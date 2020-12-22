@@ -1,6 +1,8 @@
-package com.github.cc3002.finalreality.model.controller;
+package com.github.cc3002.finalreality.model.controller.observer;
 
 import com.github.cc3002.finalreality.model.character.Enemy;
+import com.github.cc3002.finalreality.model.controller.GameController;
+
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -8,7 +10,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author Nicolás García Ríos
  */
-public class EnemyHandler implements IEventHandler{
+public class EnemyHandler implements IEventHandler {
     private final GameController controller;
 
     public EnemyHandler(GameController controller) {

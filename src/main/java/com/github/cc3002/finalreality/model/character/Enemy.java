@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.BlockingQueue;
+import com.github.cc3002.finalreality.model.controller.GameController;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -95,6 +96,16 @@ public class Enemy extends AbstractCharacter {
         this.setHP(0);
       }
     }
+  }
+
+  /**
+   * useTurn method. If the character is an enemy, it attacks to a random player using the controller,
+   * if its not, it doesn't do anything. (We need it only for the beginTurn method in the controller,
+   * using a boolean to determine if the character is an enemy or not is equal to use instanceof() method)
+   */
+  @Override
+  public void useTurn(GameController controller){
+    controller.attackRandomPlayer();
   }
 
   /**
