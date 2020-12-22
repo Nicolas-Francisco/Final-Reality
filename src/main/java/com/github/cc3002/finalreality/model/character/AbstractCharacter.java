@@ -1,7 +1,8 @@
 package com.github.cc3002.finalreality.model.character;
-
+import java.beans.PropertyChangeSupport;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
+import com.github.cc3002.finalreality.model.controller.IEventHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,21 +16,18 @@ public abstract class AbstractCharacter implements ICharacter {
   private final BlockingQueue<ICharacter> turnsQueue;
   private final String name;
   private int HP;
-  private final int Defense;
+  private int Defense;
   private ScheduledExecutorService scheduledExecutor;
   private boolean alive;
+  private PropertyChangeSupport DeadCharacterEvent = new PropertyChangeSupport(this);
 
   /**
    * Creates a new character.
    *
-   * @param name
-   *     the character's name
-   * @param turnsQueue
-   *     the queue with the characters waiting for their turn
-   * @param hp
-   *     the character's hp
-   * @param defense
-   *     the character's defense
+   * @param name       the character's name
+   * @param turnsQueue the queue with the characters waiting for their turn
+   * @param hp         the character's hp
+   * @param defense    the character's defense
    */
   protected AbstractCharacter(@NotNull BlockingQueue<ICharacter> turnsQueue,
                               @NotNull String name,
@@ -37,21 +35,14 @@ public abstract class AbstractCharacter implements ICharacter {
                               @NotNull int defense) {
     this.turnsQueue = turnsQueue;
     this.name = name;
-    this.HP = hp;
     this.Defense = defense;
-
+    this.setHP(hp);
     /**
      * depending of the amount of HP of the character, it might be dead or alive. This parameter
      * can be changed during fights (a character can be killed by another when attacked).
      * If a user creates a character with 0 HP, we initialize the character with false. (this
      * is a border case)
      */
-    if(this.HP > 0){
-      this.alive = true;
-    }
-    else{
-      this.alive = false;
-    }
   }
 
   /**
@@ -110,22 +101,18 @@ public abstract class AbstractCharacter implements ICharacter {
    * setter methods for each private parameter of the class.
    */
   public void setHP(int health) {
-    if (health <= 0){
+    if (health <= 0) {
       this.HP = 0;
-      this.setDead();
-    }
-    else{
+      this.alive = false;
+      DeadCharacterEvent.firePropertyChange("Death", null, this);
+    } else {
       this.HP = health;
-      this.setAlive();
+      this.alive = true;
     }
   }
 
-  public void setDead() {
-    this.alive = false;
-  }
-
-  public void setAlive() {
-    this.alive = true;
+  public void setDefense(int defense) {
+    this.Defense = defense;
   }
 
   /**
@@ -149,35 +136,10 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   /**
-   * equip(Weapon) is only used in AbstractPlayerCharacter and its subclasses,
-   * which all extends AbstractCharacter, this means that this method should not be
-   * declared in the Interface nor in the Abstract class, but in the AbstractPlayerCharacter
-   * class instead.
-   * Declaring this method in this abstract class breaks the Liskov's substitution principle,
-   * since the Enemy subclass is unable of using it.
-   *
-   @Override public void equip(Weapon weapon);
+   * addListener() adds a listener to the event
    */
-
-  /**
-   * Enemy class does not have any weapons, so having a getEquippedWeapon() method
-   * for enemies has no sense. Therefore getEquippedWeapon() should be declared and
-   * implemented only by the AbstractPlayerCharacter class.
-   * Declaring this method in the abstract class breaks the Liskov's substitution principle,
-   * since the Enemy subclass is unable of using it.
-   *
-   * @Override public Weapon getEquippedWeapon() {
-   * return equippedWeapon;
-   * }
-   */
-
-  /**
-   * Having an array of Classes is not a good method nor an extendable code, besides each
-   * class has different restrictions in terms of weapons (leading to Double Dispatch).
-   * Hence, getCharacterClass() gets replaced by the subclasses of the AbstractPlayer Class
-   *
-   @Override public CharacterClass getCharacterClass() {
-   return characterClass;
-   }
-   */
+  @Override
+  public void addListener(IEventHandler characterHandler){
+    DeadCharacterEvent.addPropertyChangeListener(characterHandler);
+  }
 }

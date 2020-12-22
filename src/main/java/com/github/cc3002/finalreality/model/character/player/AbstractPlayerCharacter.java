@@ -115,7 +115,7 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
    */
   @Override
   public void attacked(int BaseDamage){
-    if ((this.IsAlive())){
+    if ((this.IsAlive()) && (BaseDamage > this.getDefense())){
       int damage = BaseDamage - this.getDefense();
       if (this.getHP() > damage){
         this.setHP(this.getHP() - damage);

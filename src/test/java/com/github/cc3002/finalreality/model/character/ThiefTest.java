@@ -1,11 +1,13 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.Knight;
+import com.github.cc3002.finalreality.model.character.player.IPlayer;
 import com.github.cc3002.finalreality.model.character.player.Thief;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This testing class tests all the methods of a Thief player.
@@ -15,10 +17,59 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class ThiefTest extends AbstractPlayerCharacterTest {
 
+    private static final String THIEF_NAME = "Zidane";    private Thief testThief;
+    private IPlayer expectedThief;
+    private IPlayer differentThief1;
+    private IPlayer differentThief2;
+    private IPlayer differentThief3;
+    private Object differentThief4;
+
+
     /**
-     * New testing player
+     * This method creates all the objects that we are going to test with the constructorTest().
+     * Using inheritance, we only have to create these objects with different attributes and test them all
+     * in the upper method checkConstructor, which tests all the weapons.
      */
-    private Thief testThief = new Thief(THIEF_NAME, turns, 1, 1);
+    @BeforeEach
+    void setUp() {
+        testThief = new Thief(THIEF_NAME, turns, 1, 1);
+        expectedThief = new Thief(THIEF_NAME, turns, 1, 1);
+        differentThief1 = new Thief("Lautrec", turns, 1, 1);
+        differentThief2 = new Thief(THIEF_NAME, turns, 5, 1);
+        differentThief3 = new Thief(THIEF_NAME, turns, 1, 5);
+        differentThief4 = new Object();
+    }
+
+    /**
+     * This method tests the construction method.
+     * Because every Hashcode() and Equals() is different in every Class, we have to
+     * test every branch and any difference between players. In this case, the Hashcode
+     * and Equals compares every parameter of the WhiteMage Class, thus we have to test
+     * differences in each parameter (name, hp, defence and mana)
+     */
+    @Test
+    void constructorTest() {
+        checkConstruction(testThief, expectedThief, differentThief1, differentThief2, differentThief3, differentThief4);
+    }
+
+    /**
+     * This method tests the equip methods and branches.
+     */
+    @Test
+    void equipWeaponTest() {
+        List<IWeapon> cannotEquip = new ArrayList<IWeapon>();
+        cannotEquip.add(testStaff);
+        cannotEquip.add(testAxe);
+
+        List<IWeapon> canEquip = new ArrayList<IWeapon>();
+        canEquip.add(testBow);
+        canEquip.add(testSword);
+        canEquip.add(testKnife);
+
+        Thief testDeadThief = new Thief("Greirat", turns, 0, 1);
+
+        checkEquip(testThief, testDeadThief, canEquip, cannotEquip);
+    }
 
     /**
      * This method tests the waitTurn() method if the character is a player.
@@ -41,58 +92,5 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * This method tests the construction method.
-     * Because every Hashcode() and Equals() is different in every Class, we have to
-     * test every branch and any difference between players. In this case, the Hashcode
-     * and Equals compares every parameter of the Thief Class, thus we have to test
-     * differences in each parameter (name, hp and  defence)
-     */
-    @Test
-    void constructorTest() {
-        var expectedThief = new Thief(THIEF_NAME, turns, 1, 1);
-        var differentThief1 = new Thief("Lautrec", turns, 1, 1);
-        var differentThief2 = new Thief(THIEF_NAME, turns, 5, 1);
-        var differentThief3 = new Thief(THIEF_NAME, turns, 1, 5);
-        var expectedKnight = new Knight("Solaire", turns, 1, 1);
-
-        assertEquals(expectedThief, expectedThief);
-        assertEquals(expectedThief.hashCode(), expectedThief.hashCode());
-
-        assertTrue(expectedThief.equals(expectedThief));
-        assertFalse(expectedThief.equals(differentThief1));
-        assertFalse(expectedThief.equals(differentThief2));
-        assertFalse(expectedThief.equals(differentThief3));
-        assertFalse(expectedThief.equals(expectedKnight));
-    }
-
-    /**
-     * This method tests the equip methods and branches.
-     */
-    @Test
-    void equipWeaponTest() {
-        testThief.equip(testStaff);
-        assertNull(testThief.getEquippedWeapon());
-        testThief.equip(testAxe);
-        assertNull(testThief.getEquippedWeapon());
-
-        testThief.equip(testBow);
-        assertEquals(testBow, testThief.getEquippedWeapon());
-        testThief.equip(testSword);
-        assertEquals(testSword, testThief.getEquippedWeapon());
-        testThief.equip(testKnife);
-        assertEquals(testKnife, testThief.getEquippedWeapon());
-
-
-
-        Thief differentThief1 = new Thief("Greirat", turns, 0, 1);
-        differentThief1.equip(testKnife);
-        assertNull(differentThief1.getEquippedWeapon());
-        differentThief1.equip(testSword);
-        assertNull(differentThief1.getEquippedWeapon());
-        differentThief1.equip(testBow);
-        assertNull(differentThief1.getEquippedWeapon());
     }
 }

@@ -2,24 +2,38 @@ package com.github.cc3002.finalreality.model.weapon;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * This testing class tests all the methods of na Axe weapon.
+ * This testing class tests all the methods of an Axe weapon.
  *
  * @author Ignacio Slater Muñoz
  * @author Nicolas García Ríos
  */
 public class AxeTest extends AbstractWeaponTest{
 
+    private static final String AXE_NAME = "Test Axe";
+    private static final int DAMAGE = 15;
+    private static final int SPEED = 10;
+    private IWeapon testAxe;
+    private IWeapon expectedAxe;
+    private IWeapon differentAxe1;
+    private IWeapon differentAxe2;
+    private IWeapon differentAxe3;
+    private Object differentAxe4;
+
     /**
-     * New testing weapon
+     * This method creates all the objects that we are going to test with the constructorTest().
+     * Using inheritance, we only have to create these objects with different attributes and test them all
+     * in the upper method checkConstructor, which tests all the weapons.
      */
     @BeforeEach
     void setUp() {
         testAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
+        expectedAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
+        differentAxe1 = new Axe("Test", DAMAGE, SPEED);
+        differentAxe2 = new Axe(AXE_NAME, 1, SPEED);
+        differentAxe3 = new Axe(AXE_NAME, DAMAGE, 1);
+        differentAxe4 = new Object();
     }
 
     /**
@@ -31,18 +45,6 @@ public class AxeTest extends AbstractWeaponTest{
      */
     @Test
     void constructorTest() {
-        var expectedAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
-        var differentAxe1 = new Axe("Test", DAMAGE, SPEED);
-        var differentAxe2 = new Axe(AXE_NAME, 1, SPEED);
-        var differentAxe3 = new Axe(AXE_NAME, DAMAGE, 1);
-        var expectedBow = new Bow(BOW_NAME, DAMAGE, SPEED);
-        assertEquals(expectedAxe, testAxe);
-        assertEquals(expectedAxe.hashCode(), testAxe.hashCode());
-
-        assertTrue(expectedAxe.equals(expectedAxe));
-        assertFalse(expectedAxe.equals(differentAxe1));
-        assertFalse(expectedAxe.equals(differentAxe2));
-        assertFalse(expectedAxe.equals(differentAxe3));
-        assertFalse(expectedAxe.equals(expectedBow));
+        checkConstruction(testAxe, expectedAxe, differentAxe1, differentAxe2, differentAxe3, differentAxe4);
     }
 }
