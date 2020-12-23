@@ -66,7 +66,12 @@ public interface ICharacter {
   /**
    * Adds a listener to the character
    */
-  void addListener(IEventHandler handler);
+  void addListenerDead(IEventHandler handler);
+
+  /**
+   * Adds a listener to the character
+   */
+  void addListenerTurn(IEventHandler handler);
 
   /**
    * useTurn method. If the character is an enemy, it attacks to a random player using the controller,

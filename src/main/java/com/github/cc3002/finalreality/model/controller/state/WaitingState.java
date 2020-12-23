@@ -19,6 +19,11 @@ public class WaitingState extends GameState{
     }
 
     @Override
+    public void tryToBeginTurn(){
+        this.controller.beginTurn();
+    }
+
+    @Override
     public boolean isWaitingState(){
         return true;
     }

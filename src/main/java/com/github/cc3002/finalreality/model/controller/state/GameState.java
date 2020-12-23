@@ -73,6 +73,7 @@ public class GameState {
      * the equipped weapon in a turn, and not between two.
      */
     public void equip(int playerIndex, String weaponName){
+        this.error();
     }
 
     /**
@@ -80,6 +81,14 @@ public class GameState {
      * during a turn only, and not between two.
      */
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
+        this.error();
+    }
+
+    /**
+     * tryToBeginTurn()
+     */
+    public void tryToBeginTurn(){
+        this.error();
     }
 
     /**

@@ -19,6 +19,8 @@ public class TurnHandler implements IEventHandler {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        controller.onModifiedQueue((ICharacter) evt.getNewValue());
+        System.out.println(((ICharacter) evt.getNewValue()).getName() + " added to Queue");
+        controller.tryToBeginTurn();
+        // controller.onModifiedQueue((ICharacter) evt.getNewValue());
     }
 }

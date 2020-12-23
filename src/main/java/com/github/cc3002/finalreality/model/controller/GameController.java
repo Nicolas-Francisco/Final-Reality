@@ -32,7 +32,7 @@ public class GameController {
     private final IEventHandler DeadEnemyHandler = new EnemyHandler(this);
     private final IEventHandler TurnHandler = new TurnHandler(this);
     private GameState state;
-    private final BlockingQueue<ICharacter> turnsQueue;
+    protected BlockingQueue<ICharacter> turnsQueue;
     protected int enemies = new Random().nextInt(4) + 1;
     private ICharacter characterTurn;
 
@@ -50,7 +50,7 @@ public class GameController {
      * tryToBeginTurn() method tries to begin the next turn, asking the state pattern
      */
     public void tryToBeginTurn(){
-        this.state.beginTurn();
+        this.state.tryToBeginTurn();
     }
 
     /**
@@ -125,7 +125,7 @@ public class GameController {
 
     /**
      * attackRandomPlayer() is called when an enemy just started it's turn. It only attacks a random player
-     * from the player party.
+     * from the player party, and if the player chosen is dead, we repeat the process using recursion.
      */
     public void attackRandomPlayer(){
         int rand = new Random().nextInt(4);
@@ -134,6 +134,7 @@ public class GameController {
         } else {
             attackRandomPlayer();
         }
+        return;
     }
 
     /**
@@ -144,6 +145,9 @@ public class GameController {
         turnsQueue.poll();
         character.waitTurn();
         state.endTurn();
+        if(!turnsQueue.isEmpty()){
+            tryToBeginTurn();
+        }
     }
 
     /**
@@ -152,9 +156,10 @@ public class GameController {
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         System.out.println(attackerCharacter.getName() + " attacks " + attackedCharacter.getName());
         attackerCharacter.attackTo(attackedCharacter);
-        System.out.println(attackerCharacter.getName() + "'s current hp: " + attackerCharacter.getHP());
-        System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
-        endTurn(attackerCharacter);
+        if (!this.state.isVictoryState()){
+            System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
+            endTurn(attackerCharacter);
+        }
     }
 
     /**
@@ -207,12 +212,6 @@ public class GameController {
         }
     }
 
-    /**
-     * onModifiedQueue() method is triggered when a character is added to the queue.
-     */
-    public void onModifiedQueue(ICharacter character) {
-        System.out.println(character.getName() + " added to Queue");
-    }
 
     /**
      * putInPlayerParty() method adds a player to the gamer party, with a limit given by the user
@@ -221,8 +220,8 @@ public class GameController {
         if (gamerParty.size() < this.maxCharacters){
             gamerParty.add(player);
             this.alivePlayers ++;
-            player.addListener(DeadPlayerHandler);
-            player.addListener(TurnHandler);
+            player.addListenerDead(DeadPlayerHandler);
+            player.addListenerTurn(TurnHandler);
         }
     }
 
@@ -233,8 +232,8 @@ public class GameController {
         if (cpuParty.size() < this.maxCharacters){
             cpuParty.add(enemy);
             this.aliveEnemies ++;
-            enemy.addListener(DeadEnemyHandler);
-            enemy.addListener(TurnHandler);
+            enemy.addListenerDead(DeadEnemyHandler);
+            enemy.addListenerTurn(TurnHandler);
         }
     }
 

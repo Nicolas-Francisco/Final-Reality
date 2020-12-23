@@ -69,8 +69,8 @@ public abstract class AbstractCharacter implements ICharacter {
   public void addToQueue() {
     if(this.IsAlive()){
       turnsQueue.add(this);
-      addToQueueEvent.firePropertyChange("Character Added to Queue", null, this);
       scheduledExecutor.shutdown();
+      addToQueueEvent.firePropertyChange("Character Added to Queue", null, this);
     }
   }
 
@@ -142,11 +142,19 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   /**
-   * addListener() adds a listener to the event
+   * addListenerDead() adds a listener to the event
    */
   @Override
-  public void addListener(IEventHandler characterHandler){
+  public void addListenerDead(IEventHandler characterHandler){
     DeadCharacterEvent.addPropertyChangeListener(characterHandler);
+  }
+
+  /**
+   * addListenerTurn() adds a listener to the event
+   */
+  @Override
+  public void addListenerTurn(IEventHandler characterHandler){
+    addToQueueEvent.addPropertyChangeListener(characterHandler);
   }
 
   /**
