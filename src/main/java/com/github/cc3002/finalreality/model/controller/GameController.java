@@ -33,7 +33,7 @@ public class GameController {
     private final IEventHandler TurnHandler = new TurnHandler(this);
     private GameState state;
     protected BlockingQueue<ICharacter> turnsQueue;
-    protected int enemies = new Random().nextInt(4) + 1;
+    protected int enemies;
     private ICharacter characterTurn;
 
     public GameController(){
@@ -229,7 +229,7 @@ public class GameController {
      * putInEnemyParty() method adds an enemy to the gamer party, with a limit given by the user
      */
     public void putInEnemyParty(Enemy enemy){
-        if (cpuParty.size() < this.maxCharacters){
+        if (cpuParty.size() < this.enemies){
             cpuParty.add(enemy);
             this.aliveEnemies ++;
             enemy.addListenerDead(DeadEnemyHandler);
@@ -339,6 +339,13 @@ public class GameController {
     public void victory(){
         this.state.victory();
         System.out.println("HEIR OF FIRE DESTROYED");
+    }
+
+    /**
+     * setter for the amount of enemies.
+     */
+    public void setNumberOfEnemies(int num){
+        this.enemies = num;
     }
 
     /**

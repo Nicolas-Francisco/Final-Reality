@@ -83,7 +83,7 @@ public class ControllerTest {
         controller.createBlackMage("testBlackMage", 10, 10, 10);
         assertEquals(currentParty, controller.getGamerParty());
 
-
+        controller.setNumberOfEnemies(1);
         assertEquals(controller.getAliveEnemies(), 0);
         controller.createEnemy("testEnemy", 10, 10, 10, 10);
         assertEquals(controller.getAliveEnemies(), 1);
@@ -216,6 +216,7 @@ public class ControllerTest {
         controller.equip(2, "testAxe");
         controller.equip(3, "testStaff");
 
+        controller.setNumberOfEnemies(1);
         controller.createEnemy("testEnemy", 10, 10, 10, 8);
 
         controller.startQueue();
