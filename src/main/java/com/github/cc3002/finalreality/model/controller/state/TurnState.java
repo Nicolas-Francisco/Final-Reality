@@ -15,18 +15,20 @@ public class TurnState extends GameState{
     }
 
     @Override
-    public void endTurn(){
+    public void waiting(){
         this.changeState(new WaitingState(this.controller));
     }
 
     @Override
     public void victory(){
         this.changeState(new VictoryState(this.controller));
+        this.controller.victory();
     }
 
     @Override
     public void gameOver(){
         this.changeState(new GameOverState(this.controller));
+        this.controller.gameOver();
     }
 
     @Override
@@ -50,6 +52,5 @@ public class TurnState extends GameState{
     @Override
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         this.controller.attack(attackerCharacter, attackedCharacter);
-        controller.setState(new WaitingState(this.controller));
     }
 }

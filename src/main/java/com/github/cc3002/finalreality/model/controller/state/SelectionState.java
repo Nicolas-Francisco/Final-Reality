@@ -19,7 +19,7 @@ public class SelectionState extends GameState{
     }
 
     @Override
-    public void endTurn(){
+    public void waiting(){
         this.changeState(new WaitingState(this.controller));
     }
 

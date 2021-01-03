@@ -221,7 +221,7 @@ public class ControllerTest {
 
         controller.startQueue();
         Thread.sleep(5000);
-        controller.attack(controller.getCharacterTurn(), controller.getEnemy(0));
+        controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(0));
     }
 
     /**

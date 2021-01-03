@@ -20,6 +20,7 @@ public class WaitingState extends GameState{
 
     @Override
     public void tryToBeginTurn(){
+        this.nextTurn();
         this.controller.beginTurn();
     }
 

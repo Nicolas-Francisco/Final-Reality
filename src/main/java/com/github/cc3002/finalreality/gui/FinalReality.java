@@ -1,9 +1,11 @@
 package com.github.cc3002.finalreality.gui;
 
+import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.character.player.*;
 import com.github.cc3002.finalreality.model.controller.GameController;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,11 +15,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Main entry point for the application.
@@ -332,25 +339,41 @@ public class FinalReality extends Application {
     weapon2Grid.addRow(3, createweapon2Button);
     weapon3Grid.addRow(3, createweapon3Button);
 
+    ArrayList<IWeapon> weaponCache = new ArrayList();
+
     createButton.setOnAction(event -> {
-        controller.createKnight(textNameCharacter.getText(), 35, 20);
+        Knight knight = controller.createKnight(textNameCharacter.getText(), 35, 20);
+        if (weaponCache.isEmpty()){
+            createweapon1Button.fire();
+        }
+        int index = controller.getGamerParty().indexOf(knight);
+        controller.tryToEquip(index, weaponCache.get(0).getName());
         if (controller.getAlivePlayers() == 4){
-            selectionEnemyScene(primaryStage, background);
+            selectionEnemyScene(primaryStage, background, false);
         } else {
             creationScene(primaryStage, background);
         }
     });
 
     createweapon1Button.setOnAction(event -> {
-        controller.createSword("Claymore", 18, 22);
+        if (weaponCache.size() < 2){
+            controller.createSword("Claymore", 18, 22);
+            weaponCache.add(controller.getInventory().get("Claymore"));
+        }
     });
 
     createweapon2Button.setOnAction(event -> {
-        controller.createKnife("Corvian knife", 10, 10);
+        if (weaponCache.size() < 2){
+            controller.createKnife("Corvian knife", 10, 10);
+            weaponCache.add(controller.getInventory().get("Corvian knife"));
+        }
     });
 
     createweapon3Button.setOnAction(event -> {
-        controller.createAxe("Blacknight Axe", 20, 25);
+        if (weaponCache.size() < 2){
+            controller.createAxe("Blacknight axe", 20, 25);
+            weaponCache.add(controller.getInventory().get("Blacknight axe"));
+        }
     });
 
     creationRoot.getChildren().add(createButton);
@@ -469,25 +492,41 @@ public class FinalReality extends Application {
     weapon2Grid.addRow(3, createweapon2Button);
     weapon3Grid.addRow(3, createweapon3Button);
 
+    ArrayList<IWeapon> weaponCache = new ArrayList();
+
     createButton.setOnAction(event -> {
-        controller.createThief(textNameCharacter.getText(), 30, 16);
+        Thief thief = controller.createThief(textNameCharacter.getText(), 30, 16);
+        if (weaponCache.isEmpty()){
+            createweapon1Button.fire();
+        }
+        int index = controller.getGamerParty().indexOf(thief);
+        controller.tryToEquip(index, weaponCache.get(0).getName());
         if (controller.getAlivePlayers() == 4){
-            selectionEnemyScene(primaryStage, background);
+            selectionEnemyScene(primaryStage, background, false);
         } else {
             creationScene(primaryStage, background);
         }
     });
 
     createweapon1Button.setOnAction(event -> {
-        controller.createSword("Broadsword", 10, 12);
+        if (weaponCache.size() < 2){
+            controller.createSword("Broadsword", 10, 12);
+            weaponCache.add(controller.getInventory().get("Broadsword"));
+        }
     });
 
     createweapon2Button.setOnAction(event -> {
-        controller.createKnife("Bandit's knife", 10, 10);
+        if (weaponCache.size() < 2){
+            controller.createKnife("Bandit's knife", 10, 10);
+            weaponCache.add(controller.getInventory().get("Bandit's knife"));
+        }
     });
 
     createweapon3Button.setOnAction(event -> {
-        controller.createAxe("Bow of Pharis", 14, 12);
+        if (weaponCache.size() < 2){
+            controller.createAxe("Bow of Pharis", 14, 12);
+            weaponCache.add(controller.getInventory().get("Bow of Pharis"));
+        }
     });
 
     creationRoot.getChildren().add(createButton);
@@ -606,25 +645,41 @@ public class FinalReality extends Application {
       weapon2Grid.addRow(3, createweapon2Button);
       weapon3Grid.addRow(3, createweapon3Button);
 
+      ArrayList<IWeapon> weaponCache = new ArrayList();
+
       createButton.setOnAction(event -> {
-          controller.createEngineer(textNameCharacter.getText(), 33, 18);
+          Engineer engineer = controller.createEngineer(textNameCharacter.getText(), 33, 18);
+          if (weaponCache.isEmpty()){
+              createweapon1Button.fire();
+          }
+          int index = controller.getGamerParty().indexOf(engineer);
+          controller.tryToEquip(index, weaponCache.get(0).getName());
           if (controller.getAlivePlayers() == 4){
-              selectionEnemyScene(primaryStage, background);
+              selectionEnemyScene(primaryStage, background, false);
           } else {
               creationScene(primaryStage, background);
           }
       });
 
       createweapon1Button.setOnAction(event -> {
-          controller.createAxe("Eleonora", 14, 16);
+          if (weaponCache.size() < 2){
+              controller.createAxe("Eleonora", 14, 16);
+              weaponCache.add(controller.getInventory().get("Eleonora"));
+          }
       });
 
       createweapon2Button.setOnAction(event -> {
-          controller.createAxe("Demon's Axe", 22, 24);
+          if (weaponCache.size() < 2){
+              controller.createAxe("Demon's Axe", 22, 24);
+              weaponCache.add(controller.getInventory().get("Demon's Axe"));
+          }
       });
 
       createweapon3Button.setOnAction(event -> {
-          controller.createAxe("Dragonslayer Bow", 18, 16);
+          if (weaponCache.size() < 2){
+              controller.createAxe("Dragonslayer Bow", 18, 16);
+              weaponCache.add(controller.getInventory().get("Dragonslayer Bow"));
+          }
       });
 
       creationRoot.getChildren().add(createButton);
@@ -743,25 +798,41 @@ public class FinalReality extends Application {
       weapon2Grid.addRow(3, createweapon2Button);
       weapon3Grid.addRow(3, createweapon3Button);
 
+      ArrayList<IWeapon> weaponCache = new ArrayList();
+
       createButton.setOnAction(event -> {
-          controller.createWhiteMage(textNameCharacter.getText(), 25, 15, 15);
+          WhiteMage white = controller.createWhiteMage(textNameCharacter.getText(), 25, 15, 15);
+          if (weaponCache.isEmpty()){
+              createweapon1Button.fire();
+          }
+          int index = controller.getGamerParty().indexOf(white);
+          controller.tryToEquip(index, weaponCache.get(0).getName());
           if (controller.getAlivePlayers() == 4){
-              selectionEnemyScene(primaryStage, background);
+              selectionEnemyScene(primaryStage, background, false);
           } else {
               creationScene(primaryStage, background);
           }
       });
 
       createweapon1Button.setOnAction(event -> {
-          controller.createStaff("Izalith Staff", 10, 6);
+          if (weaponCache.size() < 2){
+              controller.createStaff("Izalith Staff", 10, 6);
+              weaponCache.add(controller.getInventory().get("Izalith Staff"));
+          }
       });
 
       createweapon2Button.setOnAction(event -> {
-          controller.createStaff("Oolacile Staff", 14, 10);
+          if (weaponCache.size() < 2){
+              controller.createStaff("Oolacile Staff", 14, 10);
+              weaponCache.add(controller.getInventory().get("Oolacile Staff"));
+          }
       });
 
       createweapon3Button.setOnAction(event -> {
-          controller.createStaff("Archdeacon's Staff", 19, 16);
+          if (weaponCache.size() < 2){
+              controller.createStaff("Archdeacon's Staff", 19, 16);
+              weaponCache.add(controller.getInventory().get("Archdeacon's Staff"));
+          }
       });
 
       creationRoot.getChildren().add(createButton);
@@ -880,25 +951,41 @@ public class FinalReality extends Application {
       weapon2Grid.addRow(3, createweapon2Button);
       weapon3Grid.addRow(3, createweapon3Button);
 
+      ArrayList<IWeapon> weaponCache = new ArrayList();
+
       createButton.setOnAction(event -> {
-          controller.createBlackMage(textNameCharacter.getText(), 23, 15, 15);
+          BlackMage black = controller.createBlackMage(textNameCharacter.getText(), 23, 15, 15);
+          if (weaponCache.isEmpty()){
+              createweapon1Button.fire();
+          }
+          int index = controller.getGamerParty().indexOf(black);
+          controller.tryToEquip(index, weaponCache.get(0).getName());
           if (controller.getAlivePlayers() == 4){
-              selectionEnemyScene(primaryStage, background);
+              selectionEnemyScene(primaryStage, background, false);
           } else {
               creationScene(primaryStage, background);
           }
       });
 
       createweapon1Button.setOnAction(event -> {
-          controller.createStaff("Heretic's Staff", 16, 12);
+          if (weaponCache.size() < 2){
+              controller.createStaff("Heretic's Staff", 16, 12);
+              weaponCache.add(controller.getInventory().get("Heretic's Staff"));
+          }
       });
 
       createweapon2Button.setOnAction(event -> {
-          controller.createStaff("Manus Catalyst", 25, 18);
+          if (weaponCache.size() < 2){
+              controller.createStaff("Manus Catalyst", 25, 18);
+              weaponCache.add(controller.getInventory().get("Manus Catalyst"));
+          }
       });
 
       createweapon3Button.setOnAction(event -> {
-          controller.createKnife("Aquamarine Dagger", 6, 9);
+          if (weaponCache.size() < 2){
+              controller.createKnife("Aquamarine Dagger", 6, 9);
+              weaponCache.add(controller.getInventory().get("Aquamarine Dagger"));
+          }
       });
 
       creationRoot.getChildren().add(createButton);
@@ -910,14 +997,437 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
-  public void selectionEnemyScene(Stage primaryStage, ImageView background){
+  public void selectionEnemyScene(Stage primaryStage, ImageView background, boolean start){
     Group selectionRoot = new Group();
     selectionRoot.getChildren().add(background);
+
+    // Texts
+    Label title = new Label("Select Difficulty");
+
+    title.setFont(frMainFont2);
+
+    title.setTextFill(Color.web("#000000"));
+
+    title.setLayoutX(210);
+    title.setLayoutY(60);
+
+    selectionRoot.getChildren().addAll(title);
+
+    // Buttons
+    Button easyModeButton = new Button("Easy");
+    Button normalModeButton = new Button("Normal");
+    Button hardModeButton = new Button("Final Reality");
+    Button startGame = new Button("Start");
+
+    easyModeButton.setFont(frMainFont1);
+    normalModeButton.setFont(frMainFont1);
+    hardModeButton.setFont(frMainFont1);
+    startGame.setFont(frMainFont1);
+
+    easyModeButton.setLayoutX(290);
+    easyModeButton.setLayoutY(150);
+
+    normalModeButton.setLayoutX(282);
+    normalModeButton.setLayoutY(210);
+
+    hardModeButton.setLayoutX(260);
+    hardModeButton.setLayoutY(270);
+
+    startGame.setLayoutX(290);
+    startGame.setLayoutY(350);
+
+    selectionRoot.getChildren().addAll(easyModeButton, normalModeButton, hardModeButton);
+    if (start){
+        selectionRoot.getChildren().add(startGame);
+    }
+
+    easyModeButton.setOnAction(event -> {
+        if (!start){
+            int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+            controller.setNumberOfEnemies(randomNum);
+            for (int i = 0 ; i < randomNum ; i++){
+                controller.createEnemy("Goblin", ThreadLocalRandom.current().nextInt(20, 32 + 1),
+                        ThreadLocalRandom.current().nextInt(0, 5 + 1),
+                        ThreadLocalRandom.current().nextInt(18, 25 + 1),
+                        ThreadLocalRandom.current().nextInt(15, 20 + 1));
+            }
+        }
+        controller.tryToStart();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        selectionEnemyScene(primaryStage, background, true);
+    });
+
+    normalModeButton.setOnAction(event -> {
+        if (!start) {
+            controller.setNumberOfEnemies(4);
+            for (int i = 0; i < 4; i++) {
+                controller.createEnemy("Monster", ThreadLocalRandom.current().nextInt(35, 45 + 1),
+                        ThreadLocalRandom.current().nextInt(2, 8 + 1),
+                        ThreadLocalRandom.current().nextInt(22, 27 + 1),
+                        ThreadLocalRandom.current().nextInt(15, 20 + 1));
+            }
+        }
+        controller.tryToStart();
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        selectionEnemyScene(primaryStage, background, true);
+    });
+
+    hardModeButton.setOnAction(event -> {
+        if (!start) {
+            controller.setNumberOfEnemies(4);
+            for (int i = 0; i < 4; i++) {
+                controller.createEnemy("Demon", ThreadLocalRandom.current().nextInt(50, 60 + 1),
+                        ThreadLocalRandom.current().nextInt(6, 10 + 1),
+                        ThreadLocalRandom.current().nextInt(27, 33 + 1),
+                        ThreadLocalRandom.current().nextInt(10, 20 + 1));
+            }
+        }
+        controller.tryToStart();
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        selectionEnemyScene(primaryStage, background, true);
+    });
+
+    startGame.setOnAction(event -> {
+        if (controller.getCharacterTurn() != null){
+            try {
+                gameStage(primaryStage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            startGame.fire();
+        }
+    });
 
     // Draw the creation scene
     Scene creationScene = new Scene(selectionRoot, 640, 460);
     primaryStage.setResizable(false);
     primaryStage.setScene(creationScene);
     primaryStage.show();
+  }
+
+  public void gameStage(Stage primaryStage) throws FileNotFoundException {
+      Group gameRoot = new Group();
+
+      //Background
+      Image menu = new Image(new FileInputStream("images/fight.png"));
+      ImageView background = new ImageView(menu);
+      background.setFitHeight(640);
+      background.setMouseTransparent(true);
+      background.setOpacity(0.6);
+      background.setViewOrder(0.4);
+      background.isPreserveRatio();
+
+      gameRoot.getChildren().add(background);
+
+      // Text Field
+      TextField textfield1 = new TextField();
+      textfield1.setFont(frMainFont1);
+      textfield1.setText("");
+      textfield1.setAlignment(Pos.CENTER);
+
+      textfield1.setLayoutX(280);
+      textfield1.setLayoutY(400);
+
+      gameRoot.getChildren().add(textfield1);
+
+      // Buttons
+      Button equipButton = new Button("EQUIP");
+      Button attackButton = new Button("ATTACK");
+
+      equipButton.setFont(frMainFont1);
+      attackButton.setFont(frMainFont1);
+
+      equipButton.setLayoutX(100);
+      equipButton.setLayoutY(400);
+
+      attackButton.setLayoutX(240);
+      attackButton.setLayoutY(400);
+
+      gameRoot.getChildren().addAll(equipButton, attackButton);
+
+      equipButton.setOnAction(event -> {
+          if (controller.getGamerParty().contains(controller.getCharacterTurn()) &&
+                  !controller.getInventory().isEmpty()){
+              try {
+                  inventoryStage(primaryStage);
+              } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+              }
+          }
+      });
+
+      attackButton.setOnAction(event -> {
+          if (controller.getGamerParty().contains(controller.getCharacterTurn())){
+              int index = Integer.parseInt(textfield1.getText());
+              controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(index));
+              try {
+                  Thread.sleep(1500);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+              try {
+                  gameStage(primaryStage);
+              } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+              }
+          }
+      });
+
+      // Texts and Grids
+      Label currentTurn = new Label(controller.getCharacterTurn().getName() + "  Has the Turn");
+
+      currentTurn.setFont(frMainFont2);
+
+      currentTurn.setLayoutX(110);
+      currentTurn.setLayoutY(30);
+
+      gameRoot.getChildren().addAll(currentTurn);
+
+      GridPane playerGrid = new GridPane();
+
+      for (int i = 0; i<4 ; i++){
+          if (controller.getPlayer(i).IsAlive()){
+              Label nameLabel = new Label(controller.getPlayer(i).getName() +
+                      " -  index " + String.valueOf(i));
+              Label weaponLabel = new Label(controller.getPlayer(i).getEquippedWeapon().getName() +
+                      "    " +
+                      String.valueOf(controller.getPlayer(i).getEquippedWeapon().getDamage()));
+              Label hpLabel = new Label("HP     " +
+                      String.valueOf(controller.getPlayer(i).getHP()));
+              Label defLabel = new Label("DEF    " +
+                      String.valueOf(controller.getPlayer(i).getDefense()));
+              Label spaceLabel = new Label("          ");
+
+              nameLabel.setFont(frMainFont1);
+              weaponLabel.setFont(frMainFont1);
+              hpLabel.setFont(frMainFont1);
+              defLabel.setFont(frMainFont1);
+
+              playerGrid.addRow(5*i, nameLabel);
+              playerGrid.addRow(5*i + 3, weaponLabel);
+              playerGrid.addRow(5*i + 2, hpLabel);
+              playerGrid.addRow(5*i + 1, defLabel);
+              playerGrid.addRow(5*i + 4, spaceLabel);
+          }
+      }
+
+      GridPane enemyGrid = new GridPane();
+
+      for (int i = 0; i < controller.getNumberOfEnemies() ; i++){
+          if (controller.getEnemy(i).IsAlive()){
+              Label nameLabel = new Label(controller.getEnemy(i).getName() +
+                      " -  index " + String.valueOf(i));
+              Label attackLabel = new Label("ATK    " +
+                      String.valueOf(controller.getEnemy(i).getAttack()));
+              Label hpLabel = new Label("HP     " +
+                      String.valueOf(controller.getEnemy(i).getHP()));
+              Label defLabel = new Label("DEF    " +
+                      String.valueOf(controller.getEnemy(i).getDefense()));
+              Label spaceLabel = new Label("    ");
+
+              nameLabel.setFont(frMainFont1);
+              attackLabel.setFont(frMainFont1);
+              hpLabel.setFont(frMainFont1);
+              defLabel.setFont(frMainFont1);
+
+              enemyGrid.addRow(5*i, nameLabel);
+              enemyGrid.addRow(5*i + 3, attackLabel);
+              enemyGrid.addRow(5*i + 2, hpLabel);
+              enemyGrid.addRow(5*i + 1, defLabel);
+              enemyGrid.addRow(5*i + 4, spaceLabel);
+          }
+      }
+
+      playerGrid.setLayoutX(90);
+      playerGrid.setLayoutY(60);
+
+      enemyGrid.setLayoutX(380);
+      enemyGrid.setLayoutY(60);
+
+      gameRoot.getChildren().addAll(playerGrid, enemyGrid);
+
+      // Draw the creation scene
+      Scene creationScene = new Scene(gameRoot, 640, 460);
+      primaryStage.setResizable(false);
+      primaryStage.setScene(creationScene);
+      primaryStage.show();
+  }
+
+  public void inventoryStage(Stage primaryStage) throws FileNotFoundException {
+      Group inventoryRoot = new Group();
+
+      // Background
+      Image menu = new Image(new FileInputStream("images/inventory.jpg"));
+      ImageView background = new ImageView(menu);
+      background.setFitHeight(460);
+      background.setFitWidth(640);
+      background.setMouseTransparent(true);
+      background.setOpacity(0.6);
+      background.setViewOrder(0.4);
+      background.isPreserveRatio();
+
+      inventoryRoot.getChildren().add(background);
+
+      // Weapons
+      ArrayList<String> listWeapons = controller.getInventoryKeys();
+
+      HBox hBoxWeapons1 = new HBox();
+      HBox hBoxWeapons2 = new HBox();
+      hBoxWeapons1.setSpacing(20);
+      hBoxWeapons2.setSpacing(20);
+
+      ICharacter activePlayer = controller.getCharacterTurn();
+
+      int index = 0;
+      for (int i = 0 ; i < controller.getGamerParty().size() ; i++){
+          if (controller.getPlayer(i).equals(activePlayer)){
+              index = i;
+              break;
+          }
+      }
+
+      int j = 1;
+      for(String weapon: listWeapons){
+          Label numL =new Label("Weapon number " + j);
+          Label nameL =new Label(controller.getInventory().get(weapon).getName());
+          Label damageL =new Label("DM   " + String.valueOf(controller.getInventory().get(weapon).getDamage()));
+          Label weightL =new Label("WE   " + String.valueOf(controller.getInventory().get(weapon).getWeight()));
+
+          VBox vbox = new VBox();
+
+          numL.setFont(frMainFont1);
+          nameL.setFont(frMainFont1);
+          damageL.setFont(frMainFont1);
+          weightL.setFont(frMainFont1);
+
+          vbox.getChildren().add(numL);
+          vbox.getChildren().add(nameL);
+          vbox.getChildren().add(damageL);
+          vbox.getChildren().add(weightL);
+
+          if (j/2 <= 1) {
+              hBoxWeapons1.getChildren().add(vbox);
+          } else if (j/2 <= 2){
+              hBoxWeapons2.getChildren().add(vbox);
+          }
+
+          j ++;
+      }
+
+      Label labelA = new Label("Current Character");
+      Label labelNombre = new Label(controller.getPlayer(index).getName() + " , " +
+              controller.getPlayer(index).getStringClass());
+      Label weaponL = new Label("equips " +
+              controller.getPlayer(index).getEquippedWeapon().getName());
+      Label damageL = new Label("with " +
+              controller.getPlayer(index).getEquippedWeapon().getDamage() + " points of damage");
+
+      labelA.setFont(frMainFont1);
+      labelNombre.setFont(frMainFont1);
+      weaponL.setFont(frMainFont1);
+      damageL.setFont(frMainFont1);
+
+      VBox personaje = new VBox();
+      personaje.getChildren().add(labelA);
+      personaje.getChildren().add(labelNombre);
+      personaje.getChildren().add(weaponL);
+      personaje.getChildren().add(damageL);
+
+      personaje.setLayoutX(60);
+      personaje.setLayoutY(350);
+
+      Label label =new Label("Choose a weapon to equip");
+
+      label.setFont(frMainFont2);
+      label.setLayoutX(60);
+      label.setLayoutY(30);
+
+      TextField textWeapon = new TextField("");
+      textWeapon.setFont(frMainFont1);
+      textWeapon.setAlignment(Pos.CENTER);
+
+      Button buttonEnter = new Button("Enter");
+      buttonEnter.setFont(frMainFont1);
+
+      textWeapon.setLayoutX(400);
+      textWeapon.setLayoutY(350);
+
+      buttonEnter.setLayoutX(400);
+      buttonEnter.setLayoutY(380);
+
+      int finalIndex = index;
+      buttonEnter.setOnAction(action->{
+          controller.tryToEquip(finalIndex, listWeapons.get(Integer.valueOf(textWeapon.getText()) - 1));
+          try {
+              gameStage(primaryStage);
+          } catch (FileNotFoundException e) {
+              e.printStackTrace();
+          }
+      });
+
+      VBox equipWeapon = new VBox();
+      equipWeapon.setSpacing(20);
+      equipWeapon.getChildren().add(hBoxWeapons1);
+      equipWeapon.getChildren().add(hBoxWeapons2);
+      equipWeapon.setPadding(new Insets(20));
+
+      equipWeapon.setLayoutY(60);
+      equipWeapon.setLayoutX(50);
+
+      inventoryRoot.getChildren().addAll(equipWeapon, label, personaje, textWeapon, buttonEnter);
+
+      // Draw the creation scene
+      Scene creationScene = new Scene(inventoryRoot, 640, 460);
+      primaryStage.setResizable(false);
+      primaryStage.setScene(creationScene);
+      primaryStage.show();
+  }
+
+  public void victoryStage(Stage primaryStage) throws FileNotFoundException {
+      Group root = new Group();
+
+      // Background
+      Image menu = new Image(new FileInputStream("images/inventory.jpg"));
+      ImageView background = new ImageView(menu);
+      background.setFitHeight(460);
+      background.setFitWidth(640);
+      background.setMouseTransparent(true);
+      background.setOpacity(0.6);
+      background.setViewOrder(0.4);
+      background.isPreserveRatio();
+
+      root.getChildren().add(background);
+
+      // Draw the creation scene
+      Scene creationScene = new Scene(root, 640, 460);
+      primaryStage.setResizable(false);
+      primaryStage.setScene(creationScene);
+      primaryStage.show();
+  }
+
+  public boolean readyToStart(){
+      if (controller.getGamerParty().size() == 4){
+          for (int i = 0; i < 4; i++){
+              if (controller.getPlayer(i).getEquippedWeapon() == null){
+                  return false;
+              }
+          }
+      } else {
+          return false;
+      }
+      return true;
   }
 }

@@ -22,7 +22,7 @@ public class GameState {
     /**
      * starts the game, from Start state to Waiting state.
      */
-    public void startGame(){
+    public void waiting(){
         this.error();
     }
 
@@ -88,6 +88,13 @@ public class GameState {
      * tryToBeginTurn()
      */
     public void tryToBeginTurn(){
+        this.error();
+    }
+
+    /**
+     * tryToStart()
+     */
+    public void tryToStart(){
         this.error();
     }
 

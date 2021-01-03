@@ -45,6 +45,13 @@ public class Thief extends AbstractPlayerCharacter {
     }
 
     /**
+     * getStringClass() returns the name of its class in a String form. This method was created for the GUI only
+     */
+    public String getStringClass(){
+        return "Thief";
+    }
+
+    /**
      * both methods equals() and hashcode() are different depending of the type of character and
      * the type of Character, hence this methods cannot be used with inheritance
      */

@@ -35,6 +35,8 @@ public class GameController {
     protected BlockingQueue<ICharacter> turnsQueue;
     protected int enemies;
     private ICharacter characterTurn;
+    private boolean lockTurn1 = false;
+    private boolean lockTurn2 = false;
 
     public GameController(){
         this.state = new StartState(this);
@@ -46,18 +48,22 @@ public class GameController {
         this.alivePlayers = 0;
     }
 
+
+    /**
+     * tryToStart() method tries to start the game
+     */
+    public void tryToStart(){
+        this.state.tryToStart();
+    }
+
     /**
      * tryToBeginTurn() method tries to begin the next turn, asking the state pattern
      */
     public void tryToBeginTurn(){
-        this.state.tryToBeginTurn();
-    }
-
-    /**
-     * tryToEndTurn() method tries to end the actual turn, asking the state pattern
-     */
-    public void tryToEndTurn(){
-        this.state.endTurn();
+        if (!lockTurn1){
+            lockTurn1 = true;
+            this.state.tryToBeginTurn();
+        }
     }
 
     /**
@@ -100,7 +106,7 @@ public class GameController {
                 enemy.waitTurn();
                 numberEnemies++;
             }
-            this.state.startGame();
+            this.state.waiting();
         }
     }
 
@@ -110,16 +116,17 @@ public class GameController {
      * is an enemy, it only attacks a random player and finishes it's turn (through tryToAttack method).
      */
     public void beginTurn(){
-        this.state.nextTurn();
-        this.characterTurn = turnsQueue.peek();
-        if(this.characterTurn.IsAlive()){
-            this.state.beginTurn();
-            System.out.println(this.characterTurn.getName() + "'s turn");
-            this.characterTurn.useTurn(this);
-        }
-        else {
-            this.state.endTurn();
-            beginTurn();
+        if (!lockTurn2){
+            lockTurn2 = true;
+            this.characterTurn = turnsQueue.peek();
+            if(this.characterTurn.IsAlive()){
+                this.state.beginTurn();
+                System.out.println(this.characterTurn.getName() + "'s turn");
+                this.characterTurn.useTurn(this);
+            }
+            else {
+                this.state.endTurn();
+            }
         }
     }
 
@@ -140,11 +147,13 @@ public class GameController {
     /**
      * endTurn() method ends the actual turn, making the last character wait.
      */
-    public void endTurn(ICharacter character){
+    public void endTurn(){
         System.out.println(this.characterTurn.getName() + "´s turn has ended");
         turnsQueue.poll();
-        character.waitTurn();
-        state.endTurn();
+        this.getCharacterTurn().waitTurn();
+        state.waiting();
+        lockTurn1 = false;
+        lockTurn2 = false;
         if(!turnsQueue.isEmpty()){
             tryToBeginTurn();
         }
@@ -158,7 +167,7 @@ public class GameController {
         attackerCharacter.attackTo(attackedCharacter);
         if (!this.state.isVictoryState()){
             System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
-            endTurn(attackerCharacter);
+            endTurn();
         }
     }
 
@@ -196,7 +205,7 @@ public class GameController {
         this.aliveEnemies --;
         System.out.println(enemy.getName() + " of the Enemy party has died");
         if (this.getAliveEnemies() == 0){
-            this.victory();
+            this.state.victory();
         }
     }
 
@@ -208,7 +217,7 @@ public class GameController {
         this.alivePlayers --;
         System.out.println(player.getName() + " of the Player party has died");
         if (this.getAlivePlayers() == 0){
-            this.gameOver();
+            this.state.gameOver();
         }
     }
 
@@ -240,41 +249,46 @@ public class GameController {
     /**
      * createKnight() method creates a Knight with the information given and then it is added to the party
      */
-    public void createKnight(String name, int hp , int defense){
+    public Knight createKnight(String name, int hp , int defense){
         Knight knight = new Knight(name, turnsQueue, hp, defense);
         this.putInPlayerParty(knight);
+        return knight;
     }
 
     /**
      * createThief() method creates a Thief with the information given and then it is added to the party
      */
-    public void createThief(String name, int hp , int defense){
+    public Thief createThief(String name, int hp , int defense){
         Thief thief = new Thief(name, turnsQueue, hp, defense);
         this.putInPlayerParty(thief);
+        return thief;
     }
 
     /**
      * createEngineer() method creates an Engineer with the information given and then it is added to the party
      */
-    public void createEngineer(String name, int hp , int defense){
+    public Engineer createEngineer(String name, int hp , int defense){
         Engineer engineer = new Engineer(name, turnsQueue, hp, defense);
         this.putInPlayerParty(engineer);
+        return engineer;
     }
 
     /**
      * createWhiteMage() method creates a White Mage with the information given and then it is added to the party
      */
-    public void createWhiteMage(String name, int hp , int defense, int mp){
+    public WhiteMage createWhiteMage(String name, int hp , int defense, int mp){
         WhiteMage whitemage = new WhiteMage(name, turnsQueue, hp, defense, mp);
         this.putInPlayerParty(whitemage);
+        return whitemage;
     }
 
     /**
      * createBlackMage() method creates a Black Mage with the information given and then it is added to the party
      */
-    public void createBlackMage(String name, int hp , int defense, int mp){
+    public BlackMage createBlackMage(String name, int hp , int defense, int mp){
         BlackMage blackmage = new BlackMage(name, turnsQueue, hp, defense, mp);
         this.putInPlayerParty(blackmage);
+        return blackmage;
     }
 
     /**
@@ -329,7 +343,6 @@ public class GameController {
      * gameOver() finalizes the game when the gamer loses.
      */
     public void gameOver(){
-        this.state.gameOver();
         System.out.println("YOU DIED");
     }
 
@@ -337,7 +350,6 @@ public class GameController {
      * victory() finalizes the game when the gamer wins.
      */
     public void victory(){
-        this.state.victory();
         System.out.println("HEIR OF FIRE DESTROYED");
     }
 
@@ -351,6 +363,17 @@ public class GameController {
     /**
      * getters methods.
      */
+
+    public ArrayList<String> getInventoryKeys(){
+        ArrayList<String> keys = new ArrayList<>();
+        this.getInventory().forEach((key, weapon) -> {
+            keys.add(key);
+        });
+        return keys;
+    }
+
+    public int getNumberOfEnemies(){return this.enemies;}
+
     public ArrayList<IPlayer> getGamerParty(){return this.gamerParty;}
 
     public ArrayList<Enemy> getCpuParty(){return this.cpuParty;}
