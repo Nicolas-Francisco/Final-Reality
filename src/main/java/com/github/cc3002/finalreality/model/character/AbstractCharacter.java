@@ -2,7 +2,9 @@ package com.github.cc3002.finalreality.model.character;
 import java.beans.PropertyChangeSupport;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
-import com.github.cc3002.finalreality.model.controller.IEventHandler;
+
+import com.github.cc3002.finalreality.model.controller.GameController;
+import com.github.cc3002.finalreality.model.controller.observer.IEventHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,6 +22,7 @@ public abstract class AbstractCharacter implements ICharacter {
   private ScheduledExecutorService scheduledExecutor;
   private boolean alive;
   private PropertyChangeSupport DeadCharacterEvent = new PropertyChangeSupport(this);
+  private PropertyChangeSupport addToQueueEvent = new PropertyChangeSupport(this);
 
   /**
    * Creates a new character.
@@ -64,8 +67,11 @@ public abstract class AbstractCharacter implements ICharacter {
    */
   @Override
   public void addToQueue() {
-    turnsQueue.add(this);
-    scheduledExecutor.shutdown();
+    if(this.IsAlive()){
+      turnsQueue.add(this);
+      scheduledExecutor.shutdown();
+      addToQueueEvent.firePropertyChange("Character Added to Queue", null, this);
+    }
   }
 
   /**
@@ -136,10 +142,26 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   /**
-   * addListener() adds a listener to the event
+   * addListenerDead() adds a listener to the event
    */
   @Override
-  public void addListener(IEventHandler characterHandler){
+  public void addListenerDead(IEventHandler characterHandler){
     DeadCharacterEvent.addPropertyChangeListener(characterHandler);
   }
+
+  /**
+   * addListenerTurn() adds a listener to the event
+   */
+  @Override
+  public void addListenerTurn(IEventHandler characterHandler){
+    addToQueueEvent.addPropertyChangeListener(characterHandler);
+  }
+
+  /**
+   * useTurn method. If the character is an enemy, it attacks to a random player using the controller,
+   * if its not, it doesn't do anything. (We need it only for the beginTurn method in the controller,
+   * using a boolean to determine if the character is an enemy or not is equal to use instanceof() method)
+   */
+  @Override
+  public void useTurn(GameController controller){}
 }

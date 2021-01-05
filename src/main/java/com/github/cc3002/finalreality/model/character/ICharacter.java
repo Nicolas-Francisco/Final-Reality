@@ -1,6 +1,7 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.controller.IEventHandler;
+import com.github.cc3002.finalreality.model.controller.GameController;
+import com.github.cc3002.finalreality.model.controller.observer.IEventHandler;
 
 /**
  * This represents a character from the game.
@@ -65,5 +66,17 @@ public interface ICharacter {
   /**
    * Adds a listener to the character
    */
-  void addListener(IEventHandler handler);
+  void addListenerDead(IEventHandler handler);
+
+  /**
+   * Adds a listener to the character
+   */
+  void addListenerTurn(IEventHandler handler);
+
+  /**
+   * useTurn method. If the character is an enemy, it attacks to a random player using the controller,
+   * if its not, it doesn't do anything. (We need it only for the beginTurn method in the controller,
+   * using a boolean to determine if the character is an enemy or not is equal to use instanceof() method)
+   */
+  void useTurn(GameController controller);
 }

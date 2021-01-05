@@ -3,11 +3,11 @@ package com.github.cc3002.finalreality.model.character;
 import com.github.cc3002.finalreality.model.character.player.IPlayer;
 import com.github.cc3002.finalreality.model.character.player.WhiteMage;
 import com.github.cc3002.finalreality.model.weapon.IWeapon;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This testing class tests all the methods of a WhiteMage player.
@@ -53,6 +53,7 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
     void constructorTest() {
         checkConstruction(testWhiteMage, expectedWhiteMage, differentWhiteMage1, differentWhiteMage2,
                 differentWhiteMage3, differentWhiteMage4, differentWhiteMage5);
+        assertEquals(testWhiteMage.getStringClass(), "White Mage");
     }
 
     /**
@@ -81,17 +82,17 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest {
     @Test
     void waitTurnTest() {
         testWhiteMage.equip(testStaff);
-        Assertions.assertTrue(turns.isEmpty());
+        assertTrue(turns.isEmpty());
         testWhiteMage.waitTurn();
         try {
             // Thread.sleep is not accurate so this values may be changed to adjust the
             // acceptable error margin.
             // We're testing that the character waits approximately 1 second.
             Thread.sleep(900);
-            Assertions.assertEquals(0, turns.size());
+            assertEquals(0, turns.size());
             Thread.sleep(200);
-            Assertions.assertEquals(1, turns.size());
-            Assertions.assertEquals(testWhiteMage, turns.peek());
+            assertEquals(1, turns.size());
+            assertEquals(testWhiteMage, turns.peek());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

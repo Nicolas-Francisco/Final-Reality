@@ -31,4 +31,9 @@ public interface IPlayer extends ICharacter {
      * to modify it.
      */
     void setEquippedWeapon(IWeapon weapon);
+
+    /**
+     * getStringClass() returns the name of its class in a String form. This method was created for the GUI only
+     */
+    String getStringClass();
 }

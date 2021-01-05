@@ -83,7 +83,7 @@ public class ControllerTest {
         controller.createBlackMage("testBlackMage", 10, 10, 10);
         assertEquals(currentParty, controller.getGamerParty());
 
-
+        controller.setNumberOfEnemies(1);
         assertEquals(controller.getAliveEnemies(), 0);
         controller.createEnemy("testEnemy", 10, 10, 10, 10);
         assertEquals(controller.getAliveEnemies(), 1);
@@ -199,31 +199,33 @@ public class ControllerTest {
      */
     @Test
     public void victoryTest() throws InterruptedException {
-        Knight testKnight2 = new Knight("testKnight2", turns, 100, 100);
+        controller = new GameController();
 
-        controller.createKnight("testKnight2", 100, 100);
+        controller.createKnight("testKnight", 10, 10);
         controller.createThief("testThief", 10, 10);
         controller.createEngineer("testEngineer", 10, 10);
         controller.createWhiteMage("testWhiteMage", 10, 10, 10);
 
-        controller.createAxe("testAxe", 10, 300);
-        controller.createKnife("testKnife", 10, 200);
-        controller.createStaff("testStaff", 10, 100);
-        controller.createSword("testSword", 100, 10);
+        controller.createAxe("testAxe", 10, 20);
+        controller.createKnife("testKnife", 10, 15);
+        controller.createStaff("testStaff", 10, 10);
+        controller.createSword("testSword", 100, 5);
 
         controller.equip(0, "testSword");
         controller.equip(1, "testKnife");
         controller.equip(2, "testAxe");
         controller.equip(3, "testStaff");
 
-        controller.createEnemy("testEnemy", 10, 10, 10, 20);
+        controller.setNumberOfEnemies(1);
+        controller.createEnemy("testEnemy", 10, 10, 10, 10);
 
-        controller.startQueue();
-        Thread.sleep(5000);
-        controller.beginTurn();
-        assertEquals(controller.getCharacterTurn().hashCode(), testKnight2.hashCode());
-        controller.attack(controller.getCharacterTurn(), controller.getEnemy(0));
+        controller.tryToStart();
+        assertTrue(controller.getState().isWaitingState());
+        Thread.sleep(4000);
+        controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(0));
+        Thread.sleep(1000);
         assertFalse(controller.getEnemy(0).IsAlive());
+        assertTrue(controller.getState().isVictoryState());
     }
 
     /**
@@ -232,22 +234,37 @@ public class ControllerTest {
      */
     @Test
     public void gameOverTest() throws InterruptedException {
+        controller = new GameController();
+
         controller.createKnight("testKnight", 10, 10);
         controller.createThief("testThief", 10, 10);
         controller.createEngineer("testEngineer", 10, 10);
         controller.createWhiteMage("testWhiteMage", 10, 10, 10);
 
-        controller.createEnemy("testEnemy", 100, 100, 100, 10);
+        controller.createAxe("testAxe", 10, 15);
+        controller.createKnife("testKnife", 10, 10);
+        controller.createStaff("testStaff", 10, 20);
+        controller.createSword("testSword", 100, 5);
 
-        assertEquals(controller.getAlivePlayers(), 4);
+        controller.equip(0, "testSword");
+        controller.equip(1, "testKnife");
+        controller.equip(2, "testAxe");
+        controller.equip(3, "testStaff");
 
-        int cont = 0;
-        while (cont < 4) {
-            assertTrue(controller.getPlayer(cont).IsAlive());
-            controller.getEnemy(0).attackTo(controller.getPlayer(cont));
-            assertFalse(controller.getPlayer(cont).IsAlive());
-            cont ++;
+        controller.setNumberOfEnemies(4);
+        controller.createEnemy("testEnemy1",10,100,100,25);
+        controller.createEnemy("testEnemy2",10,100,100,30);
+        controller.createEnemy("testEnemy3",10,100,100,35);
+        controller.createEnemy("testEnemy4",10,100,100,40);
+
+        controller.tryToStart();
+        assertTrue(controller.getState().isWaitingState());
+        Thread.sleep(5000);
+        for (int i = 0; i < 4 ; i++){
+            controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(0));
+            Thread.sleep(1000);
         }
-        assertEquals(controller.getAlivePlayers(), 0);
+        assertTrue(controller.getState().isGameOverState());
+
     }
 }

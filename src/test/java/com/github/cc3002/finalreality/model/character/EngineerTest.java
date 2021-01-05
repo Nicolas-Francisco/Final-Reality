@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * This testing class tests all the methods of a Engineer player.
  *
@@ -51,6 +53,7 @@ public class EngineerTest extends AbstractPlayerCharacterTest {
     void constructorTest() {
         checkConstruction(testEngineer, expectedEngineer, differentEngineer1, differentEngineer2, differentEngineer3,
                 differentEngineer4);
+        assertEquals(testEngineer.getStringClass(), "Engineer");
     }
 
     /**

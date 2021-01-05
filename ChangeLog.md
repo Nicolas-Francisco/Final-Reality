@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+Version 4.0
+-----------
+- (B.10) Implementation of the states of the game
+
 Version 3.0
 -----------
 - (RC.7) "Tarea 2" version

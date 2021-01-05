@@ -3,6 +3,12 @@ package com.github.cc3002.finalreality.model.controller;
 import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.*;
+import com.github.cc3002.finalreality.model.controller.observer.EnemyHandler;
+import com.github.cc3002.finalreality.model.controller.observer.IEventHandler;
+import com.github.cc3002.finalreality.model.controller.observer.PlayerHandler;
+import com.github.cc3002.finalreality.model.controller.observer.TurnHandler;
+import com.github.cc3002.finalreality.model.controller.state.GameState;
+import com.github.cc3002.finalreality.model.controller.state.StartState;
 import com.github.cc3002.finalreality.model.weapon.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,17 +30,63 @@ public class GameController {
     private int aliveEnemies;
     private final IEventHandler DeadPlayerHandler = new PlayerHandler(this);
     private final IEventHandler DeadEnemyHandler = new EnemyHandler(this);
-    private final BlockingQueue<ICharacter> turnsQueue;
-    protected int enemies = new Random().nextInt(3) + 1;
+    private final IEventHandler TurnHandler = new TurnHandler(this);
+    private GameState state;
+    protected BlockingQueue<ICharacter> turnsQueue;
+    protected int enemies;
     private ICharacter characterTurn;
+    private boolean lockTurn1 = false;
+    private boolean lockTurn2 = false;
 
     public GameController(){
+        this.state = new StartState(this);
         this.turnsQueue = new LinkedBlockingQueue<ICharacter>();
         this.inventory = new HashMap<String, IWeapon>();
         this.gamerParty = new ArrayList<IPlayer>();
         this.cpuParty = new ArrayList<Enemy>();
         this.aliveEnemies = 0;
         this.alivePlayers = 0;
+    }
+
+
+    /**
+     * tryToStart() method tries to start the game.
+     */
+    public void tryToStart(){
+        this.state.tryToStart();
+    }
+
+    /**
+     * tryToBeginTurn() method tries to begin the next turn, asking the state pattern.
+     */
+    public void tryToBeginTurn(){
+        if (!lockTurn1){
+            lockTurn1 = true;
+            this.state.tryToBeginTurn();
+        }
+    }
+
+    /**
+     * tryToEquip() method tries to equip a weapon to the player. Assuming the player can only change
+     * the equipped weapon in a turn, and not between two.
+     */
+    public void tryToEquip(int playerIndex, String weaponName){
+        this.state.equip(playerIndex, weaponName);
+    }
+
+    /**
+     * tryToAttack() method tries to attack a character. Assuming that some character can attack to another
+     * during a turn only, and not between two.
+     */
+    public void tryToAttack(ICharacter attackerCharacter, ICharacter attackedCharacter){
+        this.state.attack(attackerCharacter, attackedCharacter);
+    }
+
+    /**
+     * setState() method changes the state of the game.
+     */
+    public void setState(GameState state){
+        this.state = state;
     }
 
     /**
@@ -54,23 +106,58 @@ public class GameController {
                 enemy.waitTurn();
                 numberEnemies++;
             }
+            this.state.waiting();
         }
     }
 
     /**
-     * beginTurn() method designs the character who owns the actual turn.
+     * beginTurn() method designs the character who owns the actual turn. If the character is dead, then it
+     * ends it's turn immediately, passing to the next alive character. By the other hand if the character
+     * is an enemy, it only attacks a random player and finishes it's turn (through tryToAttack method).
      */
     public void beginTurn(){
-        this.characterTurn = turnsQueue.peek();
-        System.out.println(this.characterTurn.getName() + "'s turn");
+        if (!lockTurn2){
+            lockTurn2 = true;
+            this.characterTurn = turnsQueue.peek();
+            if(this.characterTurn.IsAlive()){
+                this.state.beginTurn();
+                System.out.println(this.characterTurn.getName() + "'s turn");
+                this.characterTurn.useTurn(this);
+            }
+            else {
+                this.endTurn();
+            }
+        }
+    }
+
+    /**
+     * attackRandomPlayer() is called when an enemy just started it's turn. It only attacks a random player
+     * from the player party, and if the player chosen is dead, we repeat the process using recursion.
+     */
+    public void attackRandomPlayer(){
+        int rand = new Random().nextInt(4);
+        if (this.getPlayer(rand).IsAlive()){
+            attack(this.characterTurn, this.getPlayer(rand));
+        } else {
+            attackRandomPlayer();
+        }
+        return;
     }
 
     /**
      * endTurn() method ends the actual turn, making the last character wait.
      */
-    public void endTurn(ICharacter character){
+    public void endTurn(){
+        System.out.println(this.characterTurn.getName() + "´s turn has ended");
         turnsQueue.poll();
-        character.waitTurn();
+        characterTurn.waitTurn();
+        state.waiting();
+        characterTurn = null;
+        lockTurn2 = false;
+        lockTurn1 = false;
+        if (!turnsQueue.isEmpty()) {
+            tryToBeginTurn();
+        }
     }
 
     /**
@@ -79,93 +166,17 @@ public class GameController {
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         System.out.println(attackerCharacter.getName() + " attacks " + attackedCharacter.getName());
         attackerCharacter.attackTo(attackedCharacter);
-        endTurn(attackedCharacter);
+        this.state.terminate(attackedCharacter);
     }
 
     /**
-     * onDeadEnemy() method is triggered when an enemy dies (EnemyHandler). This method reduces the amount
-     * of aliveCharacters in the User class and then checks if the gamer wins.
+     * terminateTurn() method terminates completly the turn depending if the game is over or not. If the
+     * game continues, it will print the hp of the attacked player and end the turn, but if the game is over,
+     * it wont end the turn (the final states victory and game over are not allowed to use endturn() method)
      */
-    public void onDeadEnemy(Enemy enemy) {
-        this.aliveEnemies --;
-        System.out.println(enemy.getName() + " has died");
-        if (this.getAliveEnemies() == 0){
-            this.victory();
-        }
-    }
-
-    /**
-     * onDeadEnemy() method is triggered when a player dies (PlayerHandler). This method reduces the amount
-     * of aliveCharacters in the User class and then checks if the gamer loses.
-     */
-    public void onDeadPlayer(IPlayer player) {
-        this.alivePlayers --;
-        System.out.println(player.getName() + " has died");
-        if (this.getAlivePlayers() == 0){
-            this.gameOver();
-        }
-    }
-
-    /**
-     * putInPlayerParty() method adds a player to the gamer party, with a limit given by the user
-     */
-    public void putInPlayerParty(IPlayer player){
-        if (gamerParty.size() < this.maxCharacters){
-            gamerParty.add(player);
-            this.alivePlayers ++;
-            player.addListener(DeadPlayerHandler);
-        }
-    }
-
-    /**
-     * putInEnemyParty() method adds an enemy to the gamer party, with a limit given by the user
-     */
-    public void putInEnemyParty(Enemy enemy){
-        if (cpuParty.size() < this.maxCharacters){
-            cpuParty.add(enemy);
-            this.aliveEnemies ++;
-            enemy.addListener(DeadEnemyHandler);
-        }
-    }
-
-    /**
-     * createKnight() method creates a Knight with the information given and then it is added to the party
-     */
-    public void createKnight(String name, int hp , int defense){
-        Knight knight = new Knight(name, turnsQueue, hp, defense);
-        this.putInPlayerParty(knight);
-    }
-
-    /**
-     * createThief() method creates a Thief with the information given and then it is added to the party
-     */
-    public void createThief(String name, int hp , int defense){
-        Thief thief = new Thief(name, turnsQueue, hp, defense);
-        this.putInPlayerParty(thief);
-    }
-
-    /**
-     * createEngineer() method creates an Engineer with the information given and then it is added to the party
-     */
-    public void createEngineer(String name, int hp , int defense){
-        Engineer engineer = new Engineer(name, turnsQueue, hp, defense);
-        this.putInPlayerParty(engineer);
-    }
-
-    /**
-     * createWhiteMage() method creates a White Mage with the information given and then it is added to the party
-     */
-    public void createWhiteMage(String name, int hp , int defense, int mp){
-        WhiteMage whitemage = new WhiteMage(name, turnsQueue, hp, defense, mp);
-        this.putInPlayerParty(whitemage);
-    }
-
-    /**
-     * createBlackMage() method creates a Black Mage with the information given and then it is added to the party
-     */
-    public void createBlackMage(String name, int hp , int defense, int mp){
-        BlackMage blackmage = new BlackMage(name, turnsQueue, hp, defense, mp);
-        this.putInPlayerParty(blackmage);
+    public void terminateTurn(ICharacter attackedCharacter){
+        System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
+        endTurn();
     }
 
     /**
@@ -179,13 +190,113 @@ public class GameController {
         if (currentWeapon == null){
             if (player.getEquippedWeapon() != null){
                 inventory.remove(weapon.getName());
+                System.out.println(player.getName() + " equips " + player.getEquippedWeapon().getName());
+                System.out.println(player.getEquippedWeapon().getName() + "'s damage: " +
+                        player.getEquippedWeapon().getDamage());
             }
         } else {
             if (player.getEquippedWeapon().hashCode() == weapon.hashCode()){
                 inventory.remove(weapon.getName());
                 inventory.put(currentWeapon.getName(), currentWeapon);
+                System.out.println(player.getName() + " equips " + weapon.getName());
+                System.out.println(currentWeapon.getName() + " saved");
+                System.out.println(weapon.getName() + "'s damage: " + weapon.getDamage());
             }
         }
+    }
+
+    /**
+     * onDeadEnemy() method is triggered when an enemy dies (EnemyHandler). This method reduces the amount
+     * of aliveCharacters in the User class and then checks if the gamer wins.
+     */
+    public void onDeadEnemy(Enemy enemy) {
+        this.aliveEnemies --;
+        System.out.println(enemy.getName() + " of the Enemy party has died");
+        if (this.getAliveEnemies() == 0){
+            this.state.victory();
+        }
+    }
+
+    /**
+     * onDeadEnemy() method is triggered when a player dies (PlayerHandler). This method reduces the amount
+     * of aliveCharacters in the User class and then checks if the gamer loses.
+     */
+    public void onDeadPlayer(IPlayer player) {
+        this.alivePlayers --;
+        System.out.println(player.getName() + " of the Player party has died");
+        if (this.getAlivePlayers() == 0){
+            this.state.gameOver();
+        }
+    }
+
+
+    /**
+     * putInPlayerParty() method adds a player to the gamer party, with a limit given by the user
+     */
+    public void putInPlayerParty(IPlayer player){
+        if (gamerParty.size() < this.maxCharacters){
+            gamerParty.add(player);
+            this.alivePlayers ++;
+            player.addListenerDead(DeadPlayerHandler);
+            player.addListenerTurn(TurnHandler);
+        }
+    }
+
+    /**
+     * putInEnemyParty() method adds an enemy to the gamer party, with a limit given by the user
+     */
+    public void putInEnemyParty(Enemy enemy){
+        if (cpuParty.size() < this.enemies){
+            cpuParty.add(enemy);
+            this.aliveEnemies ++;
+            enemy.addListenerDead(DeadEnemyHandler);
+            enemy.addListenerTurn(TurnHandler);
+        }
+    }
+
+    /**
+     * createKnight() method creates a Knight with the information given and then it is added to the party
+     */
+    public Knight createKnight(String name, int hp , int defense){
+        Knight knight = new Knight(name, turnsQueue, hp, defense);
+        this.putInPlayerParty(knight);
+        return knight;
+    }
+
+    /**
+     * createThief() method creates a Thief with the information given and then it is added to the party
+     */
+    public Thief createThief(String name, int hp , int defense){
+        Thief thief = new Thief(name, turnsQueue, hp, defense);
+        this.putInPlayerParty(thief);
+        return thief;
+    }
+
+    /**
+     * createEngineer() method creates an Engineer with the information given and then it is added to the party
+     */
+    public Engineer createEngineer(String name, int hp , int defense){
+        Engineer engineer = new Engineer(name, turnsQueue, hp, defense);
+        this.putInPlayerParty(engineer);
+        return engineer;
+    }
+
+    /**
+     * createWhiteMage() method creates a White Mage with the information given and then it is added to the party
+     */
+    public WhiteMage createWhiteMage(String name, int hp , int defense, int mp){
+        WhiteMage whitemage = new WhiteMage(name, turnsQueue, hp, defense, mp);
+        this.putInPlayerParty(whitemage);
+        return whitemage;
+    }
+
+    /**
+     * createBlackMage() method creates a Black Mage with the information given and then it is added to the party
+     */
+    public BlackMage createBlackMage(String name, int hp , int defense, int mp){
+        BlackMage blackmage = new BlackMage(name, turnsQueue, hp, defense, mp);
+        this.putInPlayerParty(blackmage);
+        return blackmage;
     }
 
     /**
@@ -251,30 +362,96 @@ public class GameController {
     }
 
     /**
-     * getters methods.
+     * setter for the amount of enemies.
      */
-    public ArrayList<IPlayer> getGamerParty(){return this.gamerParty;}
+    public void setNumberOfEnemies(int num){
+        this.enemies = num;
+    }
 
-    public ArrayList<Enemy> getCpuParty(){return this.cpuParty;}
+    /**
+     * getInventoryKeys() returns the keys of the inventory.
+     */
+    public ArrayList<String> getInventoryKeys(){
+        ArrayList<String> keys = new ArrayList<>();
+        this.getInventory().forEach((key, weapon) -> {
+            keys.add(key);
+        });
+        return keys;
+    }
 
-    public HashMap<String, IWeapon> getInventory(){return this.inventory;}
+    /**
+     * getState() method returns the state of the game.
+     */
+    public GameState getState(){
+        return this.state;
+    }
 
-    public int getAlivePlayers(){return this.alivePlayers;}
+    /**
+     * getNumberOfEnemies() method returns the maximum enemies created
+     */
+    public int getNumberOfEnemies(){
+        return this.enemies;
+    }
 
-    public int getAliveEnemies(){return this.aliveEnemies;}
+    /**
+     * getGamerParty() method returns the party of the player.
+     */
+    public ArrayList<IPlayer> getGamerParty(){
+        return this.gamerParty;
+    }
 
+    /**
+     * getCpuParty() method returns the party of the cpu.
+     */
+    public ArrayList<Enemy> getCpuParty(){
+        return this.cpuParty;
+    }
+
+    /**
+     * getInventory() method returns the inventory of the player
+     */
+    public HashMap<String, IWeapon> getInventory(){
+        return this.inventory;
+    }
+
+    /**
+     * getAlivePlayers() method returns the amount of alive players.
+     */
+    public int getAlivePlayers(){
+        return this.alivePlayers;
+    }
+
+    /**
+     * getAliveEnemies() method returns the amount of alive enemies.
+     */
+    public int getAliveEnemies(){
+        return this.aliveEnemies;
+    }
+
+    /**
+     * getEnemy() method returns a certain enemy.
+     */
     public Enemy getEnemy(int enemyIndex){
         return this.getCpuParty().get(enemyIndex);
     }
 
+    /**
+     * getPlayer() method returns a certain Player.
+     */
     public IPlayer getPlayer(int playerIndex){
         return this.getGamerParty().get(playerIndex);
     }
 
+    /**
+     * getCharacterTurn() method returns the current owner of the turn.
+     */
     public ICharacter getCharacterTurn(){
         return this.characterTurn;
     }
 
+    /**
+     * getEquippedWeapon() method returns the equipped weapon of a player.
+     */
     public IWeapon getEquippedWeapon(int playerIndex){
         return this.getPlayer(playerIndex).getEquippedWeapon();
     }
