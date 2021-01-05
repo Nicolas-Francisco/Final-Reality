@@ -14,26 +14,38 @@ public class TurnState extends GameState{
         super(controller);
     }
 
+    /**
+     * starts the waiting stage. From Start, Turn or Selection states to Waiting state.
+     */
     @Override
     public void waiting(){
         this.changeState(new WaitingState(this.controller));
     }
 
+    /**
+     * ends the game, from Waiting state to Victory state.
+     */
     @Override
     public void victory(){
         this.changeState(new VictoryState(this.controller));
         this.controller.victory();
     }
 
+    /**
+     * ends the game, from Waiting state to Game Over state.
+     */
     @Override
     public void gameOver(){
         this.changeState(new GameOverState(this.controller));
         this.controller.gameOver();
     }
 
+    /**
+     * terminate() method terminates the turn completely if the game has not ended.
+     */
     @Override
-    public boolean isTurnState(){
-        return true;
+    public void terminate(ICharacter attackedCharacter){
+        this.controller.terminateTurn(attackedCharacter);
     }
 
     /**
@@ -52,5 +64,13 @@ public class TurnState extends GameState{
     @Override
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         this.controller.attack(attackerCharacter, attackedCharacter);
+    }
+
+    /**
+     * isTurnState() returns true if the game is in TurnState
+     */
+    @Override
+    public boolean isTurnState(){
+        return true;
     }
 }

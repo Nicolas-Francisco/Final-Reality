@@ -50,14 +50,14 @@ public class GameController {
 
 
     /**
-     * tryToStart() method tries to start the game
+     * tryToStart() method tries to start the game.
      */
     public void tryToStart(){
         this.state.tryToStart();
     }
 
     /**
-     * tryToBeginTurn() method tries to begin the next turn, asking the state pattern
+     * tryToBeginTurn() method tries to begin the next turn, asking the state pattern.
      */
     public void tryToBeginTurn(){
         if (!lockTurn1){
@@ -125,7 +125,7 @@ public class GameController {
                 this.characterTurn.useTurn(this);
             }
             else {
-                this.state.endTurn();
+                this.endTurn();
             }
         }
     }
@@ -150,11 +150,12 @@ public class GameController {
     public void endTurn(){
         System.out.println(this.characterTurn.getName() + "´s turn has ended");
         turnsQueue.poll();
-        this.getCharacterTurn().waitTurn();
+        characterTurn.waitTurn();
         state.waiting();
-        lockTurn1 = false;
+        characterTurn = null;
         lockTurn2 = false;
-        if(!turnsQueue.isEmpty()){
+        lockTurn1 = false;
+        if (!turnsQueue.isEmpty()) {
             tryToBeginTurn();
         }
     }
@@ -165,10 +166,17 @@ public class GameController {
     public void attack(ICharacter attackerCharacter, ICharacter attackedCharacter){
         System.out.println(attackerCharacter.getName() + " attacks " + attackedCharacter.getName());
         attackerCharacter.attackTo(attackedCharacter);
-        if (!this.state.isVictoryState()){
-            System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
-            endTurn();
-        }
+        this.state.terminate(attackedCharacter);
+    }
+
+    /**
+     * terminateTurn() method terminates completly the turn depending if the game is over or not. If the
+     * game continues, it will print the hp of the attacked player and end the turn, but if the game is over,
+     * it wont end the turn (the final states victory and game over are not allowed to use endturn() method)
+     */
+    public void terminateTurn(ICharacter attackedCharacter){
+        System.out.println(attackedCharacter.getName() + "'s current hp: " + attackedCharacter.getHP());
+        endTurn();
     }
 
     /**
@@ -361,9 +369,8 @@ public class GameController {
     }
 
     /**
-     * getters methods.
+     * getInventoryKeys() returns the keys of the inventory.
      */
-
     public ArrayList<String> getInventoryKeys(){
         ArrayList<String> keys = new ArrayList<>();
         this.getInventory().forEach((key, weapon) -> {
@@ -372,30 +379,79 @@ public class GameController {
         return keys;
     }
 
-    public int getNumberOfEnemies(){return this.enemies;}
+    /**
+     * getState() method returns the state of the game.
+     */
+    public GameState getState(){
+        return this.state;
+    }
 
-    public ArrayList<IPlayer> getGamerParty(){return this.gamerParty;}
+    /**
+     * getNumberOfEnemies() method returns the maximum enemies created
+     */
+    public int getNumberOfEnemies(){
+        return this.enemies;
+    }
 
-    public ArrayList<Enemy> getCpuParty(){return this.cpuParty;}
+    /**
+     * getGamerParty() method returns the party of the player.
+     */
+    public ArrayList<IPlayer> getGamerParty(){
+        return this.gamerParty;
+    }
 
-    public HashMap<String, IWeapon> getInventory(){return this.inventory;}
+    /**
+     * getCpuParty() method returns the party of the cpu.
+     */
+    public ArrayList<Enemy> getCpuParty(){
+        return this.cpuParty;
+    }
 
-    public int getAlivePlayers(){return this.alivePlayers;}
+    /**
+     * getInventory() method returns the inventory of the player
+     */
+    public HashMap<String, IWeapon> getInventory(){
+        return this.inventory;
+    }
 
-    public int getAliveEnemies(){return this.aliveEnemies;}
+    /**
+     * getAlivePlayers() method returns the amount of alive players.
+     */
+    public int getAlivePlayers(){
+        return this.alivePlayers;
+    }
 
+    /**
+     * getAliveEnemies() method returns the amount of alive enemies.
+     */
+    public int getAliveEnemies(){
+        return this.aliveEnemies;
+    }
+
+    /**
+     * getEnemy() method returns a certain enemy.
+     */
     public Enemy getEnemy(int enemyIndex){
         return this.getCpuParty().get(enemyIndex);
     }
 
+    /**
+     * getPlayer() method returns a certain Player.
+     */
     public IPlayer getPlayer(int playerIndex){
         return this.getGamerParty().get(playerIndex);
     }
 
+    /**
+     * getCharacterTurn() method returns the current owner of the turn.
+     */
     public ICharacter getCharacterTurn(){
         return this.characterTurn;
     }
 
+    /**
+     * getEquippedWeapon() method returns the equipped weapon of a player.
+     */
     public IWeapon getEquippedWeapon(int playerIndex){
         return this.getPlayer(playerIndex).getEquippedWeapon();
     }

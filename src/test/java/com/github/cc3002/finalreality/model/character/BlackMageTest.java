@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * This testing class tests all the methods of a BlackMage player.
  *
@@ -53,6 +55,7 @@ public class BlackMageTest extends AbstractPlayerCharacterTest {
     void constructorTest() {
         checkConstruction(testBlackMage, expectedBlackMage, differentBlackMage1, differentBlackMage2, differentBlackMage3,
                 differentBlackMage4, differentBlackMage5);
+        assertEquals(testBlackMage.getStringClass(), "Black Mage");
     }
 
     /**

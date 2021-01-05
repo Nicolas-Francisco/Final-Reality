@@ -147,9 +147,61 @@ eliminating the "Inventory" class, while the party is represented by an ArrayLis
 "Tarea 3" version Design
 ---
 
-In this version we create de states of the game using the State patter design. The states are best 
-described in the assumptions title.
+In this version we create de states of the game using the State patter design and the GUI of the game. 
+The game is divided in 6 principal states (Start, Waiting, Selecting, Turn, Victory and Game Over), these 
+states and their inner relations are best described in the assumptions title. By the other hand, the GUI 
+of the game is a series of methods which modify the primary scene in order to be able to play the game.
 
+
+Final Reality Game
+---
+
+To be able to play the game, you must right-click the "FinalReality.java" archive and select the "Run" option.
+Once clicked, a new window called "Final Reality" will open and show the main menu of the game. This scene contains
+the name of the game along with two buttons (New Game and Continues), and the name of the creator.
+
+To play the game, you only have to press the "New Game" button which will lead you to the creation Scene. This 
+menu is the creation section of the game, where you can create four and only four characters with the classes you want. 
+In order to be challenging, all the classes have default values such as the hp, defense, and the mana 
+(not yet implemented). Once a class is selected a new scene will open, where you can choose the name of your character
+and two weapons maximum. In order to be challenging, the weapons are too created with default values such as the name, 
+weight and damage, and only the first two weapons selected will be in the inventory of the game. 
+
+This creation scene allows the player to not choose a name at all (nameless character). It also allows to not select 
+a weapon at all, but in this case the game will automatically select the first weapon out of the three shown.
+
+When the player has already created the four characters and their weapons, the Difficulty selection menu will open. In 
+order to be easier for the player to test the game, there are 3 buttons which will create different enemies:
+- The "Easy" mode of the game will create 2 or 3 weak enemies that can be easily defeated, and was created to test 
+the "victory" final more quickly.
+
+- The "Normal" mode will create 4 enemies with more attack power, hp and defense, and was created to test long 
+battles between the player and the cpu.
+
+- Finally, the "Final Reality" mode will create impossible enemies with a lots of damage and defense, and was created 
+to test the "game over" final more quickly.
+
+When a game mode is selected, the game will wait until all the characters are added to the queue and will show a new
+button called "Start". When the "Start" button is pressed, the Game scene will start and show all the alive members 
+of the game (player characters and enemies). When a character of the player has the turn, it can equip a different
+weapon or attack a certain enemy.
+
+The "Equip" button of the game scene will work only if there are at least 1 weapon in the inventory (the inventory can 
+have between 0 and 4 weapons saved). When clicked, it will open the inventory of the player, showing the current data 
+of the owner of the turn (class, current weapon equipped and its damage). To change the current wheapon, the player only
+has to write the number of the weapon and press the "Enter" button, this will open the game scene again and change the
+weapon only if the player is allowed to equip the weapon selected (see the assumption title).
+
+By the other hand, if the player wants to attack a certain enemy, it only has to write down the index of the enemy shown
+and press "Attack". If a certain enemy or player is dead, it will disappear of the scene even though it is still in 
+the queue, so if the player decides to attack an already dead enemy that is not in the scene the game will attack 
+anyway, and the player will lose its turn.
+
+The game will be over when all the players or all the enemies are dead. If all the enemies are gone, the victory scene
+will be open and show a victory message. If all the players died, the game over scene will be open and show a game over 
+message. In both cases there will be two buttons, "Play Again" or "Try again" and "Close" or "Give Up". "Play Again" and 
+"Try again" buttons will start the game again (allowing the player to play multiple rounds), while "Close" and "Give Up" 
+buttons will close the window and end the game.
 
 Testing
 ---

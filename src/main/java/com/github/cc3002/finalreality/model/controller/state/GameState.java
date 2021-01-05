@@ -15,12 +15,15 @@ public class GameState {
         this.controller = controller;
     }
 
+    /**
+     * changeState() changes the state of the game in the controller.
+     */
     protected void changeState(GameState state) {
         controller.setState(state);
     }
 
     /**
-     * starts the game, from Start state to Waiting state.
+     * starts the waiting stage. From Start, Turn or Selection states to Waiting state.
      */
     public void waiting(){
         this.error();
@@ -37,13 +40,6 @@ public class GameState {
      * starts the turn of a player, from Selection state to Turn state.
      */
     public void beginTurn(){
-        this.error();
-    }
-
-    /**
-     * ends the turn of a player, from Turn state to Waiting state.
-     */
-    public void endTurn(){
         this.error();
     }
 
@@ -85,42 +81,64 @@ public class GameState {
     }
 
     /**
-     * tryToBeginTurn()
+     * terminate() method terminates the turn completely if the game has not ended.
+     */
+    public void terminate(ICharacter attackedCharacter){
+        this.error();
+    }
+
+    /**
+     * tryToBeginTurn() method begins the turn if the game is in waiting state.
      */
     public void tryToBeginTurn(){
         this.error();
     }
 
     /**
-     * tryToStart()
+     * tryToStart() method starts the game if the game is in start state.
      */
     public void tryToStart(){
         this.error();
     }
 
     /**
-     * assertion methods
+     * isStartState() returns true if the game is in startState
      */
     public boolean isStartState(){
         return false;
     }
 
+    /**
+     * isWaitingState() returns true if the game is in waitingState
+     */
     public boolean isWaitingState(){
         return false;
     }
 
+    /**
+     * isSelectionState() returns true if the game is in SelectionState
+     */
     public boolean isSelectionState(){
         return false;
     }
 
+    /**
+     * isTurnState() returns true if the game is in TurnState
+     */
     public boolean isTurnState(){
         return false;
     }
 
+    /**
+     * isVictoryState() returns true if the game is in victoryState
+     */
     public boolean isVictoryState(){
         return false;
     }
 
+    /**
+     * isGameOverState() returns true if the game is in gameOverState
+     */
     public boolean isGameOverState(){
         return false;
     }

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * This testing class tests all the methods of a Thief player.
  *
@@ -49,7 +51,9 @@ public class ThiefTest extends AbstractPlayerCharacterTest {
      */
     @Test
     void constructorTest() {
-        checkConstruction(testThief, expectedThief, differentThief1, differentThief2, differentThief3, differentThief4);
+        checkConstruction(testThief, expectedThief, differentThief1, differentThief2,
+                differentThief3, differentThief4);
+        assertEquals(testThief.getStringClass(), "Thief");
     }
 
     /**

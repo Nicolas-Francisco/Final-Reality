@@ -13,11 +13,17 @@ public class StartState extends GameState{
         super(controller);
     }
 
+    /**
+     * starts the waiting stage. From Start, Turn or Selection states to Waiting state.
+     */
     @Override
     public void waiting() {
         this.changeState(new WaitingState(this.controller));
     }
 
+    /**
+     * tryToStart() method starts the game if the game is in start state.
+     */
     @Override
     public void tryToStart(){
         this.controller.startQueue();
@@ -32,6 +38,9 @@ public class StartState extends GameState{
         this.controller.equip(playerIndex, weaponName);
     }
 
+    /**
+     * isStartState() returns true if the game is in startState
+     */
     @Override
     public boolean isStartState(){
         return true;

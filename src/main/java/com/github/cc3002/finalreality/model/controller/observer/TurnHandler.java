@@ -1,8 +1,6 @@
 package com.github.cc3002.finalreality.model.controller.observer;
 
-import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.controller.GameController;
-
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -19,8 +17,6 @@ public class TurnHandler implements IEventHandler {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(((ICharacter) evt.getNewValue()).getName() + " added to Queue");
         controller.tryToBeginTurn();
-        // controller.onModifiedQueue((ICharacter) evt.getNewValue());
     }
 }

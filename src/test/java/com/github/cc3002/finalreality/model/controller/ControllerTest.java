@@ -199,9 +199,9 @@ public class ControllerTest {
      */
     @Test
     public void victoryTest() throws InterruptedException {
-        Knight testKnight2 = new Knight("testKnight", turns, 100, 100);
+        controller = new GameController();
 
-        controller.createKnight("testKnight", 100, 100);
+        controller.createKnight("testKnight", 10, 10);
         controller.createThief("testThief", 10, 10);
         controller.createEngineer("testEngineer", 10, 10);
         controller.createWhiteMage("testWhiteMage", 10, 10, 10);
@@ -217,36 +217,54 @@ public class ControllerTest {
         controller.equip(3, "testStaff");
 
         controller.setNumberOfEnemies(1);
-        controller.createEnemy("testEnemy", 10, 10, 10, 8);
+        controller.createEnemy("testEnemy", 10, 10, 10, 10);
 
-        controller.startQueue();
-        Thread.sleep(5000);
+        controller.tryToStart();
+        assertTrue(controller.getState().isWaitingState());
+        Thread.sleep(4000);
         controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(0));
+        Thread.sleep(1000);
+        assertFalse(controller.getEnemy(0).IsAlive());
+        assertTrue(controller.getState().isVictoryState());
     }
 
     /**
      * gameOverTest() method.
      * This method tests a simple fight where the player party loses
-
+     */
     @Test
     public void gameOverTest() throws InterruptedException {
+        controller = new GameController();
+
         controller.createKnight("testKnight", 10, 10);
         controller.createThief("testThief", 10, 10);
         controller.createEngineer("testEngineer", 10, 10);
         controller.createWhiteMage("testWhiteMage", 10, 10, 10);
 
-        controller.createEnemy("testEnemy", 100, 100, 100, 10);
+        controller.createAxe("testAxe", 10, 15);
+        controller.createKnife("testKnife", 10, 10);
+        controller.createStaff("testStaff", 10, 20);
+        controller.createSword("testSword", 100, 5);
 
-        assertEquals(controller.getAlivePlayers(), 4);
+        controller.equip(0, "testSword");
+        controller.equip(1, "testKnife");
+        controller.equip(2, "testAxe");
+        controller.equip(3, "testStaff");
 
-        int cont = 0;
-        while (cont < 4) {
-            assertTrue(controller.getPlayer(cont).IsAlive());
-            controller.getEnemy(0).attackTo(controller.getPlayer(cont));
-            assertFalse(controller.getPlayer(cont).IsAlive());
-            cont ++;
+        controller.setNumberOfEnemies(4);
+        controller.createEnemy("testEnemy1",10,100,100,25);
+        controller.createEnemy("testEnemy2",10,100,100,30);
+        controller.createEnemy("testEnemy3",10,100,100,35);
+        controller.createEnemy("testEnemy4",10,100,100,40);
+
+        controller.tryToStart();
+        assertTrue(controller.getState().isWaitingState());
+        Thread.sleep(5000);
+        for (int i = 0; i < 4 ; i++){
+            controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(0));
+            Thread.sleep(1000);
         }
-        assertEquals(controller.getAlivePlayers(), 0);
+        assertTrue(controller.getState().isGameOverState());
+
     }
-     */
 }

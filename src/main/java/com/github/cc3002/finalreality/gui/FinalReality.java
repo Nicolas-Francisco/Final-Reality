@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Nicolás García Ríos
  */
 public class FinalReality extends Application {
-  private GameController controller = new GameController();
+  private GameController controller;
   private Font frTitleFont = Font.loadFont("file:images/finalf.ttf", 70);
   private Font frMainFont1 = Font.loadFont("file:images/Final-Fantasy.ttf", 12);
   private Font frMainFont2 = Font.loadFont("file:images/Final-Fantasy.ttf", 20);
@@ -45,15 +45,20 @@ public class FinalReality extends Application {
   @Override
   public void start(Stage primaryStage) throws FileNotFoundException {
     primaryStage.setTitle("Final reality");
+    controller = new GameController();
     mainScene(primaryStage);
   }
 
+  /**
+   * mainScene() shows the principal menu of the game.
+   * The title, the name of the creator, the background and the new game button to start
+   */
   public void mainScene(Stage primaryStage) throws FileNotFoundException {
     Group root = new Group();
 
     // Texts
     Label title = new Label("FINAL REALITY");
-    Label firma = new Label("created by BlackFire");
+    Label firma = new Label("created by Nicolas Garcia");
 
     title.setFont(frTitleFont);
     firma.setFont(frMainFont1);
@@ -64,7 +69,7 @@ public class FinalReality extends Application {
     title.setLayoutX(172);
     title.setLayoutY(120);
 
-    firma.setLayoutX(462);
+    firma.setLayoutX(410);
     firma.setLayoutY(440);
 
     root.getChildren().addAll(title, firma);
@@ -92,7 +97,7 @@ public class FinalReality extends Application {
     continueButton.setLayoutX(278);
     continueButton.setLayoutY(250);
 
-    root.getChildren().addAll(startButton, continueButton);
+    root.getChildren().addAll(startButton);
 
     startButton.setOnAction(event -> creationScene(primaryStage, background));
 
@@ -103,6 +108,11 @@ public class FinalReality extends Application {
     primaryStage.show();
   }
 
+    /**
+     * creationScene() shows the creation menu of the game.
+     * The title, the classes of characters with their default values, the background and the
+     * buttons for each class of the game.
+     */
   public void creationScene(Stage primaryStage, ImageView background){
     Group creationRoot = new Group();
     creationRoot.getChildren().add(background);
@@ -214,7 +224,7 @@ public class FinalReality extends Application {
     backToMenuButton.setLayoutY(430);
 
     creationRoot.getChildren().addAll(createKnightButton, createThiefButton, createEngineerButton,
-            createWhiteMageButton, createBlackMageButton, backToMenuButton, creationKnightText1,
+            createWhiteMageButton, createBlackMageButton, creationKnightText1,
             creationKnightText2, creationThiefText1, creationThiefText2, creationEngineerText1,
             creationEngineerText2, creationWhiteMageText1, creationWhiteMageText2, creationBlackMageText1,
             creationBlackMageText2, creationWhiteMageText3, creationBlackMageText3);
@@ -232,6 +242,10 @@ public class FinalReality extends Application {
     primaryStage.show();
   }
 
+    /**
+     * createKnight() shows the creation menu of a knight.
+     * The title, the name textField, and the three default weapons to choose, and the create button.
+     */
   public void createKnight(Stage primaryStage, ImageView background){
     Group creationRoot = new Group();
     creationRoot.getChildren().add(background);
@@ -385,6 +399,10 @@ public class FinalReality extends Application {
     primaryStage.show();
   }
 
+    /**
+     * createThief() shows the creation menu of a thief.
+     * The title, the name textField, and the three default weapons to choose, and the create button.
+     */
   public void createThief(Stage primaryStage, ImageView background){
     Group creationRoot = new Group();
     creationRoot.getChildren().add(background);
@@ -524,7 +542,7 @@ public class FinalReality extends Application {
 
     createweapon3Button.setOnAction(event -> {
         if (weaponCache.size() < 2){
-            controller.createAxe("Bow of Pharis", 14, 12);
+            controller.createBow("Bow of Pharis", 14, 12);
             weaponCache.add(controller.getInventory().get("Bow of Pharis"));
         }
     });
@@ -538,6 +556,10 @@ public class FinalReality extends Application {
     primaryStage.show();
   }
 
+    /**
+     * createEngineer() shows the creation menu of an engineer.
+     * The title, the name textField, and the three default weapons to choose, and the create button.
+     */
   public void createEngineer(Stage primaryStage, ImageView background){
       Group creationRoot = new Group();
       creationRoot.getChildren().add(background);
@@ -677,7 +699,7 @@ public class FinalReality extends Application {
 
       createweapon3Button.setOnAction(event -> {
           if (weaponCache.size() < 2){
-              controller.createAxe("Dragonslayer Bow", 18, 16);
+              controller.createBow("Dragonslayer Bow", 18, 16);
               weaponCache.add(controller.getInventory().get("Dragonslayer Bow"));
           }
       });
@@ -691,6 +713,10 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
+    /**
+     * createWhiteMage() shows the creation menu of a white mage.
+     * The title, the name textField, and the three default weapons to choose, and the create button.
+     */
   public void createWhiteMage(Stage primaryStage, ImageView background){
       Group creationRoot = new Group();
       creationRoot.getChildren().add(background);
@@ -844,6 +870,10 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
+    /**
+     * createBlackMage() shows the creation menu of a black mage.
+     * The title, the name textField, and the three default weapons to choose, and the create button.
+     */
   public void createBlackMage(Stage primaryStage, ImageView background){
       Group creationRoot = new Group();
       creationRoot.getChildren().add(background);
@@ -997,6 +1027,10 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
+    /**
+     * selectionEnemyScene() shows the game modes.
+     * The title, the three default modes to choose, and the start button.
+     */
   public void selectionEnemyScene(Stage primaryStage, ImageView background, boolean start){
     Group selectionRoot = new Group();
     selectionRoot.getChildren().add(background);
@@ -1039,17 +1073,20 @@ public class FinalReality extends Application {
     selectionRoot.getChildren().addAll(easyModeButton, normalModeButton, hardModeButton);
     if (start){
         selectionRoot.getChildren().add(startGame);
+        easyModeButton.setDisable(true);
+        normalModeButton.setDisable(true);
+        hardModeButton.setDisable(true);
     }
 
     easyModeButton.setOnAction(event -> {
         if (!start){
-            int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+            int randomNum = ThreadLocalRandom.current().nextInt(2, 3 + 1);
             controller.setNumberOfEnemies(randomNum);
             for (int i = 0 ; i < randomNum ; i++){
-                controller.createEnemy("Goblin", ThreadLocalRandom.current().nextInt(20, 32 + 1),
-                        ThreadLocalRandom.current().nextInt(0, 5 + 1),
+                controller.createEnemy("Goblin", ThreadLocalRandom.current().nextInt(15, 22 + 1),
+                        ThreadLocalRandom.current().nextInt(0, 2 + 1),
                         ThreadLocalRandom.current().nextInt(18, 25 + 1),
-                        ThreadLocalRandom.current().nextInt(15, 20 + 1));
+                        ThreadLocalRandom.current().nextInt(20, 25 + 1));
             }
         }
         controller.tryToStart();
@@ -1065,15 +1102,15 @@ public class FinalReality extends Application {
         if (!start) {
             controller.setNumberOfEnemies(4);
             for (int i = 0; i < 4; i++) {
-                controller.createEnemy("Monster", ThreadLocalRandom.current().nextInt(35, 45 + 1),
-                        ThreadLocalRandom.current().nextInt(2, 8 + 1),
-                        ThreadLocalRandom.current().nextInt(22, 27 + 1),
-                        ThreadLocalRandom.current().nextInt(15, 20 + 1));
+                controller.createEnemy("Monster", ThreadLocalRandom.current().nextInt(25, 30 + 1),
+                        ThreadLocalRandom.current().nextInt(2, 5 + 1),
+                        ThreadLocalRandom.current().nextInt(20, 22 + 1),
+                        ThreadLocalRandom.current().nextInt(20, 25 + 1));
             }
         }
         controller.tryToStart();
         try {
-            Thread.sleep(4000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -1084,10 +1121,10 @@ public class FinalReality extends Application {
         if (!start) {
             controller.setNumberOfEnemies(4);
             for (int i = 0; i < 4; i++) {
-                controller.createEnemy("Demon", ThreadLocalRandom.current().nextInt(50, 60 + 1),
-                        ThreadLocalRandom.current().nextInt(6, 10 + 1),
-                        ThreadLocalRandom.current().nextInt(27, 33 + 1),
-                        ThreadLocalRandom.current().nextInt(10, 20 + 1));
+                controller.createEnemy("Demon", ThreadLocalRandom.current().nextInt(40, 50 + 1),
+                        ThreadLocalRandom.current().nextInt(20, 30 + 1),
+                        ThreadLocalRandom.current().nextInt(50, 60 + 1),
+                        ThreadLocalRandom.current().nextInt(25, 30 + 1));
             }
         }
         controller.tryToStart();
@@ -1100,14 +1137,12 @@ public class FinalReality extends Application {
     });
 
     startGame.setOnAction(event -> {
-        if (controller.getCharacterTurn() != null){
+        if (controller.getCharacterTurn() != null) {
             try {
                 gameStage(primaryStage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        } else {
-            startGame.fire();
         }
     });
 
@@ -1118,6 +1153,10 @@ public class FinalReality extends Application {
     primaryStage.show();
   }
 
+    /**
+     * gameStage() shows the main game.
+     * The alive players and enemies, the two action buttons and the text field for the attack button
+     */
   public void gameStage(Stage primaryStage) throws FileNotFoundException {
       Group gameRoot = new Group();
 
@@ -1174,14 +1213,29 @@ public class FinalReality extends Application {
               int index = Integer.parseInt(textfield1.getText());
               controller.tryToAttack(controller.getCharacterTurn(), controller.getEnemy(index));
               try {
-                  Thread.sleep(1500);
+                  Thread.sleep(1000);
               } catch (InterruptedException e) {
                   e.printStackTrace();
               }
-              try {
-                  gameStage(primaryStage);
-              } catch (FileNotFoundException e) {
-                  e.printStackTrace();
+
+              if (controller.getAliveEnemies() == 0){
+                  try {
+                      this.victoryStage(primaryStage);
+                  } catch (FileNotFoundException e) {
+                      e.printStackTrace();
+                  }
+              } else if (controller.getAlivePlayers() == 0){
+                  try {
+                      this.gameOverStage(primaryStage);
+                  } catch (FileNotFoundException e) {
+                      e.printStackTrace();
+                  }
+              } else {
+                  try {
+                      gameStage(primaryStage);
+                  } catch (FileNotFoundException e) {
+                      e.printStackTrace();
+                  }
               }
           }
       });
@@ -1191,7 +1245,7 @@ public class FinalReality extends Application {
 
       currentTurn.setFont(frMainFont2);
 
-      currentTurn.setLayoutX(110);
+      currentTurn.setLayoutX(90);
       currentTurn.setLayoutY(30);
 
       gameRoot.getChildren().addAll(currentTurn);
@@ -1266,6 +1320,10 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
+    /**
+     * inventoryStage() shows the inventory of the player.
+     * The saved weapons, the info of the owner of the turn and the text field for the enter button
+     */
   public void inventoryStage(Stage primaryStage) throws FileNotFoundException {
       Group inventoryRoot = new Group();
 
@@ -1396,20 +1454,65 @@ public class FinalReality extends Application {
       primaryStage.show();
   }
 
+    /**
+     * victoryStage() shows the victory scene.
+     * The victory message and the two actions.
+     */
   public void victoryStage(Stage primaryStage) throws FileNotFoundException {
       Group root = new Group();
 
-      // Background
-      Image menu = new Image(new FileInputStream("images/inventory.jpg"));
+      // Texts
+      Label title = new Label("HEIR OF FIRE DESTROYED");
+
+      title.setFont(frTitleFont);
+
+      title.setTextFill(Color.web("#000000"));
+
+      title.setLayoutX(60);
+      title.setLayoutY(120);
+
+      root.getChildren().addAll(title);
+
+      //Background
+      Image menu = new Image(new FileInputStream("images/end.png"));
+      Image img = new Image(new FileInputStream("images/main.jpg"));
       ImageView background = new ImageView(menu);
+      background.setMouseTransparent(true);
       background.setFitHeight(460);
       background.setFitWidth(640);
-      background.setMouseTransparent(true);
       background.setOpacity(0.6);
       background.setViewOrder(0.4);
       background.isPreserveRatio();
 
       root.getChildren().add(background);
+
+      // Buttons
+      Button startButton = new Button("Play Again");
+      Button terminateButton = new Button("Close");
+
+      startButton.setFont(frMainFont1);
+      terminateButton.setFont(frMainFont1);
+
+      startButton.setLayoutX(264);
+      startButton.setLayoutY(220);
+
+      terminateButton.setLayoutX(280);
+      terminateButton.setLayoutY(250);
+
+      root.getChildren().addAll(startButton, terminateButton);
+
+      startButton.setOnAction(event -> {
+          ImageView background2 = new ImageView(img);
+          background.setMouseTransparent(true);
+          background.setOpacity(0.75);
+          background.setViewOrder(0.4);
+          background.isPreserveRatio();
+
+          this.controller = new GameController();
+          creationScene(primaryStage, background);
+      });
+
+      terminateButton.setOnAction(event -> primaryStage.close());
 
       // Draw the creation scene
       Scene creationScene = new Scene(root, 640, 460);
@@ -1417,6 +1520,74 @@ public class FinalReality extends Application {
       primaryStage.setScene(creationScene);
       primaryStage.show();
   }
+
+    /**
+     * gameOverStage() shows the game over scene.
+     * The game over message and the two actions.
+     */
+    public void gameOverStage(Stage primaryStage) throws FileNotFoundException {
+        Group root = new Group();
+
+        // Texts
+        Label title = new Label("YOU DIED");
+
+        title.setFont(frTitleFont);
+
+        title.setTextFill(Color.web("#000000"));
+
+        title.setLayoutX(230);
+        title.setLayoutY(120);
+
+        root.getChildren().addAll(title);
+
+        //Background
+        Image menu = new Image(new FileInputStream("images/menu.jpg"));
+        Image img = new Image(new FileInputStream("images/main.jpg"));
+        ImageView background = new ImageView(menu);
+        background.setMouseTransparent(true);
+        background.setOpacity(0.6);
+        background.setViewOrder(0.4);
+        background.isPreserveRatio();
+
+        root.getChildren().add(background);
+
+        // Buttons
+        Button startButton = new Button("Try Again");
+        Button terminateButton = new Button("Give Up");
+
+        startButton.setFont(frMainFont1);
+        terminateButton.setFont(frMainFont1);
+
+        startButton.setLayoutX(264);
+        startButton.setLayoutY(220);
+
+        terminateButton.setLayoutX(278);
+        terminateButton.setLayoutY(250);
+
+        root.getChildren().addAll(startButton, terminateButton);
+
+        startButton.setOnAction(event -> {
+            ImageView background2 = new ImageView(img);
+            background.setMouseTransparent(true);
+            background.setOpacity(0.75);
+            background.setViewOrder(0.4);
+            background.isPreserveRatio();
+
+            try {
+                this.start(primaryStage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+        terminateButton.setOnAction(event -> primaryStage.close());
+
+        // Draw the creation scene
+        Scene creationScene = new Scene(root, 640, 460);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(creationScene);
+        primaryStage.show();
+    }
 
   public boolean readyToStart(){
       if (controller.getGamerParty().size() == 4){
